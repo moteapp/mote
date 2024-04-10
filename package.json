@@ -1,0 +1,16 @@
+{
+  "name": "mote",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ios": "yarn workspace mote ios"
+  },
+  "author": "",
+  "license": "ISC"
+}
