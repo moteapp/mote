@@ -1,0 +1,5 @@
+{
+    "references": [
+        { "path": "./packages/mote-web/tsconfig.json" }
+    ]
+}
