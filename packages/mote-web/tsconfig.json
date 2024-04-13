@@ -22,7 +22,8 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "mote/*": ["./src/mote/*"]
-    }
+    },
+    "outDir": "./dist",
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
