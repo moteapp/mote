@@ -1,4 +1,7 @@
 {
+    "compilerOptions": {
+        "outDir": "./dist",
+    },
     "references": [
         { "path": "./packages/mote-web/tsconfig.json" }
     ]
