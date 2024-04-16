@@ -7,7 +7,7 @@ export const TitlebarPart = () => {
     return (
         <div className='titlebar'>
             <div>
-                <img src='/mote-192.png' style={{marginLeft: 15, height: 43, width: 43}}/>
+                <img src='/mote-512.png' style={{marginLeft: 15, height: 38, width: 43}}/>
             </div>
             <div>
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
