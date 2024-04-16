@@ -27,5 +27,7 @@ module.exports = {
     'prefer-rest-params': 'off',
     'no-constant-condition': 'off',
     'no-extra-boolean-cast': 'off',
+    'no-useless-escape': 'off',
+    'no-var': 'off',
   },
 }

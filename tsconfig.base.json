@@ -8,6 +8,7 @@
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true,
+        "useDefineForClassFields": false
     },
     "references": [
         { "path": "./packages/mote-web/tsconfig.json" }
