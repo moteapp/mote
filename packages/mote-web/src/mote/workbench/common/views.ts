@@ -16,6 +16,21 @@ export interface IView {
 	getProgressIndicator(): IProgressIndicator | undefined;
 }
 
+/**
+ * View Container Contexts
+ */
+
+export interface IViewContainerDescriptor {
+
+	/**
+	 * The id of the view container
+	 */
+	readonly id: string;
+}
+
+export interface ViewContainer extends IViewContainerDescriptor { }
+
+
 export interface IViewPaneContainer {
 	onDidAddViews: Event<IView[]>;
 	onDidRemoveViews: Event<IView[]>;

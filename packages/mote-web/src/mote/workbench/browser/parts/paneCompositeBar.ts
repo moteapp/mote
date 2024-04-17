@@ -1,7 +1,7 @@
 import { Parts } from 'mote/workbench/service/layout/workbenchLayoutService';
 import { Disposable } from 'vs/base/common/lifecycle';
 import { IPaneCompositePart } from './paneCompositePart';
-import { CompositeBar, ICompositeBarItem } from './compositebar';
+import { CompositeBar, ICompositeBarItem } from './compositeBar';
 import { Dimension } from 'mote/base/browser/dom';
 
 export interface IPaneCompositeBarOptions {

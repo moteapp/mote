@@ -5,6 +5,9 @@ import { Workbench } from './workbench';
 import { ServiceCollection } from 'vs/platform/instantiation/common/serviceCollection';
 import { ConsoleLogger, ILogService, LogLevel } from 'mote/platform/log/common/log';
 import { LogService } from 'mote/platform/log/common/logService';
+import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
+
+export let instantiationService: IInstantiationService;
 
 export class BrowserMain extends Disposable {
 
@@ -29,7 +32,9 @@ export class BrowserMain extends Disposable {
 		// Create Workbench
 		const workbench = new Workbench(this.domElement,  services.logService, undefined, services.serviceCollection);
 
-        workbench.startup();
+        // Startup
+        instantiationService = workbench.startup();
+
         return {
             shutdown: async () => {}
         };

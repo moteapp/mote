@@ -10,6 +10,7 @@ import { IInstantiationService } from 'vs/platform/instantiation/common/instanti
 import { isChrome, isFirefox, isLinux, isSafari, isWeb, isWindows } from 'vs/base/common/platform';
 import { coalesce } from 'vs/base/common/arrays';
 import { toErrorMessage } from 'vs/base/common/errorMessage';
+import { getSingletonServiceDescriptors } from 'vs/platform/instantiation/common/extensions';
 
 export class Workbench extends Layout {
 
@@ -100,6 +101,23 @@ export class Workbench extends Layout {
     private initServices(serviceCollection: ServiceCollection): IInstantiationService {
         // Layout Service
 		serviceCollection.set(IWorkbenchLayoutService, this);
+
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		//
+		// NOTE: Please do NOT register services here. Use `registerSingleton()`
+		//       from `workbench.common.main.ts` if the service is shared between
+		//       desktop and web or `workbench.desktop.main.ts` if the service
+		//       is desktop only.
+		//
+		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+		// All Contributed Services
+		const contributedServices = getSingletonServiceDescriptors();
+		for (const [id, descriptor] of contributedServices) {
+			serviceCollection.set(id, descriptor);
+		}
+
 
         const instantiationService = new InstantiationService(serviceCollection, true);
         return instantiationService;

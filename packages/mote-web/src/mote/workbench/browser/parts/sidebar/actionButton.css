@@ -1,0 +1,7 @@
+.sidebar-action-container {
+    display: flex; align-items: center; opacity: 0; pointer-events: none; transition: opacity 200ms ease-in 0s;
+}
+
+.sidebar-action {
+    user-select: none; transition: background 20ms ease-in 0s; cursor: pointer; display: flex; align-items: center; justify-content: center; height: 20px; width: 20px; border-radius: 4px; margin-left: 4px;
+}

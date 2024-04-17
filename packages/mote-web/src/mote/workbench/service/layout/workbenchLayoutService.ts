@@ -1,4 +1,6 @@
 import { ILayoutService } from 'mote/platform/layout/layoutService';
+import { Part } from 'mote/workbench/browser/part';
+import { IDisposable } from 'vs/base/common/lifecycle';
 import { refineServiceDecorator } from 'vs/platform/instantiation/common/instantiation';
 
 export const enum Parts {
@@ -23,4 +25,10 @@ export const IWorkbenchLayoutService = refineServiceDecorator<ILayoutService, IW
 export interface IWorkbenchLayoutService extends ILayoutService {
 
 	readonly _serviceBrand: undefined;
+
+	/**
+	 * Register a part to participate in the layout.
+	 */
+	registerPart(part: Part): IDisposable;
+
 }

@@ -13,6 +13,7 @@ import { EditorPart } from './parts/editor/editorPart';
 import { ILogService } from 'mote/platform/log/common/log';
 import { isFullscreen } from 'vs/base/browser/browser';
 import { ActivitybarPart } from './parts/activitybar/activitybarPart';
+import { EditorGroupLayout, IEditorGroupsService } from 'mote/workbench/service/editor/common/editorGroupsService';
 
 //#region Layout Implementation
 
@@ -44,7 +45,7 @@ interface ILayoutInitializationState {
 		//readonly editorsToOpen: Promise<IEditorToOpen[]>;
 	};
 	readonly layout?: {
-		//readonly editors?: EditorGroupLayout;
+		readonly editors?: EditorGroupLayout;
 	};
 }
 
@@ -70,6 +71,7 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
     private activityBarPartView!: ISerializableView;
 
     private logService!: ILogService;
+	private editorGroupService!: IEditorGroupsService;
 
     private state!: ILayoutState;
     private stateModel!: LayoutStateModel;
@@ -87,6 +89,9 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
         // Services
         this.logService = accessor.get(ILogService);
 
+		// Parts
+		this.editorGroupService = accessor.get(IEditorGroupsService);
+
         const instantiationService = accessor.get(IInstantiationService);
 
         const sidebarPart = instantiationService.createInstance(SidebarPart);
@@ -95,8 +100,8 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
         const titlebarPart = instantiationService.createInstance(TitlebarPart);
         this.registerPart(titlebarPart);
 
-        const editorPart = instantiationService.createInstance(EditorPart);
-        this.registerPart(editorPart);
+        //const editorPart = instantiationService.createInstance(EditorPart, Parts.EDITOR_PART, mainWindow.moteWindowId, '', {} as any);
+        //this.registerPart(editorPart);
 
         const activityBar = instantiationService.createInstance(ActivitybarPart, {} as any);
         this.registerPart(activityBar);

@@ -1,5 +1,6 @@
 import { Listbox, ListboxItem } from '@nextui-org/react';
 import { SVGIcon } from 'mote/base/component/icon/svgIcon';
+import { Section } from './section';
 
 const items = [
     {
@@ -35,6 +36,7 @@ export const Sidebar = (props: SidebarProps) => {
                     </ListboxItem>
                 )}
             </Listbox>
+            <Section />
         </div>
     );
 };

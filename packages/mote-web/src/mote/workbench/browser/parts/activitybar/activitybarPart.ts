@@ -26,6 +26,12 @@ export class ActivitybarPart extends Part {
         super(Parts.ACTIVITYBAR_PART, {}, layoutService);
     }
 
+	override create(parent: HTMLElement, options?: object | undefined): void {
+		super.create(parent, options);
+
+		parent.style.backgroundColor = '#f8f8f8';
+	}
+
 	show(focus?: boolean): void {
 		if (!this.content) {
 			return;
@@ -82,6 +88,8 @@ export class ActivitybarPart extends Part {
 
 	override layout(width: number, height: number): void {
 		super.layout(width, height, 0, 0);
+
+		this.element.style.height = `${height}px`;
 
 		if (!this.compositeBar.value) {
 			return;
