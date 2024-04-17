@@ -51,9 +51,10 @@ class AuxiliaryEditorPartImpl extends EditorPart implements IAuxiliaryEditorPart
         windowId: number,
 		editorPartsView: IEditorPartsView,
         @IWorkbenchLayoutService layoutService: IWorkbenchLayoutService,
+        @IInstantiationService instantiationService: IInstantiationService,
     ) {
         const id = AuxiliaryEditorPartImpl.COUNTER++;
-        super(`auxiliary.editor.part.${id}`, windowId, editorPartsView, layoutService);
+        super(`auxiliary.editor.part.${id}`, windowId, '', editorPartsView, layoutService, instantiationService);
     }
 
     close(): boolean {
