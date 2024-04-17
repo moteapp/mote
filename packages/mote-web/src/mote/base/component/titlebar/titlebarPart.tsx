@@ -3,7 +3,7 @@ import { WorkbenchToolbar } from './titlebarAction';
 
 import './titlebarPart.css';
 
-export const TitlebarPart = () => {
+export const Titlebar = () => {
     return (
         <div className='titlebar'>
             <div>

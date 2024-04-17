@@ -14,9 +14,13 @@ const items = [
     },
 ]
 
-export const Sidebar = () => {
+interface SidebarProps {
+    width: number;
+}
+
+export const Sidebar = (props: SidebarProps) => {
     return (
-        <div style={{width: 280, backgroundColor: '#f8f8f8', height: '100vh'}}>
+        <div style={{width: props.width, backgroundColor: '#f8f8f8', height: '100vh'}}>
             <Listbox items={items}>
                 {(item) => (
                     <ListboxItem
