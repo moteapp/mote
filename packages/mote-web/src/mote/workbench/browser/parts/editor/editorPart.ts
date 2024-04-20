@@ -1,18 +1,22 @@
 import ReactDOM from 'react-dom/client'
 import React from 'react';
 import { Part } from 'mote/workbench/browser/part';
-import { IWorkbenchLayoutService, Parts } from 'mote/workbench/service/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/workbenchLayoutService';
 import { QuickNote } from 'mote/base/component/quicknote/quicknote';
 import { IEditorGroupView, IEditorPartCreationOptions, IEditorPartsView } from './editor';
 import { mainWindow } from 'mote/base/browser/window';
 import { GroupIdentifier } from 'mote/workbench/common/editorCommon';
 import { Emitter, PauseableEmitter } from 'vs/base/common/event';
-import { ISerializedGrid, SerializableGrid } from 'vs/base/browser/ui/grid/grid';
-import { GroupDirection } from 'mote/workbench/service/editor/common/editorGroupsService';
+import { GridBranchNode, GridNode, ISerializedGrid, ISerializedNode, Orientation, SerializableGrid, isGridBranchNode } from 'vs/base/browser/ui/grid/grid';
+import { EditorGroupLayout, GroupDirection, GroupLayoutArgument, GroupOrientation, GroupsOrder, IMergeGroupOptions } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { EditorGroupView } from './editorGroupView';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { ServiceCollection } from 'vs/platform/instantiation/common/serviceCollection';
 import { ISerializedEditorGroupModel, isSerializedEditorGroupModel } from 'mote/workbench/common/editor/editorGroupModel';
+import { coalesce, distinct } from 'vs/base/common/arrays';
+import { MoteEditor } from 'mote/editor/browser/moteEditor';
+import { Dimension } from 'mote/base/browser/dom';
+import { DeferredPromise } from 'vs/base/common/async';
 
 export interface IEditorPartUIState {
 	readonly serializedGrid: ISerializedGrid;
@@ -50,6 +54,7 @@ export class EditorPart extends Part {
 
     //#endregion
 
+    protected root!: ReactDOM.Root;
     protected container: HTMLElement | undefined;
 
     private gridWidget!: SerializableGrid<IEditorGroupView>;
@@ -69,11 +74,8 @@ export class EditorPart extends Part {
 
     create(parent: HTMLElement, options?: object): void {
         super.create(parent, options);
-        try {
-            ReactDOM.createRoot(parent).render(React.createElement(QuickNote));
-        } catch (error) {
-            console.error(error);
-        }
+        this.root =  ReactDOM.createRoot(parent);
+        this.root.render(React.createElement(MoteEditor, {width: this.minimumWidth, height: this.minimumHeight}));
     }
 
     protected override createContentArea(parent: HTMLElement, options?: IEditorPartCreationOptions): HTMLElement {
@@ -121,6 +123,9 @@ export class EditorPart extends Part {
 			groupView = EditorGroupView.createNew(this.editorPartsView, this, this.count, this.groupsLabel, this.scopedInstantiationService);
 		}
 
+        // Keep in map
+		this.groupViews.set(groupView.id, groupView);
+
         return groupView;
     }
 
@@ -128,9 +133,24 @@ export class EditorPart extends Part {
 
     }
 
+    //#region Restore
+
+    private _isReady = false;
+	get isReady(): boolean { return this._isReady; }
+
+	private readonly whenReadyPromise = new DeferredPromise<void>();
+	readonly whenReady = this.whenReadyPromise.p;
+
+	private readonly whenRestoredPromise = new DeferredPromise<void>();
+	readonly whenRestored = this.whenRestoredPromise.p;
+
+    //#endregion
+
     //#region Group operations
 
     private readonly groupViews = new Map<GroupIdentifier, IEditorGroupView>();
+    private mostRecentActiveGroups: GroupIdentifier[] = [];
+
     get groups(): IEditorGroupView[] {
 		return Array.from(this.groupViews.values());
 	}
@@ -170,11 +190,45 @@ export class EditorPart extends Part {
 		return this.groupViews.get(identifier);
 	}
 
+    getGroups(order = GroupsOrder.CREATION_TIME): IEditorGroupView[] {
+        switch (order) {
+			case GroupsOrder.CREATION_TIME:
+				return this.groups;
+            case GroupsOrder.MOST_RECENTLY_ACTIVE: {
+                const mostRecentActive = coalesce(this.mostRecentActiveGroups.map(groupId => this.getGroup(groupId)));
+
+                // there can be groups that got never active, even though they exist. in this case
+                // make sure to just append them at the end so that all groups are returned properly
+                return distinct([...mostRecentActive, ...this.groups]);
+            }
+            case GroupsOrder.GRID_APPEARANCE: {
+                const views: IEditorGroupView[] = [];
+                if (this.gridWidget) {
+                    this.fillGridNodes(views, this.gridWidget.getViews());
+                }
+
+                return views;
+            }
+        }
+    }
+
+    private fillGridNodes(target: IEditorGroupView[], node: GridBranchNode<IEditorGroupView> | GridNode<IEditorGroupView>): void {
+		if (isGridBranchNode(node)) {
+			node.children.forEach(child => this.fillGridNodes(target, child));
+		} else {
+			target.push(node.view);
+		}
+	}
+
     activateGroup(group: IEditorGroupView | GroupIdentifier, preserveWindowOrder?: boolean): IEditorGroupView {
 		const groupView = this.assertGroupView(group);
 		this.doSetGroupActive(groupView);
 
         return groupView;
+    }
+
+    mergeGroup(group: IEditorGroupView | GroupIdentifier, target: IEditorGroupView | GroupIdentifier, options?: IMergeGroupOptions): boolean {
+        return true;
     }
 
     protected assertGroupView(group: IEditorGroupView | GroupIdentifier): IEditorGroupView {
@@ -209,6 +263,94 @@ export class EditorPart extends Part {
 		// even if its the same group that is already active to
 		// signal the intent even when nothing has changed.
 		this._onDidActivateGroup.fire(group);
+    }
+
+    //#endregion
+
+    //#region Layout
+
+    private top = 0;
+	private left = 0;
+	private _contentDimension!: Dimension;
+	get contentDimension(): Dimension { return this._contentDimension; }
+
+    override layout(width: number, height: number, top: number, left: number): void {
+		this.top = top;
+		this.left = left;
+
+		// Layout contents
+		const contentAreaSize = super.layoutContents(width, height).contentSize;
+
+		// Layout editor container
+		this.doLayout(Dimension.lift(contentAreaSize), top, left);
+	}
+
+    private doLayout(dimension: Dimension, top = this.top, left = this.left): void {
+		this._contentDimension = dimension;
+
+        this.root!.render(React.createElement(MoteEditor, {width: dimension.width, height: dimension.height}));
+
+		// Layout Grid
+		//this.centeredLayoutWidget.layout(this._contentDimension.width, this._contentDimension.height, top, left);
+
+		// Event
+		//this._onDidLayout.fire(dimension);
+	}
+
+    getLayout(): EditorGroupLayout {
+
+		// Example return value:
+		// { orientation: 0, groups: [ { groups: [ { size: 0.4 }, { size: 0.6 } ], size: 0.5 }, { groups: [ {}, {} ], size: 0.5 } ] }
+
+		const serializedGrid = this.gridWidget.serialize();
+		const orientation = serializedGrid.orientation === Orientation.HORIZONTAL ? GroupOrientation.HORIZONTAL : GroupOrientation.VERTICAL;
+		const root = this.serializedNodeToGroupLayoutArgument(serializedGrid.root);
+
+		return {
+			orientation,
+			groups: root.groups as GroupLayoutArgument[]
+		};
+	}
+
+    private serializedNodeToGroupLayoutArgument(serializedNode: ISerializedNode): GroupLayoutArgument {
+		if (serializedNode.type === 'branch') {
+			return {
+				size: serializedNode.size,
+				groups: serializedNode.data.map(node => this.serializedNodeToGroupLayoutArgument(node))
+			};
+		}
+
+		return { size: serializedNode.size };
+	}
+
+    applyLayout(layout: EditorGroupLayout): void {
+        // Determine how many groups we need overall
+		let layoutGroupsCount = 0;
+		function countGroups(groups: GroupLayoutArgument[]): void {
+			for (const group of groups) {
+				if (Array.isArray(group.groups)) {
+					countGroups(group.groups);
+				} else {
+					layoutGroupsCount++;
+				}
+			}
+		}
+		countGroups(layout.groups);
+
+        // If we currently have too many groups, merge them into the last one
+		let currentGroupViews = this.getGroups(GroupsOrder.GRID_APPEARANCE);
+		if (layoutGroupsCount < currentGroupViews.length) {
+			const lastGroupInLayout = currentGroupViews[layoutGroupsCount - 1];
+			currentGroupViews.forEach((group, index) => {
+				if (index >= layoutGroupsCount) {
+					this.mergeGroup(group, lastGroupInLayout);
+				}
+			});
+
+			currentGroupViews = this.getGroups(GroupsOrder.GRID_APPEARANCE);
+		}
+
+		const activeGroup = this.activeGroup;
     }
 
     //#endregion

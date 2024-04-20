@@ -1,6 +1,6 @@
 import { Dimension } from 'mote/base/browser/dom';
 import { GroupIdentifier } from 'mote/workbench/common/editorCommon';
-import { GroupDirection, IEditorGroup, IEditorPart } from 'mote/workbench/service/editor/common/editorGroupsService';
+import { GroupDirection, IEditorGroup, IEditorPart } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { ISerializableView } from 'vs/base/browser/ui/grid/grid';
 import { IDisposable } from 'vs/base/common/lifecycle';
 

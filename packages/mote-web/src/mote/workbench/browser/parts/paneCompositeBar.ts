@@ -1,4 +1,4 @@
-import { Parts } from 'mote/workbench/service/layout/workbenchLayoutService';
+import { Parts } from 'mote/workbench/services/layout/workbenchLayoutService';
 import { Disposable } from 'vs/base/common/lifecycle';
 import { IPaneCompositePart } from './paneCompositePart';
 import { CompositeBar, ICompositeBarItem } from './compositeBar';

@@ -1,5 +1,5 @@
 import { Part } from 'mote/workbench/browser/part';
-import { IWorkbenchLayoutService, Parts } from 'mote/workbench/service/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/workbenchLayoutService';
 import { MutableDisposable } from 'vs/base/common/lifecycle';
 import { IPaneCompositeBarOptions, PaneCompositeBar } from 'mote/workbench/browser/parts/paneCompositeBar';
 import { IPaneCompositePart } from 'mote/workbench/browser/parts/paneCompositePart';

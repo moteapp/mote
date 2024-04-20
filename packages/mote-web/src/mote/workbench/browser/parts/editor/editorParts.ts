@@ -1,12 +1,14 @@
 import { MultiWindowParts } from 'mote/workbench/browser/part';
 import { EditorPart, MainEditorPart } from './editorPart';
-import { IAuxiliaryEditorPart, IEditorGroupsService } from 'mote/workbench/service/editor/common/editorGroupsService';
+import { EditorGroupLayout, IAuxiliaryEditorPart, IAuxiliaryEditorPartCreateEvent, IEditorGroupsService } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { IEditorGroupView, IEditorPartsView } from './editor';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { Emitter } from 'vs/base/common/event';
 import { GroupIdentifier } from 'mote/workbench/common/editorCommon';
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { AuxiliaryEditorPart, IAuxiliaryEditorPartOpenOptions } from './auxiliaryEditorPart';
+import { DisposableStore } from 'vs/base/common/lifecycle';
+import { DeferredPromise } from 'vs/base/common/async';
 
 export class EditorParts extends MultiWindowParts<EditorPart> implements IEditorGroupsService, IEditorPartsView {
     
@@ -64,6 +66,27 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 		return this.mainPart;
     }
 
+	//#region Lifecycle
+
+	private _isReady = false;
+	get isReady(): boolean { return this._isReady; }
+
+	private readonly whenReadyPromise = new DeferredPromise<void>();
+	readonly whenReady = this.whenReadyPromise.p;
+
+	private readonly whenRestoredPromise = new DeferredPromise<void>();
+	readonly whenRestored = this.whenRestoredPromise.p;
+
+	//#endregion
+
+	applyLayout(layout: EditorGroupLayout): void {
+		this.activePart.applyLayout(layout);
+	}
+
+	getLayout(): EditorGroupLayout {
+		return this.activePart.getLayout();
+	}
+
     //#region IEditorGroupsService
 
     get activeGroup(): IEditorGroupView {
@@ -87,8 +110,18 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
 
     //#region Auxiliary Editor Parts
 
+	private readonly _onDidCreateAuxiliaryEditorPart = this._register(new Emitter<IAuxiliaryEditorPartCreateEvent>());
+	readonly onDidCreateAuxiliaryEditorPart = this._onDidCreateAuxiliaryEditorPart.event;
+
     async createAuxiliaryEditorPart(options?: IAuxiliaryEditorPartOpenOptions): Promise<IAuxiliaryEditorPart> {
         const { part, instantiationService, disposables } = await this.instantiationService.createInstance(AuxiliaryEditorPart, this).create('auxiliary', options);
+
+		// Events
+		this._onDidAddGroup.fire(part.activeGroup);
+
+		const eventDisposables = disposables.add(new DisposableStore());
+		this._onDidCreateAuxiliaryEditorPart.fire({ part, instantiationService, disposables: eventDisposables });
+
 
         return part;
     }

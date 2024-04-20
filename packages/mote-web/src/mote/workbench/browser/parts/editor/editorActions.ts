@@ -1,4 +1,4 @@
-import { IEditorGroupsService } from 'mote/workbench/service/editor/common/editorGroupsService';
+import { IEditorGroupsService } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { localize, localize2 } from 'vs/nls';
 import { Categories } from 'vs/platform/action/common/actionCommonCategories';
 import { Action2 } from 'vs/platform/actions/common/actions';

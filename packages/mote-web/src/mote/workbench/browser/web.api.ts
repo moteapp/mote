@@ -1,3 +1,5 @@
+import { IWorkspaceToOpen } from "mote/platform/window/common/window";
+
 /**
  * The `IWorkbench` interface is the API facade for web embedders
  * to call into the workbench.
@@ -22,3 +24,11 @@ export interface IWorkbench {
 export interface IWorkbenchConstructionOptions {
     
 }
+
+/**
+ * A workspace to open in the workbench can either be:
+ * - a workspace file with 0-N folders (via `workspaceUri`)
+ * - a single folder (via `folderUri`)
+ * - empty (via `undefined`)
+ */
+export type IWorkspace = IWorkspaceToOpen | undefined;

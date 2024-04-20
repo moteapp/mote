@@ -95,7 +95,7 @@ export const {
 			return windows.size;
 		},
 		getWindowId(targetWindow: Window): number {
-			return (targetWindow as CodeWindow).vscodeWindowId;
+			return (targetWindow as MoteWindow).moteWindowId;
 		},
 		hasWindow(windowId: number): boolean {
 			return windows.has(windowId);

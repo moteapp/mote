@@ -1,5 +1,5 @@
 import { Disposable, DisposableMap, DisposableStore, IDisposable, toDisposable } from 'vs/base/common/lifecycle';
-import { IWorkbenchLayoutService, Parts, Position } from 'mote/workbench/service/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, Parts, Position } from 'mote/workbench/services/layout/workbenchLayoutService';
 import { Emitter } from 'vs/base/common/event';
 import { StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
 import { IDimension, getActiveDocument, getClientArea, getWindow, getWindows, position, size } from 'mote/base/browser/dom';
@@ -13,7 +13,9 @@ import { EditorPart } from './parts/editor/editorPart';
 import { ILogService } from 'mote/platform/log/common/log';
 import { isFullscreen } from 'vs/base/browser/browser';
 import { ActivitybarPart } from './parts/activitybar/activitybarPart';
-import { EditorGroupLayout, IEditorGroupsService } from 'mote/workbench/service/editor/common/editorGroupsService';
+import { EditorGroupLayout, IEditorGroupsService } from 'mote/workbench/services/editor/common/editorGroupsService';
+import { DeferredPromise, Promises } from 'vs/base/common/async';
+import { mark } from 'mote/base/common/performance';
 
 //#region Layout Implementation
 
@@ -361,6 +363,66 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
 	}
 
     //#endregion
+
+	//#region Restore
+
+	private readonly whenReadyPromise = new DeferredPromise<void>();
+	protected readonly whenReady = this.whenReadyPromise.p;
+
+	private readonly whenRestoredPromise = new DeferredPromise<void>();
+	readonly whenRestored = this.whenRestoredPromise.p;
+	private restored = false;
+
+	isRestored(): boolean {
+		return this.restored;
+	}
+
+	protected restoreParts(): void {
+
+		// distinguish long running restore operations that
+		// are required for the layout to be ready from those
+		// that are needed to signal restoring is done
+		const layoutReadyPromises: Promise<unknown>[] = [];
+		const layoutRestoredPromises: Promise<unknown>[] = [];
+
+		// Restore editors
+		layoutReadyPromises.push((async () => {
+			mark('mote/willRestoreEditors');
+
+			// first ensure the editor part is ready
+			await this.editorGroupService.whenReady;
+			mark('mote/restoreEditors/editorGroupsReady');
+
+			// apply editor layout if any
+			if (this.state.initialization.layout?.editors) {
+				this.editorGroupService.mainPart.applyLayout(this.state.initialization.layout.editors);
+			}
+		})());
+
+		// Restore default views (only when `IDefaultLayout` is provided)
+		const restoreDefaultViewsPromise = (async () => {
+
+		})();
+		layoutReadyPromises.push(restoreDefaultViewsPromise);
+
+		// Restore Sidebar
+		layoutReadyPromises.push((async () => {
+
+		})());
+
+		// Await for promises that we recorded to update
+		// our ready and restored states properly.
+		Promises.settled(layoutReadyPromises).finally(() => {
+			this.whenReadyPromise.complete();
+
+			Promises.settled(layoutRestoredPromises).finally(() => {
+				this.restored = true;
+				this.whenRestoredPromise.complete();
+			});
+		});
+	}
+
+	//#endregion
 }
 
 //#region Layout State Model

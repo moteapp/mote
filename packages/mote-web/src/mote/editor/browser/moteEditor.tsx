@@ -1,9 +1,14 @@
 import Editor from '@monaco-editor/react';
 
-export const MoteEditor = () => {
+interface MoteEditorProps {
+    height: number;
+    width: number;
+}
+
+export const MoteEditor = (props: MoteEditorProps) => {
     return (
         <div>
-            <Editor height="90vh" width={"900px"} defaultLanguage="plaintext" defaultValue="// some comment" />;
+            <Editor height={props.height} width={props.width} defaultLanguage="plaintext" defaultValue="// some comment" />;
         </div>
     );
 }

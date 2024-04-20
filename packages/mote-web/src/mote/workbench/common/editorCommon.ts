@@ -1,6 +1,48 @@
 import { Disposable } from 'vs/base/common/lifecycle';
 import { IComposite } from './composite';
 import { EditorInput } from 'mote/workbench/common/editor/editorInput';
+import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
+import { IEditorGroup } from 'mote/workbench/services/editor/common/editorGroupsService';
+
+// Static values for editor contributions
+export const EditorExtensions = {
+	EditorPane: 'workbench.contributions.editors',
+	EditorFactory: 'workbench.contributions.editor.inputFactories'
+};
+
+
+export interface IEditorDescriptor<T extends IEditorPane> {
+
+	/**
+	 * The unique type identifier of the editor. All instances
+	 * of the same `IEditorPane` should have the same type
+	 * identifier.
+	 */
+	readonly typeId: string;
+
+	/**
+	 * The display name of the editor.
+	 */
+	readonly name: string;
+
+	/**
+	 * Instantiates the editor pane using the provided services.
+	 */
+	instantiate(instantiationService: IInstantiationService, group: IEditorGroup): T;
+
+	/**
+	 * Whether the descriptor is for the provided editor pane.
+	 */
+	describes(editorPane: T): boolean;
+}
+
+export interface IWillInstantiateEditorPaneEvent {
+
+	/**
+	 * @see {@link IEditorDescriptor.typeId}
+	 */
+	readonly typeId: string;
+}
 
 export type GroupIdentifier = number;
 

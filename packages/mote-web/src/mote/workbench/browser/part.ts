@@ -1,6 +1,6 @@
 import { Component } from 'mote/workbench/common/component';
 import { Dimension, IDimension, IDomPosition } from 'vs/base/browser/dom';
-import { IWorkbenchLayoutService } from 'mote/workbench/service/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/workbenchLayoutService';
 import { ISerializableView } from 'vs/base/browser/ui/grid/grid';
 import { Event, Emitter } from 'vs/base/common/event';
 import { IViewSize } from 'vs/base/browser/ui/grid/gridview';
@@ -55,6 +55,8 @@ export abstract class Part extends Component implements ISerializableView {
 
 		this.titleArea = this.createTitleArea(parent, options);
 		this.contentArea = this.createContentArea(parent, options);
+
+		this.partLayout = new PartLayout(this.options, this.contentArea);
     }
 
 	/**
@@ -89,10 +91,9 @@ export abstract class Part extends Component implements ISerializableView {
 	 * Layout title and content area in the given dimension.
 	 */
 	protected layoutContents(width: number, height: number): ILayoutContentResult {
-		//const partLayout = assertIsDefined(this.partLayout);
+		const partLayout = assertIsDefined(this.partLayout);
 
-		//return partLayout.layout(width, height);
-		return {} as any;
+		return partLayout.layout(width, height);
 	}
 
 

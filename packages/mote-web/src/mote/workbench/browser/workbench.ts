@@ -5,12 +5,17 @@ import { ILogService } from 'mote/platform/log/common/log';
 import { mainWindow } from 'mote/base/browser/window';
 import { onUnexpectedError, setUnexpectedErrorHandler } from 'vs/base/common/errors';
 import { InstantiationService } from 'vs/platform/instantiation/common/instantiationService';
-import { IWorkbenchLayoutService, Parts, Position } from 'mote/workbench/service/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, Parts, Position } from 'mote/workbench/services/layout/workbenchLayoutService';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { isChrome, isFirefox, isLinux, isSafari, isWeb, isWindows } from 'vs/base/common/platform';
 import { coalesce } from 'vs/base/common/arrays';
 import { toErrorMessage } from 'vs/base/common/errorMessage';
 import { getSingletonServiceDescriptors } from 'vs/platform/instantiation/common/extensions';
+import { Registry } from 'vs/platform/registry/common/platform';
+import { IWorkbenchContributionsRegistry, WorkbenchExtensions } from 'mote/workbench/common/contribution';
+import { ILifecycleService, LifecyclePhase } from 'mote/workbench/services/lifecycle/common/lifecycle';
+import { DeferredPromise, RunOnceScheduler, timeout } from 'vs/base/common/async';
+import { runWhenWindowIdle } from 'mote/base/browser/dom';
 
 export class Workbench extends Layout {
 
@@ -76,9 +81,13 @@ export class Workbench extends Layout {
 			const instantiationService = this.initServices(this.serviceCollection);
 
             instantiationService.invokeFunction(accessor => {
+				const lifecycleService = accessor.get(ILifecycleService);
 
                 // Layout
 				this.initLayout(accessor);
+
+				// Registries
+				Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench).start(accessor);
 
                 // Render Workbench
 				this.renderWorkbench(instantiationService);
@@ -88,6 +97,9 @@ export class Workbench extends Layout {
 
                 // Layout
 				this.layout();
+
+				// Restore
+				this.restore(lifecycleService);
             });
 
             return instantiationService;
@@ -171,5 +183,55 @@ export class Workbench extends Layout {
 		}
 
 		return part;
+	}
+
+	private restore(lifecycleService: ILifecycleService): void {
+		// Ask each part to restore
+		try {
+			this.restoreParts();
+		} catch (error) {
+			onUnexpectedError(error);
+		}
+
+		// Transition into restored phase after layout has restored
+		// but do not wait indefinitely on this to account for slow
+		// editors restoring. Since the workbench is fully functional
+		// even when the visible editors have not resolved, we still
+		// want contributions on the `Restored` phase to work before
+		// slow editors have resolved. But we also do not want fast
+		// editors to resolve slow when too many contributions get
+		// instantiated, so we find a middle ground solution via
+		// `Promise.race`
+		this.whenReady.finally(() =>
+			Promise.race([
+				this.whenRestored,
+				timeout(2000)
+			]).finally(() => {
+
+				// Update perf marks only when the layout is fully
+				// restored. We want the time it takes to restore
+				// editors to be included in these numbers
+
+				function markDidStartWorkbench() {
+					mark('mote/didStartWorkbench');
+					performance.measure('perf: workbench create & restore', 'mote/didLoadWorkbenchMain', 'mote/didStartWorkbench');
+				}
+
+				if (this.isRestored()) {
+					markDidStartWorkbench();
+				} else {
+					this.whenRestored.finally(() => markDidStartWorkbench());
+				}
+
+				// Set lifecycle phase to `Restored`
+				lifecycleService.phase = LifecyclePhase.Restored;
+
+				// Set lifecycle phase to `Eventually` after a short delay and when idle (min 2.5sec, max 5sec)
+				const eventuallyPhaseScheduler = this._register(new RunOnceScheduler(() => {
+					this._register(runWhenWindowIdle(mainWindow, () => lifecycleService.phase = LifecyclePhase.Eventually, 2500));
+				}, 2500));
+				eventuallyPhaseScheduler.schedule();
+			})
+		);
 	}
 }

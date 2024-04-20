@@ -1,7 +1,8 @@
 import { Event } from 'vs/base/common/event';
 import { GroupIdentifier } from 'mote/workbench/common/editorCommon';
-import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
+import { IInstantiationService, createDecorator } from 'vs/platform/instantiation/common/instantiation';
 import { IRectangle } from 'mote/platform/window/common/window';
+import { DisposableStore } from 'vs/base/common/lifecycle';
 
 export const IEditorGroupsService = createDecorator<IEditorGroupsService>('editorGroupsService');
 
@@ -22,6 +23,24 @@ export const enum GroupLocation {
 	LAST,
 	NEXT,
 	PREVIOUS
+}
+
+export const enum GroupsOrder {
+
+	/**
+	 * Groups sorted by creation order (oldest one first)
+	 */
+	CREATION_TIME,
+
+	/**
+	 * Groups sorted by most recent activity (most recent active first)
+	 */
+	MOST_RECENTLY_ACTIVE,
+
+	/**
+	 * Groups sorted by grid widget order
+	 */
+	GRID_APPEARANCE
 }
 
 export const enum GroupsArrangement {
@@ -58,6 +77,16 @@ export interface GroupLayoutArgument {
 	 * parent orientation.
 	 */
 	readonly groups?: GroupLayoutArgument[];
+}
+
+export const enum MergeGroupMode {
+	COPY_EDITORS,
+	MOVE_EDITORS
+}
+
+export interface IMergeGroupOptions {
+	mode?: MergeGroupMode;
+	readonly index?: number;
 }
 
 export interface EditorGroupLayout {
@@ -104,9 +133,51 @@ export interface IEditorGroupsContainer {
 	readonly onDidRemoveGroup: Event<IEditorGroup>;
 
 	/**
+	 * A property that indicates when groups have been created
+	 * and are ready to be used in the editor part.
+	 */
+	readonly isReady: boolean;
+
+	/**
+	 * A promise that resolves when groups have been created
+	 * and are ready to be used in the editor part.
+	 *
+	 * Await this promise to safely work on the editor groups model
+	 * (for example, install editor group listeners).
+	 *
+	 * Use the `whenRestored` property to await visible editors
+	 * having fully resolved.
+	 */
+	readonly whenReady: Promise<void>;
+
+	/**
+	 * A promise that resolves when groups have been restored in
+	 * the editor part.
+	 *
+	 * For groups with active editor, the promise will resolve
+	 * when the visible editor has finished to resolve.
+	 *
+	 * Use the `whenReady` property to not await editors to
+	 * resolve.
+	 */
+	readonly whenRestored: Promise<void>;
+
+
+	/**
 	 * An active group is the default location for new editors to open.
 	 */
 	readonly activeGroup: IEditorGroup;
+
+	/**
+	 * Applies the provided layout by either moving existing groups or creating new groups.
+	 */
+	applyLayout(layout: EditorGroupLayout): void;
+
+	/**
+	 * Returns an editor layout of the container.
+	 */
+	getLayout(): EditorGroupLayout;
+
 }
 
 /**
@@ -126,6 +197,12 @@ export interface IAuxiliaryEditorPart extends IEditorPart {
 	 * @returns `false` if an editor could not be moved back.
 	 */
 	close(): boolean;
+}
+
+export interface IAuxiliaryEditorPartCreateEvent {
+	readonly part: IAuxiliaryEditorPart;
+	readonly instantiationService: IInstantiationService;
+	readonly disposables: DisposableStore;
 }
 
 /**

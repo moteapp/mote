@@ -1,11 +1,11 @@
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { EditorPart, IEditorPartUIState } from './editorPart';
 import { DisposableStore } from 'vs/base/common/lifecycle';
-import { IAuxiliaryEditorPart } from 'mote/workbench/service/editor/common/editorGroupsService';
+import { IAuxiliaryEditorPart } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { IEditorPartsView } from './editor';
-import { IWorkbenchLayoutService } from 'mote/workbench/service/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/workbenchLayoutService';
 import { ServiceCollection } from 'vs/platform/instantiation/common/serviceCollection';
-import { IAuxiliaryWindowOpenOptions } from 'mote/workbench/service/auxiliaryWindow/browser/auxiliaryWindowService';
+import { IAuxiliaryWindowOpenOptions } from 'mote/workbench/services/auxiliaryWindow/browser/auxiliaryWindowService';
 
 export interface IAuxiliaryEditorPartOpenOptions extends IAuxiliaryWindowOpenOptions {
     readonly state?: IEditorPartUIState;
