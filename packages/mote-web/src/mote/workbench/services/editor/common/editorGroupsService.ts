@@ -3,6 +3,7 @@ import { GroupIdentifier, IEditorPartOptions, IEditorPartOptionsChangeEvent } fr
 import { IInstantiationService, createDecorator } from 'vs/platform/instantiation/common/instantiation';
 import { IRectangle } from 'mote/platform/window/common/window';
 import { DisposableStore } from 'vs/base/common/lifecycle';
+import { IContextKeyService } from 'vs/platform/contextkey/common/contextkey';
 
 export const IEditorGroupsService = createDecorator<IEditorGroupsService>('editorGroupsService');
 
@@ -108,6 +109,11 @@ export interface IEditorGroup {
 	 * group is moved to different locations.
 	 */
 	readonly id: GroupIdentifier;
+
+	/**
+	 * The scoped context key service for this group.
+	 */
+	readonly scopedContextKeyService: IContextKeyService;
 
 	/**
 	 * Move keyboard focus into the group.

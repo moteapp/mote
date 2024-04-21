@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as dom from 'vs/base/browser/dom';
+import * as dom from 'mote/base/browser/dom';
 import { Emitter, Event, IValueWithChangeEvent } from 'vs/base/common/event';
 import { IHoverDelegate } from 'vs/base/browser/ui/hover/hoverDelegate';
 import { IListVirtualDelegate } from 'vs/base/browser/ui/list/list';

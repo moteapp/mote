@@ -14,6 +14,7 @@ import 'mote/workbench/browser/parts/editor/editorParts';
 //#region --- workbench services
 
 import 'vs/platform/actions/common/actions.contribution';
+import 'mote/workbench/contrib/quickaccess/browser/quickAccess.contribution';
 import 'mote/editor/browser/services/hoverService/hoverService';
 import 'mote/workbench/services/commands/common/commandService';
 import 'mote/workbench/services/quickinput/browser/quickInputService';
@@ -23,21 +24,29 @@ import 'mote/workbench/services/keybinding/browser/keybindingService';
 import 'mote/workbench/services/themes/browser/workbenchThemeService';
 import 'mote/workbench/services/language/common/languageService';
 import 'mote/workbench/services/themes/browser/browserHostColorSchemeService';
+import 'mote/workbench/services/dialogs/common/dialogService';
+import 'mote/workbench/services/editor/browser/editorService';
 
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { IContextKeyService } from 'vs/platform/contextkey/common/contextkey';
 import { ContextKeyService } from 'vs/platform/contextkey/browser/contextKeyService';
 import { ContextViewService } from 'vs/platform/contextview/browser/contextViewService';
 import { IContextViewService } from 'vs/platform/contextview/browser/contextView';
+import { IListService, ListService } from 'vs/platform/list/browser/listService';
 
 
 registerSingleton(IContextKeyService, ContextKeyService, InstantiationType.Delayed);
 registerSingleton(IContextViewService, ContextViewService, InstantiationType.Delayed);
+registerSingleton(IListService, ListService, InstantiationType.Delayed);
 
 //#endregion
 
 //#region --- workbench contributions
 
-import 'mote/workbench/contrib/files/files.contribution';
+
+// Explorer
+import 'mote/workbench/contrib/files/browser/files.contribution';
+import 'mote/workbench/contrib/files/browser/fileActions.contribution';
+
 
 //#endregion

@@ -10,6 +10,7 @@ import { IInstantiationService } from 'vs/platform/instantiation/common/instanti
 import { coalesce } from 'vs/base/common/arrays';
 import { ServiceCollection } from 'vs/platform/instantiation/common/serviceCollection';
 import { EditorGroupModel, ISerializedEditorGroupModel } from 'mote/workbench/common/editor/editorGroupModel';
+import { IContextKeyService } from 'vs/platform/contextkey/common/contextkey';
 
 export class EditorGroupView extends Disposable implements IEditorGroupView {
 
@@ -25,6 +26,11 @@ export class EditorGroupView extends Disposable implements IEditorGroupView {
 		return instantiationService.createInstance(EditorGroupView, copyFrom, groupsView, groupIndex, groupsLabel, editorPartsView);
 	}
 
+    /**
+	 * Access to the context key service scoped to this editor group.
+	 */
+	readonly scopedContextKeyService: IContextKeyService;
+
     //private readonly model: EditorGroupModel;
     private active: boolean | undefined;
     private readonly editorPane: EditorPanes;
@@ -37,12 +43,16 @@ export class EditorGroupView extends Disposable implements IEditorGroupView {
         private _index: number,
         private groupsLabel: string,
         private readonly editorPartsView: IEditorPartsView,
+        @IContextKeyService private readonly contextKeyService: IContextKeyService,
         @IInstantiationService private readonly instantiationService: IInstantiationService,
     ) {
         super();
 
         //#region create()
 		{
+            // Scoped context key service
+			this.scopedContextKeyService = this._register(this.contextKeyService.createScoped(this.element));
+
             // Container
 			this.element.classList.add(...coalesce(['editor-group-container']));
 

@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as dom from 'vs/base/browser/dom';
+import * as dom from 'mote/base/browser/dom';
 import { ActionBar } from 'vs/base/browser/ui/actionbar/actionbar';
 import { ActionViewItem } from 'vs/base/browser/ui/actionbar/actionViewItems';
 import { Button } from 'vs/base/browser/ui/button/button';
@@ -20,7 +20,7 @@ import { IInputBox, IInputOptions, IKeyMods, IPickOptions, IQuickInput, IQuickIn
 import { QuickInputBox } from 'vs/platform/quickinput/browser/quickInputBox';
 import { QuickInputUI, Writeable, IQuickInputStyles, IQuickInputOptions, QuickPick, backButton, InputBox, Visibilities, QuickWidget } from 'vs/platform/quickinput/browser/quickInput';
 import { ILayoutService } from 'mote/platform/layout/browser/layoutService';
-import { mainWindow } from 'vs/base/browser/window';
+import { mainWindow } from 'mote/base/browser/window';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { QuickInputListFocus, QuickInputTree } from 'vs/platform/quickinput/browser/quickInputTree';
 

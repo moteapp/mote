@@ -3,8 +3,7 @@ import { SVGIcon } from 'mote/base/component/icon/svgIcon';
 import './actionButton.css';
 import { useState } from 'react';
 import { instantiationService } from 'mote/workbench/browser/web.main';
-import { NewEmptyEditorWindowAction } from 'mote/workbench/browser/parts/editor/editorActions';
-import { newWindowCommand } from 'mote/workbench/contrib/files/fileCommands';
+
 
 interface ActionButtonProps {
     visible: boolean;
@@ -15,7 +14,7 @@ export const ActionButton = (props: ActionButtonProps ) => {
 
     const handleAddPage = () => {
         instantiationService.invokeFunction((accessor) => {
-            newWindowCommand(accessor, {})
+            //newWindowCommand(accessor, {})
         });
     }
 

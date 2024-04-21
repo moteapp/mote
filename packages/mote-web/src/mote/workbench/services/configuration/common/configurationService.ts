@@ -9,7 +9,13 @@ export class NullCongirgutionService extends Disposable implements IConfiguratio
 
 
     getConfiguration() {
-        return {};
+        return {
+            workbench: {
+                commandPalette: {
+
+                }
+            }
+        };
     }
     getValue() {
         return {};

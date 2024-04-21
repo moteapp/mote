@@ -16,6 +16,9 @@ import { IWorkbenchContributionsRegistry, WorkbenchExtensions } from 'mote/workb
 import { ILifecycleService, LifecyclePhase } from 'mote/workbench/services/lifecycle/common/lifecycle';
 import { DeferredPromise, RunOnceScheduler, timeout } from 'vs/base/common/async';
 import { runWhenWindowIdle } from 'mote/base/browser/dom';
+import { setHoverDelegateFactory } from 'vs/base/browser/ui/hover/hoverDelegateFactory';
+import { setBaseLayerHoverDelegate } from 'vs/base/browser/ui/hover/hoverDelegate2';
+import { IHoverService, WorkbenchHoverDelegate } from 'vs/platform/hover/browser/hover';
 
 export class Workbench extends Layout {
 
@@ -82,6 +85,12 @@ export class Workbench extends Layout {
 
             instantiationService.invokeFunction(accessor => {
 				const lifecycleService = accessor.get(ILifecycleService);
+				const hoverService = accessor.get(IHoverService);
+
+				// Default Hover Delegate must be registered before creating any workbench/layout components
+				// as these possibly will use the default hover delegate
+				setHoverDelegateFactory((placement, enableInstantHover) => instantiationService.createInstance(WorkbenchHoverDelegate, placement, enableInstantHover, {}));
+				setBaseLayerHoverDelegate(hoverService);
 
                 // Layout
 				this.initLayout(accessor);

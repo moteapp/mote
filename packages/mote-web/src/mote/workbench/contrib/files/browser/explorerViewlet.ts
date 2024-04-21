@@ -6,7 +6,7 @@ import { IViewContainersRegistry, ViewContainer, ViewContainerLocation, ViewExte
 import { localize, localize2 } from 'vs/nls';
 import { KeyCode, KeyMod } from 'vs/base/common/keyCodes';
 import { SyncDescriptor } from 'vs/platform/instantiation/common/descriptors';
-import { VIEWLET_ID } from './common/filesCommon';
+import { VIEWLET_ID } from '../common/filesCommon';
 import { registerIcon } from 'vs/platform/theme/common/iconRegistry';
 import { Codicon } from 'vs/base/common/codicons';
 

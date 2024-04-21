@@ -1,6 +1,7 @@
 import { Dimension } from 'mote/base/browser/dom';
 import { GroupIdentifier } from 'mote/workbench/common/editorCommon';
 import { GroupDirection, IEditorGroup, IEditorPart } from 'mote/workbench/services/editor/common/editorGroupsService';
+import { IEditorService } from 'mote/workbench/services/editor/common/editorService';
 import { ISerializableView } from 'vs/base/browser/ui/grid/grid';
 import { IDisposable } from 'vs/base/common/lifecycle';
 
@@ -42,4 +43,12 @@ export interface IEditorPartsView {
 	registerPart(part: IEditorPart): IDisposable;
 
     getGroup(identifier: GroupIdentifier): IEditorGroupView | undefined;
+}
+
+/**
+ * A sub-interface of IEditorService to hide some workbench-core specific
+ * events from clients.
+ */
+export interface EditorServiceImpl extends IEditorService {
+    
 }
