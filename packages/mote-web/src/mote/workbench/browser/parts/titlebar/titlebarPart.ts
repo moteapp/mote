@@ -2,11 +2,11 @@ import ReactDOM from 'react-dom/client'
 import React from 'react';
 import { Emitter, Event } from 'vs/base/common/event';
 import { MultiWindowParts, Part } from 'mote/workbench/browser/part';
-import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
 import { Titlebar } from 'mote/base/component/titlebar/titlebarPart';
 import { DisposableStore, IDisposable } from 'vs/base/common/lifecycle';
 import { getZoomFactor, isWCOEnabled } from 'vs/base/browser/browser';
-import { append, $, getWindow, prepend, reset } from 'mote/base/browser/dom';
+import { append, $, getWindow, prepend, reset, Dimension } from 'mote/base/browser/dom';
 import { isMacintosh, isWeb } from 'vs/base/common/platform';
 import { IEditorGroupsContainer } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { MoteWindow, mainWindow } from 'mote/base/browser/window';
@@ -61,7 +61,7 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 	readonly maximumWidth: number = Number.POSITIVE_INFINITY;
 
 	get minimumHeight(): number {
-		const value = this.isCommandCenterVisible || (isWeb && isWCOEnabled()) ? 35 : 30;
+		const value = this.isCommandCenterVisible || (isWeb && isWCOEnabled()) ? 48 : 35;
 
 		return value / (this.preventZoom ? getZoomFactor(getWindow(this.element)) : 1);
 	}
@@ -80,6 +80,7 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 	private rightContent!: HTMLElement;
 
     protected appIcon: HTMLElement | undefined;
+	private lastLayoutDimensions: Dimension | undefined;
 
     private readonly titleDisposables = this._register(new DisposableStore());
 
@@ -151,6 +152,30 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 		this.titleDisposables.add(commandCenter);
     }
 
+	override layout(width: number, height: number): void {
+		this.updateLayout(new Dimension(width, height));
+
+		super.layoutContents(width, height);
+	}
+
+	private updateLayout(dimension: Dimension): void {
+		this.lastLayoutDimensions = dimension;
+
+		/*
+		if (hasCustomTitlebar(this.configurationService, this.titleBarStyle)) {
+			const zoomFactor = getZoomFactor(getWindow(this.element));
+
+			this.element.style.setProperty('--zoom-factor', zoomFactor.toString());
+			this.rootContainer.classList.toggle('counter-zoom', this.preventZoom);
+
+			if (this.customMenubar) {
+				const menubarDimension = new Dimension(0, dimension.height);
+				this.customMenubar.layout(menubarDimension);
+			}
+		}
+		*/
+	}
+
     toJSON(): object {
 		return {
 			type: Parts.TITLEBAR_PART
@@ -161,43 +186,6 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 		this._onWillDispose.fire();
 
 		super.dispose();
-	}
-}
-
-export class TitlebarPart extends Part {
-
-    //#region IView
-
-	readonly minimumWidth: number = 0;
-	readonly maximumWidth: number = Number.POSITIVE_INFINITY;
-
-    get minimumHeight(): number {
-        return 48;
-    }
-
-    get maximumHeight(): number { return this.minimumHeight; }
-
-    //#endregion
-
-    constructor(
-        @IWorkbenchLayoutService layoutService: IWorkbenchLayoutService,
-    ) {
-        super(Parts.TITLEBAR_PART, {}, layoutService);
-    }
-
-    create(parent: HTMLElement, options?: object): void {
-        super.create(parent, options);
-        try {
-            ReactDOM.createRoot(parent).render(React.createElement(Titlebar));
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    toJSON(): object {
-		return {
-			type: Parts.TITLEBAR_PART
-		};
 	}
 }
 

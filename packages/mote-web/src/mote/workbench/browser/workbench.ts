@@ -5,7 +5,7 @@ import { ILogService } from 'mote/platform/log/common/log';
 import { mainWindow } from 'mote/base/browser/window';
 import { onUnexpectedError, setUnexpectedErrorHandler } from 'vs/base/common/errors';
 import { InstantiationService } from 'vs/platform/instantiation/common/instantiationService';
-import { IWorkbenchLayoutService, Parts, Position } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, Parts, Position } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { isChrome, isFirefox, isLinux, isSafari, isWeb, isWindows } from 'vs/base/common/platform';
 import { coalesce } from 'vs/base/common/arrays';

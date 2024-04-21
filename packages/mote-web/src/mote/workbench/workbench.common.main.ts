@@ -6,6 +6,7 @@ import 'mote/workbench/browser/actions/quickAccessActions';
 
 //#region --- workbench parts
 
+import 'mote/workbench/browser/parts/editor/editor.contribution';
 import 'mote/workbench/browser/parts/editor/editorParts';
 
 //#endregion
@@ -19,7 +20,9 @@ import 'mote/workbench/services/quickinput/browser/quickInputService';
 import 'mote/workbench/services/editor/browser/editorPaneService';
 import 'mote/workbench/services/notification/common/notificationService';
 import 'mote/workbench/services/keybinding/browser/keybindingService';
-
+import 'mote/workbench/services/themes/browser/workbenchThemeService';
+import 'mote/workbench/services/language/common/languageService';
+import 'mote/workbench/services/themes/browser/browserHostColorSchemeService';
 
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { IContextKeyService } from 'vs/platform/contextkey/common/contextkey';

@@ -5,7 +5,7 @@ import { Event, Emitter } from 'vs/base/common/event';
 import { IContextKey, IContextKeyService, RawContextKey } from 'vs/platform/contextkey/common/contextkey';
 import { IView, IViewDescriptor, IViewDescriptorService, ViewContainerLocation } from 'mote/workbench/common/views';
 import { FocusedViewContext, getVisbileViewContextKey } from 'mote/workbench/common/contextKeys';
-import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
 import { IPaneComposite } from 'mote/workbench/common/panecomposite';
 
 export class ViewsService extends Disposable implements IViewsService {

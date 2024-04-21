@@ -65,3 +65,38 @@ export class NavigateForwardAction extends Action2 {
 		//await historyService.goForward(GoFilter.NONE);
 	}
 }
+
+export class NavigateBackwardsAction extends Action2 {
+
+	static readonly ID = 'workbench.action.navigateBack';
+	static readonly LABEL = localize('navigateBack', "Go Back");
+
+	constructor() {
+		super({
+			id: NavigateBackwardsAction.ID,
+			title: {
+				...localize2('navigateBack', "Go Back"),
+				mnemonicTitle: localize({ key: 'miBack', comment: ['&& denotes a mnemonic'] }, "&&Back")
+			},
+			f1: true,
+			precondition: ContextKeyExpr.has('canNavigateBack'),
+			icon: Codicon.arrowLeft,
+			keybinding: {
+				weight: KeybindingWeight.WorkbenchContrib,
+				win: { primary: KeyMod.Alt | KeyCode.LeftArrow },
+				mac: { primary: KeyMod.WinCtrl | KeyCode.Minus },
+				linux: { primary: KeyMod.CtrlCmd | KeyMod.Alt | KeyCode.Minus }
+			},
+			menu: [
+				{ id: MenuId.MenubarGoMenu, group: '1_history_nav', order: 1 },
+				{ id: MenuId.CommandCenter, order: 1 }
+			]
+		});
+	}
+
+	async run(accessor: ServicesAccessor): Promise<void> {
+		//const historyService = accessor.get(IHistoryService);
+
+		//await historyService.goBack(GoFilter.NONE);
+	}
+}

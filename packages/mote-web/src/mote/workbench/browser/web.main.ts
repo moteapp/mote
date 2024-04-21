@@ -18,7 +18,7 @@ import { IKeybindingService } from 'vs/platform/keybinding/common/keybinding';
 import { ITelemetryService } from 'vs/platform/telemetry/common/telemetry';
 import { NullTelemetryServiceShape } from 'vs/platform/telemetry/common/telemetryUtils';
 import { NullCongirgutionService } from 'mote/workbench/services/configuration/common/configurationService';
-import { NullThemeService } from '../services/theme/browser/themeService';
+import { NullThemeService } from '../services/themes/browser/themeService';
 import { UriIdentityService } from 'vs/platform/uriIdentity/common/uriIdentityService';
 import { IUriIdentityService } from 'vs/platform/uriIdentity/common/uriIdentity';
 import { FileService } from 'vs/platform/files/common/fileService';

@@ -3,7 +3,7 @@ import { EditorPart, IEditorPartUIState } from './editorPart';
 import { DisposableStore } from 'vs/base/common/lifecycle';
 import { IAuxiliaryEditorPart } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { IEditorPartsView } from './editor';
-import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
 import { ServiceCollection } from 'vs/platform/instantiation/common/serviceCollection';
 import { IAuxiliaryWindowOpenOptions } from 'mote/workbench/services/auxiliaryWindow/browser/auxiliaryWindowService';
 

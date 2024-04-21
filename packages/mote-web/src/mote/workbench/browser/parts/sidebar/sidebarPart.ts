@@ -1,5 +1,5 @@
 import { IPartOptions, Part } from 'mote/workbench/browser/part';
-import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
 import { Sidebar } from './sidebar';
 import ReactDOM from 'react-dom/client'
 import React from 'react';

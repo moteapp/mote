@@ -1,12 +1,11 @@
 import { Disposable, DisposableMap, DisposableStore, IDisposable, toDisposable } from 'vs/base/common/lifecycle';
-import { IWorkbenchLayoutService, MULTI_WINDOW_PARTS, Parts, Position, SINGLE_WINDOW_PARTS } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, MULTI_WINDOW_PARTS, Parts, Position, SINGLE_WINDOW_PARTS } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
 import { Emitter } from 'vs/base/common/event';
 import { StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
 import { IDimension, getActiveDocument, getClientArea, getWindow, getWindows, position, size } from 'mote/base/browser/dom';
 import { IInstantiationService, ServicesAccessor } from 'vs/platform/instantiation/common/instantiation';
 import { Part } from './part';
 import { SidebarPart } from './parts/sidebar/sidebarPart';
-import { TitlebarPart } from './parts/titlebar/titlebarPart';
 import { ISerializableView, ISerializedGrid, ISerializedLeafNode, ISerializedNode, Orientation, SerializableGrid } from 'vs/base/browser/ui/grid/grid';
 import { mainWindow } from 'mote/base/browser/window';
 import { EditorPart } from './parts/editor/editorPart';
@@ -17,6 +16,7 @@ import { EditorGroupLayout, IEditorGroupsService } from 'mote/workbench/services
 import { DeferredPromise, Promises } from 'vs/base/common/async';
 import { mark } from 'mote/base/common/performance';
 import { ITitleService } from 'mote/workbench/services/title/browser/titleService';
+import { WINDOW_ACTIVE_BORDER, WINDOW_INACTIVE_BORDER } from 'mote/workbench/common/theme';
 
 //#region Layout Implementation
 

@@ -107,10 +107,6 @@ export interface IThemeService {
 
 	readonly onDidColorThemeChange: Event<IColorTheme>;
 
-	getFileIconTheme(): IFileIconTheme;
-
-	readonly onDidFileIconThemeChange: Event<IFileIconTheme>;
-
 	getProductIconTheme(): IProductIconTheme;
 
 	readonly onDidProductIconThemeChange: Event<IProductIconTheme>;

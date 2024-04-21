@@ -1,6 +1,6 @@
 import { Component } from 'mote/workbench/common/component';
 import { Dimension, IDimension, IDomPosition } from 'vs/base/browser/dom';
-import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
 import { ISerializableView } from 'vs/base/browser/ui/grid/grid';
 import { Event, Emitter } from 'vs/base/common/event';
 import { IViewSize } from 'vs/base/browser/ui/grid/gridview';

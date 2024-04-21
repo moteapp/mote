@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import React from 'react';
 import { Part } from 'mote/workbench/browser/part';
-import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
 import { QuickNote } from 'mote/base/component/quicknote/quicknote';
 import { IEditorGroupView, IEditorPartCreationOptions, IEditorPartsView } from './editor';
 import { mainWindow } from 'mote/base/browser/window';
