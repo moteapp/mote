@@ -24,3 +24,7 @@ export interface IWorkspaceIdentifier extends IBaseWorkspaceIdentifier {
 export interface IEmptyWorkspaceIdentifier extends IBaseWorkspaceIdentifier { }
 
 export type IAnyWorkspaceIdentifier = IWorkspaceIdentifier | IEmptyWorkspaceIdentifier;
+
+export interface IWorkspaceFolder {
+	
+}

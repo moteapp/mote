@@ -127,6 +127,13 @@ export class EditorParts extends MultiWindowParts<EditorPart> implements IEditor
     }
 
     //#endregion
+
+	//#region Main Editor Part Only
+
+	get partOptions() { return this.mainPart.partOptions; }
+	get onDidChangeEditorPartOptions() { return this.mainPart.onDidChangeEditorPartOptions; }
+
+	//#endregion
 }
 
 registerSingleton(IEditorGroupsService, EditorParts, InstantiationType.Eager);

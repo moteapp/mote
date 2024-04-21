@@ -1,5 +1,5 @@
 import { Event } from 'vs/base/common/event';
-import { GroupIdentifier } from 'mote/workbench/common/editorCommon';
+import { GroupIdentifier, IEditorPartOptions, IEditorPartOptionsChangeEvent } from 'mote/workbench/common/editorCommon';
 import { IInstantiationService, createDecorator } from 'vs/platform/instantiation/common/instantiation';
 import { IRectangle } from 'mote/platform/window/common/window';
 import { DisposableStore } from 'vs/base/common/lifecycle';
@@ -223,9 +223,24 @@ export interface IEditorGroupsService extends IEditorGroupsContainer {
 	readonly parts: ReadonlyArray<IEditorPart>;
 
 	/**
+	 * An event that notifies when editor part options change.
+	 */
+	readonly onDidChangeEditorPartOptions: Event<IEditorPartOptionsChangeEvent>;
+
+	/**
+	 * Access the options of the editor part.
+	 */
+	readonly partOptions: IEditorPartOptions;
+
+	/**
 	 * Get the editor part that contains the group with the provided identifier.
 	 */
 	getPart(group: IEditorGroup | GroupIdentifier): IEditorPart;
+
+	/**
+	 * Get the editor part that is rooted in the provided container.
+	 */
+	getPart(container: unknown /* HTMLElement */): IEditorPart;
 
 	/**
 	 * Opens a new window with a full editor part instantiated

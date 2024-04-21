@@ -5,7 +5,7 @@ import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/w
 import { QuickNote } from 'mote/base/component/quicknote/quicknote';
 import { IEditorGroupView, IEditorPartCreationOptions, IEditorPartsView } from './editor';
 import { mainWindow } from 'mote/base/browser/window';
-import { GroupIdentifier } from 'mote/workbench/common/editorCommon';
+import { GroupIdentifier, IEditorPartOptions, IEditorPartOptionsChangeEvent } from 'mote/workbench/common/editorCommon';
 import { Emitter, PauseableEmitter } from 'vs/base/common/event';
 import { GridBranchNode, GridNode, ISerializedGrid, ISerializedNode, Orientation, SerializableGrid, isGridBranchNode } from 'vs/base/browser/ui/grid/grid';
 import { EditorGroupLayout, GroupDirection, GroupLayoutArgument, GroupOrientation, GroupsOrder, IMergeGroupOptions } from 'mote/workbench/services/editor/common/editorGroupsService';
@@ -51,6 +51,9 @@ export class EditorPart extends Part {
 
     private readonly _onDidChangeActiveGroup = this._register(new Emitter<IEditorGroupView>());
 	readonly onDidChangeActiveGroup = this._onDidChangeActiveGroup.event;
+
+	private readonly _onDidChangeEditorPartOptions = this._register(new Emitter<IEditorPartOptionsChangeEvent>());
+	readonly onDidChangeEditorPartOptions = this._onDidChangeEditorPartOptions.event;
 
     //#endregion
 
@@ -133,7 +136,7 @@ export class EditorPart extends Part {
 
     }
 
-    //#region Restore
+    //#region Lifecycle
 
     private _isReady = false;
 	get isReady(): boolean { return this._isReady; }
@@ -268,6 +271,13 @@ export class EditorPart extends Part {
     //#endregion
 
     //#region Layout
+
+	get partOptions(): IEditorPartOptions { 
+		return {
+			showTabs: 'single',
+			hasIcons: true,
+		}
+	}
 
     private top = 0;
 	private left = 0;

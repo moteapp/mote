@@ -3,6 +3,7 @@ import { IComposite } from './composite';
 import { EditorInput } from 'mote/workbench/common/editor/editorInput';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { IEditorGroup } from 'mote/workbench/services/editor/common/editorGroupsService';
+import { DeepRequiredNonNullable } from 'vs/base/common/types';
 
 // Static values for editor contributions
 export const EditorExtensions = {
@@ -61,4 +62,17 @@ export interface IEditorPane extends IComposite {
  */
 export interface IVisibleEditorPane extends IEditorPane {
 	readonly input: EditorInput;
+}
+
+interface IEditorPartConfiguration {
+	showTabs?: 'multiple' | 'single' | 'none';
+}
+
+export interface IEditorPartOptions extends DeepRequiredNonNullable<IEditorPartConfiguration> {
+	hasIcons: boolean;
+}
+
+export interface IEditorPartOptionsChangeEvent {
+	oldPartOptions: IEditorPartOptions;
+	newPartOptions: IEditorPartOptions;
 }

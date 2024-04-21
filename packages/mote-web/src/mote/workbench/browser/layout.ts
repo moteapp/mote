@@ -1,5 +1,5 @@
 import { Disposable, DisposableMap, DisposableStore, IDisposable, toDisposable } from 'vs/base/common/lifecycle';
-import { IWorkbenchLayoutService, Parts, Position } from 'mote/workbench/services/layout/workbenchLayoutService';
+import { IWorkbenchLayoutService, MULTI_WINDOW_PARTS, Parts, Position, SINGLE_WINDOW_PARTS } from 'mote/workbench/services/layout/workbenchLayoutService';
 import { Emitter } from 'vs/base/common/event';
 import { StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
 import { IDimension, getActiveDocument, getClientArea, getWindow, getWindows, position, size } from 'mote/base/browser/dom';
@@ -16,6 +16,7 @@ import { ActivitybarPart } from './parts/activitybar/activitybarPart';
 import { EditorGroupLayout, IEditorGroupsService } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { DeferredPromise, Promises } from 'vs/base/common/async';
 import { mark } from 'mote/base/common/performance';
+import { ITitleService } from 'mote/workbench/services/title/browser/titleService';
 
 //#region Layout Implementation
 
@@ -61,6 +62,15 @@ interface ILayoutState {
 export class Layout extends Disposable implements IWorkbenchLayoutService {
     _serviceBrand: undefined;
 
+	private readonly _onDidLayoutActiveContainer = this._register(new Emitter<IDimension>());
+	readonly onDidLayoutActiveContainer = this._onDidLayoutActiveContainer.event;
+
+	private readonly _onDidChangeActiveContainer = this._register(new Emitter<void>());
+	readonly onDidChangeActiveContainer = this._onDidChangeActiveContainer.event;
+
+	private readonly _onDidLayoutContainer = this._register(new Emitter<{ container: HTMLElement; dimension: IDimension }>());
+	readonly onDidLayoutContainer = this._onDidLayoutContainer.event;
+
     //#region Properties
 
     readonly mainContainer = document.createElement('div');
@@ -73,6 +83,7 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
     private activityBarPartView!: ISerializableView;
 
     private logService!: ILogService;
+	private titleService!: ITitleService;
 	private editorGroupService!: IEditorGroupsService;
 
     private state!: ILayoutState;
@@ -90,6 +101,7 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
 
         // Services
         this.logService = accessor.get(ILogService);
+		this.titleService = accessor.get(ITitleService);
 
 		// Parts
 		this.editorGroupService = accessor.get(IEditorGroupsService);
@@ -99,8 +111,8 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
         const sidebarPart = instantiationService.createInstance(SidebarPart);
         this.registerPart(sidebarPart);
 
-        const titlebarPart = instantiationService.createInstance(TitlebarPart);
-        this.registerPart(titlebarPart);
+        //const titlebarPart = instantiationService.createInstance(TitlebarPart);
+        //this.registerPart(titlebarPart);
 
         //const editorPart = instantiationService.createInstance(EditorPart, Parts.EDITOR_PART, mainWindow.moteWindowId, '', {} as any);
         //this.registerPart(editorPart);
@@ -337,6 +349,21 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
 		}
 	}
 
+	get mainContainerOffset() {
+		return this.computeContainerOffset(mainWindow);
+	}
+
+	get activeContainerOffset() {
+		return this.computeContainerOffset(getWindow(this.activeContainer));
+	}
+
+	private computeContainerOffset(targetWindow: Window) {
+		let top = 0;
+		let quickPickTop = 0;
+
+		return { top, quickPickTop };
+	}
+
     //#endregion
 
     //#region Parts
@@ -356,6 +383,49 @@ export class Layout extends Disposable implements IWorkbenchLayoutService {
 		}
 
 		return part;
+	}
+
+	focus(): void {
+		this.focusPart(Parts.EDITOR_PART, getWindow(this.activeContainer));
+	}
+
+	focusPart(part: MULTI_WINDOW_PARTS, targetWindow: Window): void;
+	focusPart(part: SINGLE_WINDOW_PARTS): void;
+	focusPart(part: Parts, targetWindow: Window = mainWindow): void {
+		const container = this.getContainer(targetWindow, part) ?? this.mainContainer;
+	}
+
+	getContainer(targetWindow: Window): HTMLElement;
+	getContainer(targetWindow: Window, part: Parts): HTMLElement | undefined;
+	getContainer(targetWindow: Window, part?: Parts): HTMLElement | undefined {
+		if (typeof part === 'undefined') {
+			return this.getContainerFromDocument(targetWindow.document);
+		}
+
+		if (targetWindow === mainWindow) {
+			return this.getPart(part).getContainer();
+		}
+
+		// Only some parts are supported for auxiliary windows
+		let partCandidate: unknown;
+		if (part === Parts.EDITOR_PART) {
+			partCandidate = this.editorGroupService.getPart(this.getContainerFromDocument(targetWindow.document));
+		}
+		/*
+		else if (part === Parts.STATUSBAR_PART) {
+			partCandidate = this.statusBarService.getPart(this.getContainerFromDocument(targetWindow.document));
+		} 
+		*/
+		else if (part === Parts.TITLEBAR_PART) {
+			partCandidate = this.titleService.getPart(this.getContainerFromDocument(targetWindow.document));
+		}
+
+		if (partCandidate instanceof Part) {
+			return partCandidate.getContainer();
+		}
+
+
+		return undefined;
 	}
 
     getSideBarPosition(): Position {

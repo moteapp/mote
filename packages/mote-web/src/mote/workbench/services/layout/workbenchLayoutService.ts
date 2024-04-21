@@ -1,4 +1,4 @@
-import { ILayoutService } from 'mote/platform/layout/layoutService';
+import { ILayoutService } from 'mote/platform/layout/browser/layoutService';
 import { Part } from 'mote/workbench/browser/part';
 import { IDisposable } from 'vs/base/common/lifecycle';
 import { refineServiceDecorator } from 'vs/platform/instantiation/common/instantiation';
@@ -21,6 +21,9 @@ export const enum Position {
 }
 
 export const IWorkbenchLayoutService = refineServiceDecorator<ILayoutService, IWorkbenchLayoutService>(ILayoutService);
+
+export type MULTI_WINDOW_PARTS = Parts.EDITOR_PART | Parts.TITLEBAR_PART;
+export type SINGLE_WINDOW_PARTS = Exclude<Parts, MULTI_WINDOW_PARTS>;
 
 export interface IWorkbenchLayoutService extends ILayoutService {
 

@@ -1,4 +1,6 @@
-import { URI } from "vs/base/common/uri";
+import { IEditorOptions } from "mote/platform/editor/common/editor";
+import { URI, UriComponents } from "vs/base/common/uri";
+import { FileType } from "vs/platform/files/common/files";
 
 export const WindowMinimumSize = {
 	WIDTH: 400,
@@ -53,3 +55,43 @@ export interface IFileToOpen extends IBaseWindowOpenable {
 }
 
 export type IWindowOpenable = IWorkspaceToOpen | IFileToOpen;
+
+export interface IPath<T = IEditorOptions> extends IPathData<T> {
+
+	/**
+	 * The file path to open within the instance
+	 */
+	fileUri?: URI;
+}
+
+export interface IPathData<T = IEditorOptions> {
+
+	/**
+	 * The file path to open within the instance
+	 */
+	readonly fileUri?: UriComponents;
+
+	/**
+	 * Optional editor options to apply in the file
+	 */
+	readonly options?: T;
+
+	/**
+	 * A hint that the file exists. if true, the
+	 * file exists, if false it does not. with
+	 * `undefined` the state is unknown.
+	 */
+	readonly exists?: boolean;
+
+	/**
+	 * A hint about the file type of this path.
+	 * with `undefined` the type is unknown.
+	 */
+	readonly type?: FileType;
+
+	/**
+	 * Specifies if the file should be only be opened
+	 * if it exists.
+	 */
+	readonly openOnlyIfExists?: boolean;
+}

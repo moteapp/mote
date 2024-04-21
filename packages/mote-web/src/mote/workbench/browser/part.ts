@@ -60,6 +60,13 @@ export abstract class Part extends Component implements ISerializableView {
     }
 
 	/**
+	 * Returns the overall part container.
+	 */
+	getContainer(): HTMLElement | undefined {
+		return this.parent;
+	}
+
+	/**
 	 * Subclasses override to provide a title area implementation.
 	 */
 	protected createTitleArea(parent: HTMLElement, options?: object): HTMLElement | undefined {
