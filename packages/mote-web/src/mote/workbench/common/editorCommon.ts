@@ -4,6 +4,8 @@ import { EditorInput } from 'mote/workbench/common/editor/editorInput';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { IEditorGroup } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { DeepRequiredNonNullable } from 'vs/base/common/types';
+import { IBaseTextResourceEditorInput, IResourceEditorInput, ITextResourceEditorInput } from 'vs/platform/editor/common/editor';
+import { URI } from 'vs/base/common/uri';
 
 // Static values for editor contributions
 export const EditorExtensions = {
@@ -47,8 +49,23 @@ export interface IWillInstantiateEditorPaneEvent {
 
 export type GroupIdentifier = number;
 
+export interface IEditorIdentifier {
+	groupId: GroupIdentifier;
+	editor: EditorInput;
+}
+
+export interface IEditorCloseEvent extends IEditorIdentifier {
+}
+
+export interface IEditorWillOpenEvent extends IEditorIdentifier { }
+
+
 export abstract class AbstractEditorInput extends Disposable {
 	// Marker class for implementing `isEditorInput`
+}
+
+export function isEditorInput(editor: unknown): editor is EditorInput {
+	return editor instanceof AbstractEditorInput;
 }
 
 /**
@@ -76,3 +93,22 @@ export interface IEditorPartOptionsChangeEvent {
 	oldPartOptions: IEditorPartOptions;
 	newPartOptions: IEditorPartOptions;
 }
+
+export interface IUntitledTextResourceEditorInput extends IBaseTextResourceEditorInput {
+
+	/**
+	 * Optional resource for the untitled editor. Depending on the value, the editor:
+	 * - should get a unique name if `undefined` (for example `Untitled-1`)
+	 * - should use the resource directly if the scheme is `untitled:`
+	 * - should change the scheme to `untitled:` otherwise and assume an associated path
+	 *
+	 * Untitled editors with associated path behave slightly different from other untitled
+	 * editors:
+	 * - they are dirty right when opening
+	 * - they will not ask for a file path when saving but use the associated path
+	 */
+	readonly resource: URI | undefined;
+}
+
+
+export type IUntypedEditorInput = IResourceEditorInput | ITextResourceEditorInput | IUntitledTextResourceEditorInput;

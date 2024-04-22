@@ -11,7 +11,7 @@ import { ICommandAction, ILocalizedString } from 'vs/platform/action/common/acti
 import { ICommandService } from 'vs/platform/commands/common/commands';
 import { ContextKeyExpression, IContextKeyService } from 'vs/platform/contextkey/common/contextkey';
 import { IAction, Separator, toAction } from 'vs/base/common/actions';
-import { IStorageService, StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
+import { IStorageService, StorageScope, StorageTarget } from 'vs/platform/storage/common/storage';
 import { removeFastWithoutKeepingOrder } from 'vs/base/common/arrays';
 import { localize } from 'vs/nls';
 import { IKeybindingService } from 'vs/platform/keybinding/common/keybinding';
@@ -443,13 +443,13 @@ function createMenuHide(menu: MenuId, command: ICommandAction | ISubmenuItem, st
 }
 
 export function createConfigureKeybindingAction(commandId: string, when: ContextKeyExpression | undefined = undefined, commandService: ICommandService, keybindingService: IKeybindingService): IAction {
-	const hasKeybinding = !!keybindingService.lookupKeybinding(commandId);
 	return toAction({
 		id: `configureKeybinding/${commandId}`,
-		label: hasKeybinding ? localize('change keybinding', "Change Keybinding") : localize('configure keybinding', "Configure Keybinding"),
+		label: localize('configure keybinding', "Configure Keybinding"),
 		run() {
 			// Only set the when clause when there is no keybinding
 			// It is possible that the action and the keybinding have different when clauses
+			const hasKeybinding = !!keybindingService.lookupKeybinding(commandId); // This may only be called inside the `run()` method as it can be expensive on startup. #210529
 			const whenValue = !hasKeybinding && when ? when.serialize() : undefined;
 			commandService.executeCommand('workbench.action.openGlobalKeybindings', `@command:${commandId}` + (whenValue ? ` +when:${whenValue}` : ''));
 		}

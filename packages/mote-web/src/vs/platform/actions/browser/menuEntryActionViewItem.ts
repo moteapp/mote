@@ -22,7 +22,7 @@ import { IContextMenuService, IContextViewService } from 'vs/platform/contextvie
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { IKeybindingService } from 'vs/platform/keybinding/common/keybinding';
 import { INotificationService } from 'vs/platform/notification/common/notification';
-import { IStorageService, StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
+import { IStorageService, StorageScope, StorageTarget } from 'vs/platform/storage/common/storage';
 import { IThemeService } from 'vs/platform/theme/common/themeService';
 import { ThemeIcon } from 'vs/base/common/themables';
 import { isDark } from 'vs/platform/theme/common/theme';
@@ -155,7 +155,7 @@ export class MenuEntryActionViewItem extends ActionViewItem {
 
 		try {
 			await this.actionRunner.run(this._commandAction, this._context);
-		} catch (err:any) {
+		} catch (err) {
 			this._notificationService.error(err);
 		}
 	}

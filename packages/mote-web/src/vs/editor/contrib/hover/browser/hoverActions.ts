@@ -16,7 +16,7 @@ import { AccessibilitySupport } from 'vs/platform/accessibility/common/accessibi
 import { KeybindingWeight } from 'vs/platform/keybinding/common/keybindingsRegistry';
 import { HoverController } from 'vs/editor/contrib/hover/browser/hoverController';
 import * as nls from 'vs/nls';
-import './hover';
+import './hover.css';
 
 enum HoverFocusBehavior {
 	NoAutoFocus = 'noAutoFocus',

@@ -7,7 +7,7 @@ import { mainWindow } from 'vs/base/browser/window';
 import { Disposable, DisposableStore, IDisposable } from 'vs/base/common/lifecycle';
 import { splitLines } from 'vs/base/common/strings';
 import { URI } from 'vs/base/common/uri';
-import './standalone-tokens';
+import './standalone-tokens.css';
 import { FontMeasurements } from 'vs/editor/browser/config/fontMeasurements';
 import { ICodeEditor } from 'vs/editor/browser/editorBrowser';
 import { EditorCommand, ServicesAccessor } from 'vs/editor/browser/editorExtensions';

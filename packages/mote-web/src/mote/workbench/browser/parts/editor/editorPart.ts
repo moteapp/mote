@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom/client'
 import React from 'react';
 import { Part } from 'mote/workbench/browser/part';
 import { IWorkbenchLayoutService, Parts } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
-import { QuickNote } from 'mote/base/component/quicknote/quicknote';
 import { IEditorGroupView, IEditorPartCreationOptions, IEditorPartsView } from './editor';
 import { mainWindow } from 'mote/base/browser/window';
 import { GroupIdentifier, IEditorPartOptions, IEditorPartOptionsChangeEvent } from 'mote/workbench/common/editorCommon';
@@ -17,6 +16,7 @@ import { coalesce, distinct } from 'vs/base/common/arrays';
 import { MoteEditor } from 'mote/editor/browser/moteEditor';
 import { Dimension } from 'mote/base/browser/dom';
 import { DeferredPromise } from 'vs/base/common/async';
+import { IHoverService } from 'vs/platform/hover/browser/hover';
 
 export interface IEditorPartUIState {
 	readonly serializedGrid: ISerializedGrid;
@@ -78,7 +78,6 @@ export class EditorPart extends Part {
     create(parent: HTMLElement, options?: object): void {
         super.create(parent, options);
         this.root =  ReactDOM.createRoot(parent);
-        this.root.render(React.createElement(MoteEditor, {width: this.minimumWidth, height: this.minimumHeight}));
     }
 
     protected override createContentArea(parent: HTMLElement, options?: IEditorPartCreationOptions): HTMLElement {
@@ -297,9 +296,7 @@ export class EditorPart extends Part {
 
     private doLayout(dimension: Dimension, top = this.top, left = this.left): void {
 		this._contentDimension = dimension;
-
-        this.root!.render(React.createElement(MoteEditor, {width: dimension.width, height: dimension.height}));
-
+        
 		// Layout Grid
 		//this.centeredLayoutWidget.layout(this._contentDimension.width, this._contentDimension.height, top, left);
 

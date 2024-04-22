@@ -1,3 +1,5 @@
+import 'vs/editor/editor.all';
+
 //#region --- workbench actions
 
 import 'mote/workbench/browser/actions/quickAccessActions';

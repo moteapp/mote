@@ -5,6 +5,7 @@ import { NEW_UNTITLED_FILE_COMMAND_ID, NEW_UNTITLED_FILE_LABEL } from './fileCon
 import { ServicesAccessor } from 'vs/platform/instantiation/common/instantiation';
 import { IOpenEmptyWindowOptions } from 'mote/platform/window/common/window';
 import { IHostService } from 'mote/workbench/services/host/browser/host';
+import { IEditorService } from 'mote/workbench/services/editor/common/editorService';
 
 export const newWindowCommand = (accessor: ServicesAccessor, options?: IOpenEmptyWindowOptions) => {
 	const hostService = accessor.get(IHostService);
@@ -39,7 +40,7 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 		]
 	},
 	handler: async (accessor, args?: { languageId?: string; viewType?: string }) => {
-        /*
+        
 		const editorService = accessor.get(IEditorService);
 
 		await editorService.openEditor({
@@ -50,6 +51,5 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 			},
 			languageId: args?.languageId,
 		});
-        */
 	}
 });

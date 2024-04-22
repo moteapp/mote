@@ -10,7 +10,7 @@ import { IEditorConstructionOptions } from 'vs/editor/browser/config/editorConfi
 import { IDiffEditorConstructionOptions } from 'vs/editor/browser/editorBrowser';
 import { CodeEditorWidget, ICodeEditorWidgetOptions } from 'vs/editor/browser/widget/codeEditor/codeEditorWidget';
 import { IDiffCodeEditorWidgetOptions } from 'vs/editor/browser/widget/diffEditor/diffEditorWidget';
-import { OverviewRulerFeature } from 'vs/editor/browser/widget/diffEditor/features/overviewRulerFeature';
+import { ENTIRE_DIFF_OVERVIEW_WIDTH, OverviewRulerFeature } from 'vs/editor/browser/widget/diffEditor/features/overviewRulerFeature';
 import { EditorOptions, IEditorOptions } from 'vs/editor/common/config/editorOptions';
 import { Position } from 'vs/editor/common/core/position';
 import { IContentSizeChangedEvent } from 'vs/editor/common/editorCommon';
@@ -91,7 +91,7 @@ export class DiffEditorEditors extends Disposable {
 		const editor = this._createInnerEditor(instantiationService, container, options, editorWidgetOptions);
 
 		this._register(editor.onDidContentSizeChange(e => {
-			const width = this.original.getContentWidth() + this.modified.getContentWidth() + OverviewRulerFeature.ENTIRE_DIFF_OVERVIEW_WIDTH;
+			const width = this.original.getContentWidth() + this.modified.getContentWidth() + ENTIRE_DIFF_OVERVIEW_WIDTH;
 			const height = Math.max(this.modified.getContentHeight(), this.original.getContentHeight());
 
 			this._onDidContentSizeChange.fire({
@@ -137,7 +137,7 @@ export class DiffEditorEditors extends Disposable {
 		}
 		result.ariaLabel = this._updateAriaLabel(result.ariaLabel);
 		result.wordWrapOverride1 = this._options.diffWordWrap.get();
-		result.revealHorizontalRightPadding = EditorOptions.revealHorizontalRightPadding.defaultValue + OverviewRulerFeature.ENTIRE_DIFF_OVERVIEW_WIDTH;
+		result.revealHorizontalRightPadding = EditorOptions.revealHorizontalRightPadding.defaultValue + ENTIRE_DIFF_OVERVIEW_WIDTH;
 		result.scrollbar!.verticalHasArrows = false;
 		result.extraEditorClassName = 'modified-in-monaco-diff-editor';
 		return result;

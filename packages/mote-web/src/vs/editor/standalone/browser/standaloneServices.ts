@@ -10,7 +10,8 @@ import 'vs/platform/undoRedo/common/undoRedoService';
 import 'vs/editor/common/services/languageFeatureDebounce';
 import 'vs/editor/common/services/semanticTokensStylingService';
 import 'vs/editor/common/services/languageFeaturesService';
-import 'vs/editor/browser/services/hoverService/hoverService';
+// Todo merge it 
+//import 'vs/editor/browser/services/hoverService/hoverService';
 
 import * as strings from 'vs/base/common/strings';
 import * as dom from 'vs/base/browser/dom';
@@ -1134,7 +1135,7 @@ registerSingleton(IListService, ListService, InstantiationType.Eager);
 registerSingleton(ICommandService, StandaloneCommandService, InstantiationType.Eager);
 registerSingleton(IKeybindingService, StandaloneKeybindingService, InstantiationType.Eager);
 registerSingleton(IQuickInputService, StandaloneQuickInputService, InstantiationType.Eager);
-registerSingleton(IContextViewService, StandaloneContextViewService, InstantiationType.Eager);
+//registerSingleton(IContextViewService, StandaloneContextViewService, InstantiationType.Eager);
 registerSingleton(IOpenerService, OpenerService, InstantiationType.Eager);
 registerSingleton(IClipboardService, BrowserClipboardService, InstantiationType.Eager);
 registerSingleton(IContextMenuService, StandaloneContextMenuService, InstantiationType.Eager);

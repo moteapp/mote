@@ -39,7 +39,7 @@ export class HoverService extends Disposable implements IHoverService {
 		@IInstantiationService private readonly _instantiationService: IInstantiationService,
 		@IContextMenuService contextMenuService: IContextMenuService,
 		@IKeybindingService private readonly _keybindingService: IKeybindingService,
-		@ILayoutService private readonly _layoutService: ILayoutService,
+		//@ILayoutService private readonly _layoutService: ILayoutService,
 		@IAccessibilityService private readonly _accessibilityService: IAccessibilityService
 	) {
 		super();
@@ -369,7 +369,7 @@ function getHoverTargetElement(element: HTMLElement, stopElement?: HTMLElement):
 	return element;
 }
 
-registerSingleton(IHoverService, HoverService, InstantiationType.Delayed);
+//registerSingleton(IHoverService, HoverService, InstantiationType.Delayed);
 
 registerThemingParticipant((theme, collector) => {
 	const hoverBorder = theme.getColor(editorHoverBorder);

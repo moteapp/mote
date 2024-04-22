@@ -3,6 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+/*
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/en.win'; // 40%
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/es-latin.win';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/en-in.win';
@@ -25,5 +26,6 @@ import 'vs/workbench/services/keybinding/browser/keyboardLayouts/hu.win';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/de-swiss.win';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/en-belgian.win';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/cz.win';
+*/
 
 export { KeyboardLayoutContribution } from 'mote/workbench/services/keybinding/browser/keyboardLayouts/_.contribution';

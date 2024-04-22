@@ -7,7 +7,7 @@ import { CancellationToken } from 'vs/base/common/cancellation';
 import { Emitter } from 'vs/base/common/event';
 import { IContextKey, IContextKeyService, RawContextKey } from 'vs/platform/contextkey/common/contextkey';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
-import { ILayoutService } from 'mote/platform/layout/browser/layoutService';
+import { ILayoutService } from 'vs/platform/layout/browser/layoutService';
 import { IOpenerService } from 'vs/platform/opener/common/opener';
 import { QuickAccessController } from 'vs/platform/quickinput/browser/quickAccess';
 import { IQuickAccessController } from 'vs/platform/quickinput/common/quickAccess';
@@ -17,6 +17,7 @@ import { activeContrastBorder, asCssVariable, pickerGroupBorder, pickerGroupFore
 import { IThemeService, Themable } from 'vs/platform/theme/common/themeService';
 import { IQuickInputOptions, IQuickInputStyles, QuickInputHoverDelegate } from './quickInput';
 import { QuickInputController, IQuickInputControllerHost } from 'vs/platform/quickinput/browser/quickInputController';
+import { IConfigurationService } from 'vs/platform/configuration/common/configuration';
 import { getWindow } from 'vs/base/browser/dom';
 
 export class QuickInputService extends Themable implements IQuickInputService {
@@ -58,6 +59,7 @@ export class QuickInputService extends Themable implements IQuickInputService {
 		@IContextKeyService protected readonly contextKeyService: IContextKeyService,
 		@IThemeService themeService: IThemeService,
 		@ILayoutService protected readonly layoutService: ILayoutService,
+		@IConfigurationService protected readonly configurationService: IConfigurationService,
 	) {
 		super(themeService);
 	}

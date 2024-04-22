@@ -13,7 +13,7 @@ import { IObservable, IReader, autorun, autorunWithStore, derived, derivedWithSt
 import { ITransaction, disposableObservableValue, globalTransaction, transaction } from 'vs/base/common/observableInternal/base';
 import { Scrollable, ScrollbarVisibility } from 'vs/base/common/scrollable';
 import { URI } from 'vs/base/common/uri';
-import './style';
+import './style.css';
 import { ICodeEditor } from 'vs/editor/browser/editorBrowser';
 import { ObservableElementSizeObserver } from 'vs/editor/browser/widget/diffEditor/utils';
 import { RevealOptions } from 'vs/editor/browser/widget/multiDiffEditor/multiDiffEditorWidget';

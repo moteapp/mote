@@ -3,8 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import 'vs/workbench/services/keybinding/browser/keyboardLayouts/en.darwin'; // 15%
-import 'vs/workbench/services/keybinding/browser/keyboardLayouts/zh-hans.darwin';
+import 'mote/workbench/services/keybinding/browser/keyboardLayouts/en.darwin'; // 15%
+import 'mote/workbench/services/keybinding/browser/keyboardLayouts/zh-hans.darwin';
+/*
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/en-uk.darwin';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/es.darwin';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/jp-roman.darwin';
@@ -19,5 +20,6 @@ import 'vs/workbench/services/keybinding/browser/keyboardLayouts/ru.darwin';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/pt.darwin';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/ko.darwin';
 import 'vs/workbench/services/keybinding/browser/keyboardLayouts/dvorak.darwin';
+*/
 
 export { KeyboardLayoutContribution } from 'mote/workbench/services/keybinding/browser/keyboardLayouts/_.contribution';

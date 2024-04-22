@@ -4,6 +4,7 @@ import { IInstantiationService, createDecorator } from 'vs/platform/instantiatio
 import { IRectangle } from 'mote/platform/window/common/window';
 import { DisposableStore } from 'vs/base/common/lifecycle';
 import { IContextKeyService } from 'vs/platform/contextkey/common/contextkey';
+import { EditorInput } from 'mote/workbench/common/editor/editorInput';
 
 export const IEditorGroupsService = createDecorator<IEditorGroupsService>('editorGroupsService');
 
@@ -111,6 +112,11 @@ export interface IEditorGroup {
 	readonly id: GroupIdentifier;
 
 	/**
+	 * All opened editors in the group in sequential order of their appearance.
+	 */
+	readonly editors: readonly EditorInput[];
+
+	/**
 	 * The scoped context key service for this group.
 	 */
 	readonly scopedContextKeyService: IContextKeyService;
@@ -119,6 +125,12 @@ export interface IEditorGroup {
 	 * Move keyboard focus into the group.
 	 */
 	focus(): void;
+}
+
+export function isEditorGroup(obj: unknown): obj is IEditorGroup {
+	const group = obj as IEditorGroup | undefined;
+
+	return !!group && typeof group.id === 'number' && Array.isArray(group.editors);
 }
 
 /**

@@ -11,7 +11,7 @@ import { HoverParticipantRegistry } from 'vs/editor/contrib/hover/browser/hoverT
 import { MarkdownHoverParticipant } from 'vs/editor/contrib/hover/browser/markdownHoverParticipant';
 import { MarkerHoverParticipant } from 'vs/editor/contrib/hover/browser/markerHoverParticipant';
 import { HoverController } from 'vs/editor/contrib/hover/browser/hoverController';
-import './hover';
+import './hover.css';
 
 registerEditorContribution(HoverController.ID, HoverController, EditorContributionInstantiation.BeforeFirstInteraction);
 registerEditorAction(ShowOrFocusHoverAction);

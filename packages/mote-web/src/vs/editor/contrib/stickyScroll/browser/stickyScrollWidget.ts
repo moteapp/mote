@@ -8,7 +8,7 @@ import { createTrustedTypesPolicy } from 'vs/base/browser/trustedTypes';
 import { equals } from 'vs/base/common/arrays';
 import { Disposable, DisposableStore } from 'vs/base/common/lifecycle';
 import { ThemeIcon } from 'vs/base/common/themables';
-import './stickyScroll';
+import './stickyScroll.css';
 import { ICodeEditor, IOverlayWidget, IOverlayWidgetPosition } from 'vs/editor/browser/editorBrowser';
 import { getColumnOfNodeOffset } from 'vs/editor/browser/viewParts/lines/viewLine';
 import { EmbeddedCodeEditorWidget } from 'vs/editor/browser/widget/codeEditor/embeddedCodeEditorWidget';

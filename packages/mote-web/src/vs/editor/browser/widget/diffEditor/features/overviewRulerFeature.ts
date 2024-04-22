@@ -21,10 +21,13 @@ import { OverviewRulerZone } from 'vs/editor/common/viewModel/overviewZoneManage
 import { defaultInsertColor, defaultRemoveColor, diffInserted, diffOverviewRulerInserted, diffOverviewRulerRemoved, diffRemoved } from 'vs/platform/theme/common/colorRegistry';
 import { IThemeService } from 'vs/platform/theme/common/themeService';
 
+const ONE_OVERVIEW_WIDTH = 15;
+export const ENTIRE_DIFF_OVERVIEW_WIDTH = ONE_OVERVIEW_WIDTH * 2;
+
 export class OverviewRulerFeature extends Disposable {
-	private static readonly ONE_OVERVIEW_WIDTH = 15;
-	public static readonly ENTIRE_DIFF_OVERVIEW_WIDTH = OverviewRulerFeature.ONE_OVERVIEW_WIDTH * 2;
-	public readonly width = OverviewRulerFeature.ENTIRE_DIFF_OVERVIEW_WIDTH;
+	private static readonly ONE_OVERVIEW_WIDTH = ONE_OVERVIEW_WIDTH;
+	public static readonly ENTIRE_DIFF_OVERVIEW_WIDTH = ENTIRE_DIFF_OVERVIEW_WIDTH;
+	public readonly width = ENTIRE_DIFF_OVERVIEW_WIDTH;
 
 	constructor(
 		private readonly _editors: DiffEditorEditors,

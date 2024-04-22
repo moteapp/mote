@@ -1,14 +1,17 @@
-import Editor from '@monaco-editor/react';
+import { MonacoEditor } from 'mote/editor/browser/monacoEditor';
+import { IHoverService } from 'vs/platform/hover/browser/hover';
+import { IInstantiationService, ServicesAccessor } from 'vs/platform/instantiation/common/instantiation';
 
 interface MoteEditorProps {
     height: number;
     width: number;
+    hoverService: IHoverService
 }
 
 export const MoteEditor = (props: MoteEditorProps) => {
     return (
         <div>
-            <Editor height={props.height} width={props.width} defaultLanguage="plaintext" defaultValue="// some comment" />;
+            <MonacoEditor hoverService={props.hoverService}/>;
         </div>
     );
 }

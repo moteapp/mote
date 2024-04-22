@@ -14,6 +14,7 @@
     "@nextui-org/react": "^2.2.10",
     "framer-motion": "^11.0.28",
     "marked": "4.1.0",
+    "monaco-editor": "^0.47.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

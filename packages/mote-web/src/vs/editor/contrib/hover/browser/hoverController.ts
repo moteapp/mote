@@ -20,7 +20,7 @@ import { ResultKind } from 'vs/platform/keybinding/common/keybindingResolver';
 import { RunOnceScheduler } from 'vs/base/common/async';
 import { ContentHoverWidget } from 'vs/editor/contrib/hover/browser/contentHoverWidget';
 import { ContentHoverController } from 'vs/editor/contrib/hover/browser/contentHoverController';
-import './hover';
+import './hover.css';
 import { MarginHoverWidget } from 'vs/editor/contrib/hover/browser/marginHoverWidget';
 
 // sticky hover widget which doesn't disappear on focus out and such

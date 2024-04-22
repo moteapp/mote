@@ -230,12 +230,7 @@ export class QuickAccessController extends Disposable implements IQuickAccessCon
 
 		let provider = this.mapProviderToDescriptor.get(providerDescriptor);
 		if (!provider) {
-			try {
-				provider = this.instantiationService.createInstance(providerDescriptor.ctor);
-			} catch (error) {
-				console.error(error);
-			}
-			
+			provider = this.instantiationService.createInstance(providerDescriptor.ctor);
 			this.mapProviderToDescriptor.set(providerDescriptor, provider);
 		}
 
