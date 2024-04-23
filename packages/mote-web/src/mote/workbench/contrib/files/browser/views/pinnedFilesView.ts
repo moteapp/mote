@@ -2,9 +2,6 @@ import * as nls from 'vs/nls';
 import { ViewPane } from 'mote/workbench/browser/parts/views/viewPane';
 import { ILocalizedString } from 'vs/nls';
 import { Root, createRoot } from 'react-dom/client';
-import { Explorer } from 'mote/app/components/explorer/explorer';
-import React from 'react';
-
 
 export class PinnedFilesView extends ViewPane {
 
