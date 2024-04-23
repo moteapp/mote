@@ -56,13 +56,19 @@ export class BuiltinExtensionsScannerService implements IBuiltinExtensionsScanne
 					bundledExtensions = [/*BUILD->INSERT_BUILTIN_EXTENSIONS*/];
 				} else {
 					// Find builtin extensions by checking for DOM
-					const builtinExtensionsElement = mainWindow.document.getElementById('vscode-workbench-builtin-extensions');
-					const builtinExtensionsElementAttribute = builtinExtensionsElement ? builtinExtensionsElement.getAttribute('data-settings') : undefined;
-					if (builtinExtensionsElementAttribute) {
-						try {
-							bundledExtensions = JSON.parse(builtinExtensionsElementAttribute);
-						} catch (error) { /* ignore error*/ }
-					}
+					//const builtinExtensionsElement = mainWindow.document.getElementById('vscode-workbench-builtin-extensions');
+					//const builtinExtensionsElementAttribute = builtinExtensionsElement ? builtinExtensionsElement.getAttribute('data-settings') : undefined;
+					bundledExtensions = [
+						{
+							extensionPath: 'markdown-basics',
+							packageJSON: {
+								name: 'markdown',
+								publisher: 'vscode',
+								version: '1.0.0',
+								engines: {vscode: '^1.0.0'},
+							}
+						}
+					]
 				}
 
 				this.builtinExtensionsPromises = bundledExtensions.map(async e => {

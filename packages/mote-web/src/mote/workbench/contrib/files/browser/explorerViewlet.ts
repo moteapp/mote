@@ -38,6 +38,8 @@ import { isMacintosh, isWeb } from 'vs/base/common/platform';
 import { Codicon } from 'vs/base/common/codicons';
 import { registerIcon } from 'vs/platform/theme/common/iconRegistry';
 import { isMouseEvent } from 'vs/base/browser/dom';
+import { SpaceView } from './views/spaceView';
+import { PinnedFilesView } from './views/pinnedFilesView';
 
 const explorerViewIcon = registerIcon('explorer-view-icon', Codicon.files, localize('explorerViewIcon', 'View icon of the explorer view.'));
 const openEditorsViewIcon = registerIcon('open-editors-view-icon', Codicon.book, localize('openEditorsIcon', 'View icon of the open editors view.'));
@@ -68,7 +70,9 @@ export class ExplorerViewletViewsContribution extends Disposable implements IWor
 		const viewDescriptorsToRegister: IViewDescriptor[] = [];
 		const viewDescriptorsToDeregister: IViewDescriptor[] = [];
 
-		const openEditorsViewDescriptor = this.createOpenEditorsViewDescriptor();
+		const openEditorsViewDescriptor = this.createSpaceViewDescriptor();
+		const pinnedFilesViewDescriptor = this.createPinnedFilesViewDescriptor();
+		viewDescriptorsToRegister.push(pinnedFilesViewDescriptor);
 		if (!viewDescriptors.some(v => v.id === openEditorsViewDescriptor.id)) {
 			viewDescriptorsToRegister.push(openEditorsViewDescriptor);
 		}
@@ -77,6 +81,11 @@ export class ExplorerViewletViewsContribution extends Disposable implements IWor
 		const registeredExplorerViewDescriptor = viewDescriptors.find(v => v.id === explorerViewDescriptor.id);
 		const emptyViewDescriptor = this.createEmptyViewDescriptor();
 		const registeredEmptyViewDescriptor = viewDescriptors.find(v => v.id === emptyViewDescriptor.id);
+
+		if (registeredExplorerViewDescriptor) {
+			viewDescriptorsToDeregister.push(registeredExplorerViewDescriptor);
+		}
+		/*
 
 		if (this.workspaceContextService.getWorkbenchState() === WorkbenchState.EMPTY || this.workspaceContextService.getWorkspace().folders.length === 0) {
 			if (registeredExplorerViewDescriptor) {
@@ -93,6 +102,7 @@ export class ExplorerViewletViewsContribution extends Disposable implements IWor
 				viewDescriptorsToRegister.push(explorerViewDescriptor);
 			}
 		}
+		*/
 
 		if (viewDescriptorsToDeregister.length) {
 			viewsRegistry.deregisterViews(viewDescriptorsToDeregister, VIEW_CONTAINER);
@@ -102,6 +112,42 @@ export class ExplorerViewletViewsContribution extends Disposable implements IWor
 		}
 
 		mark('code/didRegisterExplorerViews');
+	}
+
+	private createPinnedFilesViewDescriptor(): IViewDescriptor {
+		return {
+			id: PinnedFilesView.ID,
+			name: PinnedFilesView.NAME,
+			ctorDescriptor: new SyncDescriptor(PinnedFilesView),
+			containerIcon: openEditorsViewIcon,
+			order: 0,
+			canToggleVisibility: true,
+			canMoveView: true,
+			collapsed: false,
+			hideByDefault: true,
+			focusCommand: {
+				id: 'workbench.files.action.focusPinnedFilesView',
+				keybindings: { primary: KeyChord(KeyMod.CtrlCmd | KeyCode.KeyK, KeyCode.KeyE) }
+			}
+		};
+	}
+
+	private createSpaceViewDescriptor(): IViewDescriptor {
+		return {
+			id: SpaceView.ID,
+			name: SpaceView.NAME,
+			ctorDescriptor: new SyncDescriptor(SpaceView),
+			containerIcon: openEditorsViewIcon,
+			order: 0,
+			canToggleVisibility: true,
+			canMoveView: true,
+			collapsed: false,
+			hideByDefault: true,
+			focusCommand: {
+				id: 'workbench.files.action.focusSpaceView',
+				keybindings: { primary: KeyChord(KeyMod.CtrlCmd | KeyCode.KeyK, KeyCode.KeyE) }
+			}
+		};
 	}
 
 	private createOpenEditorsViewDescriptor(): IViewDescriptor {

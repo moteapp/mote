@@ -2,7 +2,7 @@ import { Color } from 'mote/base/common/color';
 import { SVGDataCollection } from './svgData';
 
 export interface ISVGIconStyles {
-	iconFill?: Color;
+	fill?: string;
 	width?: string;
 	height?: string;
     name: IconName;
@@ -15,7 +15,7 @@ export const SVGIcon = (props: ISVGIconStyles) => {
     const Icon = () => data.svg;
     return (
         <svg className={data.className}
-            style={{width: props.width ??'100%', height: props.height ?? '100%', display: 'block'}} viewBox={data.viewBox}>
+            style={{width: props.width ??'100%', height: props.height ?? '100%', display: 'block', fill: props.fill}} viewBox={data.viewBox}>
             <Icon />
         </svg>
     )

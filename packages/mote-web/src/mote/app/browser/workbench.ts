@@ -9,17 +9,8 @@ import { isEqual } from 'vs/base/common/resources';
 import { ltrim } from 'vs/base/common/strings';
 import { UriComponents } from 'vs/base/common/uri';
 import { isFolderToOpen, isWorkspaceToOpen } from 'vs/platform/window/common/window';
-import editorWorker from 'vs/editor/editor.worker?worker';
 import { LightModernColors } from './theme';
-
-
-self.MonacoEnvironment = {
-    getWorker: (moduleId: string, label: string) => {
-        console.log('getWorker', moduleId, label)
-        return new editorWorker();
-    }
-}
-
+import './useWorker';
 
 class WorkspaceProvider implements IWorkspaceProvider {
 
