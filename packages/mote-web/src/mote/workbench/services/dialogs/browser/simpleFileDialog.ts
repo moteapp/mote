@@ -30,7 +30,7 @@ import { IDisposable, dispose } from 'vs/base/common/lifecycle';
 import { createCancelablePromise, CancelablePromise } from 'vs/base/common/async';
 import { CancellationToken } from 'vs/base/common/cancellation';
 import { ICommandHandler } from 'vs/platform/commands/common/commands';
-import { IEditorService } from 'vs/workbench/services/editor/common/editorService';
+import { IEditorService } from 'mote/workbench/services/editor/common/editorService';
 import { normalizeDriveLetter } from 'vs/base/common/labels';
 import { SaveReason } from 'mote/workbench/common/editor';
 import { IPathService } from 'mote/workbench/services/path/common/pathService';

@@ -13,7 +13,7 @@ import { Registry } from 'vs/platform/registry/common/platform';
 import { IMessage } from 'mote/workbench/services/extensions/common/extensions';
 import { IExtensionDescription, EXTENSION_CATEGORIES, ExtensionIdentifierSet } from 'vs/platform/extensions/common/extensions';
 import { ExtensionKind } from 'vs/platform/environment/common/environment';
-import { allApiProposals } from 'vs/workbench/services/extensions/common/extensionsApiProposals';
+import { allApiProposals } from 'mote/workbench/services/extensions/common/extensionsApiProposals';
 import { productSchemaId } from 'vs/platform/product/common/productService';
 import { ImplicitActivationEvents, IActivationEventsGenerator } from 'vs/platform/extensionManagement/common/implicitActivationEvents';
 

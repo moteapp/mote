@@ -5,7 +5,7 @@
 
 import { CommandsRegistry, ICommandMetadata } from 'vs/platform/commands/common/commands';
 import { isNonEmptyArray } from 'vs/base/common/arrays';
-//import { EditorExtensionsRegistry } from 'vs/editor/browser/editorExtensions';
+import { EditorExtensionsRegistry } from 'vs/editor/browser/editorExtensions';
 import { MenuRegistry, MenuId, isIMenuItem } from 'vs/platform/actions/common/actions';
 
 export function getAllUnboundCommands(boundCommands: Map<string, boolean>): string[] {
@@ -40,11 +40,9 @@ export function getAllUnboundCommands(boundCommands: Map<string, boolean>): stri
 	}
 
 	// Add all editor actions
-	/*
 	for (const editorAction of EditorExtensionsRegistry.getEditorActions()) {
 		addCommand(editorAction.id, true);
 	}
-	*/
 
 	for (const id of CommandsRegistry.getCommands().keys()) {
 		addCommand(id, false);

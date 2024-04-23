@@ -7,9 +7,9 @@ import { Emitter } from 'vs/base/common/event';
 import { Barrier } from 'vs/base/common/async';
 import { Disposable } from 'vs/base/common/lifecycle';
 import { ILifecycleService, WillShutdownEvent, StartupKind, LifecyclePhase, LifecyclePhaseToString, ShutdownReason, BeforeShutdownErrorEvent, InternalBeforeShutdownEvent } from 'mote/workbench/services/lifecycle/common/lifecycle';
-import { ILogService } from 'mote/platform/log/common/log';
+import { ILogService } from 'vs/platform/log/common/log';
 import { mark } from 'mote/base/common/performance';
-import { IStorageService, StorageScope, StorageTarget, WillSaveStateReason } from 'mote/platform/storage/common/storage';
+import { IStorageService, StorageScope, StorageTarget, WillSaveStateReason } from 'vs/platform/storage/common/storage';
 
 export abstract class AbstractLifecycleService extends Disposable implements ILifecycleService {
 

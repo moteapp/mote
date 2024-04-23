@@ -5,7 +5,7 @@
 
 import { IStringDictionary } from 'vs/base/common/collections';
 import { deepClone, equals } from 'vs/base/common/objects';
-import * as semver from 'vs/base/common/semver/semver';
+import * as semver from 'semver';
 import { assertIsDefined } from 'vs/base/common/types';
 import { IExtensionIdentifier } from 'vs/platform/extensions/common/extensions';
 import { ILocalSyncExtension, IRemoteSyncExtension, ISyncExtension } from 'vs/platform/userDataSync/common/userDataSync';

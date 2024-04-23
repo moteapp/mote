@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
-import { IWillInstantiateEditorPaneEvent } from 'mote/workbench/common/editorCommon';
+import { IWillInstantiateEditorPaneEvent } from 'mote/workbench/common/editor';
 import { Event } from 'vs/base/common/event';
 
 export const IEditorPaneService = createDecorator<IEditorPaneService>('editorPaneService');

@@ -10,7 +10,7 @@ import { Disposable, DisposableStore, IDisposable } from 'vs/base/common/lifecyc
 import { Emitter, Event } from 'vs/base/common/event';
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { IAction, Action } from 'vs/base/common/actions';
-import { IStorageService, StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
+import { IStorageService, StorageScope, StorageTarget } from 'vs/platform/storage/common/storage';
 
 export class NotificationService extends Disposable implements INotificationService {
 

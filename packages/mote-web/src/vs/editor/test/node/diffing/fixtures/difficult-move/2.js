@@ -101,7 +101,7 @@ const serverEntryPoints = [
 		exclude: ['vs/css', 'vs/nls']
 	},
 	{
-		name: 'vs/workbench/api/node/extensionHostProcess',
+		name: 'mote/workbench/api/node/extensionHostProcess',
 		exclude: ['vs/css', 'vs/nls']
 	},
 	{

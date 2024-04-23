@@ -6,9 +6,9 @@ import * as assert from 'assert';
 import { IDisposable, DisposableStore } from 'vs/base/common/lifecycle';
 import { CommandsRegistry } from 'vs/platform/commands/common/commands';
 import { CommandService } from 'mote/workbench/services/commands/common/commandService';
-import { NullExtensionService } from 'vs/workbench/services/extensions/common/extensions';
+import { NullExtensionService } from 'mote/workbench/services/extensions/common/extensions';
 import { InstantiationService } from 'vs/platform/instantiation/common/instantiationService';
-import { NullLogService } from 'mote/platform/log/common/log';
+import { NullLogService } from 'vs/platform/log/common/log';
 
 suite('CommandService', function () {
 

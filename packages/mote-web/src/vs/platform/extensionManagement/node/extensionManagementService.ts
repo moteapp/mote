@@ -16,7 +16,7 @@ import { ResourceSet } from 'vs/base/common/map';
 import { Schemas } from 'vs/base/common/network';
 import * as path from 'vs/base/common/path';
 import { joinPath } from 'vs/base/common/resources';
-import * as semver from 'vs/base/common/semver/semver';
+import * as semver from 'semver';
 import { isBoolean, isUndefined } from 'vs/base/common/types';
 import { URI } from 'vs/base/common/uri';
 import { generateUuid } from 'vs/base/common/uuid';

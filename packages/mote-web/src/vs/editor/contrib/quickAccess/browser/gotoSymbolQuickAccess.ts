@@ -34,11 +34,14 @@ export interface IGotoSymbolQuickAccessProviderOptions extends IEditorNavigation
 	openSideBySideDirection?: () => undefined | 'right' | 'down';
 }
 
+const PREFIX = '@';
+const SCOPE_PREFIX = ':';
+
 export abstract class AbstractGotoSymbolQuickAccessProvider extends AbstractEditorNavigationQuickAccessProvider {
 
 	static PREFIX = '@';
 	static SCOPE_PREFIX = ':';
-	static PREFIX_BY_CATEGORY = `${AbstractGotoSymbolQuickAccessProvider.PREFIX}${AbstractGotoSymbolQuickAccessProvider.SCOPE_PREFIX}`;
+	static PREFIX_BY_CATEGORY = `${PREFIX}${SCOPE_PREFIX}`;
 
 	protected override readonly options: IGotoSymbolQuickAccessProviderOptions;
 

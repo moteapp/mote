@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { EditorPaneDescriptor } from 'mote/workbench/browser/editorBrowser';
-import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { IEditorPaneService } from 'mote/workbench/services/editor/common/editorPaneService';
+import { EditorPaneDescriptor } from 'mote/workbench/browser/editor';
+import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 
 export class EditorPaneService implements IEditorPaneService {
 

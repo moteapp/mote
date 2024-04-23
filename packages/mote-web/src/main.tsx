@@ -6,12 +6,3 @@ import 'mote/workbench/workbench.web.main';
 // Create workbench
 create(mainWindow.document.body, {});
 
-/*
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <NextUIProvider>
-      <Workbench />
-    </NextUIProvider>
-  </React.StrictMode>,
-)
-*/

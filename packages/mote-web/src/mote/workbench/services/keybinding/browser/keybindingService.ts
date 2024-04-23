@@ -12,6 +12,7 @@ import * as dom from 'vs/base/browser/dom';
 import { printKeyboardEvent, printStandardKeyboardEvent, StandardKeyboardEvent } from 'vs/base/browser/keyboardEvent';
 import { DeferredPromise, RunOnceScheduler } from 'vs/base/common/async';
 import { Emitter, Event } from 'vs/base/common/event';
+import { parse } from 'vs/base/common/json';
 import { IJSONSchema } from 'vs/base/common/jsonSchema';
 import { UserSettingsLabelProvider } from 'vs/base/common/keybindingLabels';
 import { KeybindingParser } from 'vs/base/common/keybindingParser';
@@ -27,7 +28,7 @@ import { mainWindow } from 'vs/base/browser/window';
 import { MenuRegistry } from 'vs/platform/actions/common/actions';
 import { CommandsRegistry, ICommandService } from 'vs/platform/commands/common/commands';
 import { ContextKeyExpr, ContextKeyExpression, IContextKey, IContextKeyService } from 'vs/platform/contextkey/common/contextkey';
-//import { ExtensionIdentifier } from 'vs/platform/extensions/common/extensions';
+import { ExtensionIdentifier } from 'vs/platform/extensions/common/extensions';
 import { FileOperation, IFileService } from 'vs/platform/files/common/files';
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { Extensions, IJSONContributionRegistry } from 'vs/platform/jsonschemas/common/jsonContributionRegistry';
@@ -38,7 +39,7 @@ import { IExtensionKeybindingRule, IKeybindingItem, KeybindingsRegistry, Keybind
 import { ResolvedKeybindingItem } from 'vs/platform/keybinding/common/resolvedKeybindingItem';
 import { IKeyboardLayoutService } from 'vs/platform/keyboardLayout/common/keyboardLayout';
 import { IKeyboardMapper } from 'vs/platform/keyboardLayout/common/keyboardMapper';
-import { ILogService } from 'mote/platform/log/common/log';
+import { ILogService } from 'vs/platform/log/common/log';
 import { INotificationService } from 'vs/platform/notification/common/notification';
 import { Registry } from 'vs/platform/registry/common/platform';
 import { ITelemetryService } from 'vs/platform/telemetry/common/telemetry';
@@ -46,9 +47,9 @@ import { IUriIdentityService } from 'vs/platform/uriIdentity/common/uriIdentity'
 import { ILocalizedString, isLocalizedString } from 'vs/platform/action/common/action';
 
 // workbench
-//import { commandsExtensionPoint } from 'mote/workbench/services/actions/common/menusExtensionPoint';
-//import { IExtensionService } from 'vs/workbench/services/extensions/common/extensions';
-//import { ExtensionMessageCollector, ExtensionsRegistry } from 'vs/workbench/services/extensions/common/extensionsRegistry';
+import { commandsExtensionPoint } from 'mote/workbench/services/actions/common/menusExtensionPoint';
+import { IExtensionService } from 'mote/workbench/services/extensions/common/extensions';
+import { ExtensionMessageCollector, ExtensionsRegistry } from 'mote/workbench/services/extensions/common/extensionsRegistry';
 import { IHostService } from 'mote/workbench/services/host/browser/host';
 import { IKeyboard, INavigatorWithKeyboard } from 'mote/workbench/services/keybinding/browser/navigatorKeyboard';
 import { getAllUnboundCommands } from 'mote/workbench/services/keybinding/browser/unboundCommands';
@@ -131,7 +132,6 @@ const keybindingType: IJSONSchema = {
 	}
 };
 
-/*
 const keybindingsExtPoint = ExtensionsRegistry.registerExtensionPoint<ContributedKeyBinding | ContributedKeyBinding[]>({
 	extensionPoint: 'keybindings',
 	deps: [commandsExtensionPoint],
@@ -146,7 +146,6 @@ const keybindingsExtPoint = ExtensionsRegistry.registerExtensionPoint<Contribute
 		]
 	}
 });
-*/
 
 const NUMPAD_PRINTABLE_SCANCODES = [
 	ScanCode.NumpadDivide,
@@ -195,7 +194,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		@INotificationService notificationService: INotificationService,
 		@IUserDataProfileService userDataProfileService: IUserDataProfileService,
 		@IHostService private readonly hostService: IHostService,
-		//@IExtensionService extensionService: IExtensionService,
+		@IExtensionService extensionService: IExtensionService,
 		@IFileService fileService: IFileService,
 		@IUriIdentityService uriIdentityService: IUriIdentityService,
 		@ILogService logService: ILogService,
@@ -228,7 +227,6 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 			this.updateResolver();
 		}));
 
-		/*
 		keybindingsExtPoint.setHandler((extensions) => {
 
 			const keybindings: IExtensionKeybindingRule[] = [];
@@ -239,10 +237,9 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 			KeybindingsRegistry.setExtensionKeybindings(keybindings);
 			this.updateResolver();
 		});
-		*/
 
 		this.updateKeybindingsJsonSchema();
-		//this._register(extensionService.onDidRegisterExtensions(() => this.updateKeybindingsJsonSchema()));
+		this._register(extensionService.onDidRegisterExtensions(() => this.updateKeybindingsJsonSchema()));
 
 		this._register(Event.runAndSubscribe(dom.onDidRegisterWindow, ({ window, disposables }) => disposables.add(this._registerKeyListeners(window)), { window: mainWindow, disposables: this._store }));
 
@@ -564,6 +561,37 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 		return (keybinding ? this._keyboardMapper.resolveKeybinding(keybinding) : []);
 	}
 
+	private _handleKeybindingsExtensionPointUser(extensionId: ExtensionIdentifier, isBuiltin: boolean, keybindings: ContributedKeyBinding | ContributedKeyBinding[], collector: ExtensionMessageCollector, result: IExtensionKeybindingRule[]): void {
+		if (Array.isArray(keybindings)) {
+			for (let i = 0, len = keybindings.length; i < len; i++) {
+				this._handleKeybinding(extensionId, isBuiltin, i + 1, keybindings[i], collector, result);
+			}
+		} else {
+			this._handleKeybinding(extensionId, isBuiltin, 1, keybindings, collector, result);
+		}
+	}
+
+	private _handleKeybinding(extensionId: ExtensionIdentifier, isBuiltin: boolean, idx: number, keybindings: ContributedKeyBinding, collector: ExtensionMessageCollector, result: IExtensionKeybindingRule[]): void {
+
+		const rejects: string[] = [];
+
+		if (isValidContributedKeyBinding(keybindings, rejects)) {
+			const rule = this._asCommandRule(extensionId, isBuiltin, idx++, keybindings);
+			if (rule) {
+				result.push(rule);
+			}
+		}
+
+		if (rejects.length > 0) {
+			collector.error(nls.localize(
+				'invalid.keybindings',
+				"Invalid `contributes.{0}`: {1}",
+				keybindingsExtPoint.name,
+				rejects.join('\n')
+			));
+		}
+	}
+
 	private static bindToCurrentPlatform(key: string | undefined, mac: string | undefined, linux: string | undefined, win: string | undefined): string | undefined {
 		if (OS === OperatingSystem.Windows && win) {
 			if (win) {
@@ -579,6 +607,44 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 			}
 		}
 		return key;
+	}
+
+	private _asCommandRule(extensionId: ExtensionIdentifier, isBuiltin: boolean, idx: number, binding: ContributedKeyBinding): IExtensionKeybindingRule | undefined {
+
+		const { command, args, when, key, mac, linux, win } = binding;
+		const keybinding = WorkbenchKeybindingService.bindToCurrentPlatform(key, mac, linux, win);
+		if (!keybinding) {
+			return undefined;
+		}
+
+		let weight: number;
+		if (isBuiltin) {
+			weight = KeybindingWeight.BuiltinExtension + idx;
+		} else {
+			weight = KeybindingWeight.ExternalExtension + idx;
+		}
+
+		const commandAction = MenuRegistry.getCommand(command);
+		const precondition = commandAction && commandAction.precondition;
+		let fullWhen: ContextKeyExpression | undefined;
+		if (when && precondition) {
+			fullWhen = ContextKeyExpr.and(precondition, ContextKeyExpr.deserialize(when));
+		} else if (when) {
+			fullWhen = ContextKeyExpr.deserialize(when);
+		} else if (precondition) {
+			fullWhen = precondition;
+		}
+
+		const desc: IExtensionKeybindingRule = {
+			id: command,
+			args,
+			when: fullWhen,
+			weight: weight,
+			keybinding: KeybindingParser.parseKeybinding(keybinding),
+			extensionId: extensionId.value,
+			isBuiltinExtension: isBuiltin
+		};
+		return desc;
 	}
 
 	public override getDefaultKeybindingsContent(): string {
@@ -691,7 +757,6 @@ class UserKeybindings extends Disposable {
 			}
 		}), 50));
 
-		/*
 		this._register(Event.filter(this.fileService.onDidFilesChange, e => e.contains(this.userDataProfileService.currentProfile.keybindingsResource))(() => {
 			logService.debug('Keybindings file changed');
 			this.reloadConfigurationScheduler.schedule();
@@ -703,14 +768,12 @@ class UserKeybindings extends Disposable {
 				this.reloadConfigurationScheduler.schedule();
 			}
 		}));
-	
 
 		this._register(userDataProfileService.onDidChangeCurrentProfile(e => {
 			if (!this.uriIdentityService.extUri.isEqual(e.previous.keybindingsResource, e.profile.keybindingsResource)) {
 				e.join(this.whenCurrentProfileChanged());
 			}
 		}));
-			*/
 	}
 
 	private async whenCurrentProfileChanged(): Promise<void> {
@@ -720,11 +783,9 @@ class UserKeybindings extends Disposable {
 
 	private watch(): void {
 		this.watchDisposables.clear();
-		/*
 		this.watchDisposables.add(this.fileService.watch(dirname(this.userDataProfileService.currentProfile.keybindingsResource)));
 		// Also listen to the resource incase the resource is a symlink - https://github.com/microsoft/vscode/issues/118134
 		this.watchDisposables.add(this.fileService.watch(this.userDataProfileService.currentProfile.keybindingsResource));
-		*/
 	}
 
 	async initialize(): Promise<void> {
@@ -744,7 +805,15 @@ class UserKeybindings extends Disposable {
 	}
 
 	private async readUserKeybindings(): Promise<Object[]> {
-		return [];
+		try {
+			const content = await this.fileService.readFile(this.userDataProfileService.currentProfile.keybindingsResource);
+			const value = parse(content.value.toString());
+			return Array.isArray(value)
+				? value.filter(v => v && typeof v === 'object' /* just typeof === object doesn't catch `null` */)
+				: [];
+		} catch (e) {
+			return [];
+		}
 	}
 }
 

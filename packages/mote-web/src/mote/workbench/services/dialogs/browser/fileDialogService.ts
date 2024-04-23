@@ -6,7 +6,7 @@
 import { IPickAndOpenOptions, ISaveDialogOptions, IOpenDialogOptions, IFileDialogService, FileFilter, IPromptButton } from 'vs/platform/dialogs/common/dialogs';
 import { URI } from 'vs/base/common/uri';
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
-import { AbstractFileDialogService } from 'vs/workbench/services/dialogs/browser/abstractFileDialogService';
+import { AbstractFileDialogService } from 'mote/workbench/services/dialogs/browser/abstractFileDialogService';
 import { Schemas } from 'vs/base/common/network';
 import { memoize } from 'vs/base/common/decorators';
 import { HTMLFileSystemProvider } from 'vs/platform/files/browser/htmlFileSystemProvider';

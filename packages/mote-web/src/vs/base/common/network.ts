@@ -244,7 +244,7 @@ class FileAccessImpl {
 	 * **Note:** use `dom.ts#asCSSUrl` whenever the URL is to be used in CSS context.
 	 */
 	asBrowserUri(resourcePath: AppResourcePath | ''): URI {
-		const uri = this.toUri(resourcePath, require);
+		const uri = this.toUri(resourcePath, { toUrl: (moduleId: string) => moduleId });
 		return this.uriToBrowserUri(uri);
 	}
 
@@ -291,7 +291,7 @@ class FileAccessImpl {
 	 * is responsible for loading.
 	 */
 	asFileUri(resourcePath: AppResourcePath | ''): URI {
-		const uri = this.toUri(resourcePath, require);
+		const uri = this.toUri(resourcePath, { toUrl: (moduleId: string) => moduleId });
 		return this.uriToFileUri(uri);
 	}
 

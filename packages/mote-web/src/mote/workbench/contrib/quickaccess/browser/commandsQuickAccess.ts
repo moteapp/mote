@@ -27,15 +27,27 @@ import { CommandsHistory, ICommandQuickPick } from 'vs/platform/quickinput/brows
 import { TriggerAction } from 'vs/platform/quickinput/browser/pickerQuickAccess';
 import { DefaultQuickAccessFilterValue } from 'vs/platform/quickinput/common/quickAccess';
 import { IQuickInputService, IQuickPickSeparator } from 'vs/platform/quickinput/common/quickInput';
-import { IStorageService } from 'mote/platform/storage/common/storage';
+import { IStorageService } from 'vs/platform/storage/common/storage';
 import { ITelemetryService } from 'vs/platform/telemetry/common/telemetry';
 import { IWorkbenchQuickAccessConfiguration } from 'mote/workbench/browser/quickaccess';
+import { CommandInformationResult, IAiRelatedInformationService, RelatedInformationType } from 'mote/workbench/services/aiRelatedInformation/common/aiRelatedInformation';
 import { IEditorGroupsService } from 'mote/workbench/services/editor/common/editorGroupsService';
 import { IEditorService } from 'mote/workbench/services/editor/common/editorService';
+import { IExtensionService } from 'mote/workbench/services/extensions/common/extensions';
+import { createKeybindingCommandQuery } from 'mote/workbench/services/preferences/browser/keybindingsEditorModel';
+import { IPreferencesService } from 'mote/workbench/services/preferences/common/preferences';
 
 export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAccessProvider {
 
+	private static AI_RELATED_INFORMATION_MAX_PICKS = 5;
+	private static AI_RELATED_INFORMATION_THRESHOLD = 0.8;
 	private static AI_RELATED_INFORMATION_DEBOUNCE = 200;
+
+	// If extensions are not yet registered, we wait for a little moment to give them
+	// a chance to register so that the complete set of commands shows up as result
+	// We do not want to delay functionality beyond that time though to keep the commands
+	// functional.
+	private readonly extensionRegistrationRace = raceTimeout(this.extensionService.whenInstalledExtensionsRegistered(), 800);
 
 	private useAiRelatedInfo = false;
 
@@ -52,6 +64,7 @@ export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAcce
 	constructor(
 		@IEditorService private readonly editorService: IEditorService,
 		@IMenuService private readonly menuService: IMenuService,
+		@IExtensionService private readonly extensionService: IExtensionService,
 		@IInstantiationService instantiationService: IInstantiationService,
 		@IKeybindingService keybindingService: IKeybindingService,
 		@ICommandService commandService: ICommandService,
@@ -59,6 +72,10 @@ export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAcce
 		@IDialogService dialogService: IDialogService,
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 		@IEditorGroupsService private readonly editorGroupService: IEditorGroupsService,
+		@IPreferencesService private readonly preferencesService: IPreferencesService,
+		@IProductService private readonly productService: IProductService,
+		//@IAiRelatedInformationService private readonly aiRelatedInformationService: IAiRelatedInformationService,
+		//@IChatAgentService private readonly chatAgentService: IChatAgentService,
 	) {
 		super({
 			showAlias: !Language.isDefaultVariant(),
@@ -73,15 +90,7 @@ export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAcce
 	}
 
 	private get configuration() {
-		//const commandPaletteConfig = this.configurationService.getValue<IWorkbenchQuickAccessConfiguration>().workbench.commandPalette;
-
-		const commandPaletteConfig = {
-			preserveInput: false,
-			experimental: {
-				enableNaturalLanguageSearch: true,
-				suggestCommands: new Set<string>()
-			}
-		}
+		const commandPaletteConfig = this.configurationService.getValue<IWorkbenchQuickAccessConfiguration>().workbench.commandPalette;
 
 		return {
 			preserveInput: commandPaletteConfig.preserveInput,
@@ -95,12 +104,17 @@ export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAcce
 		}
 
 		const config = this.configuration;
-		const suggestedCommandIds = config.experimental.suggestCommands;
+		const suggestedCommandIds = config.experimental.suggestCommands && this.productService.commandPaletteSuggestedCommandIds?.length
+			? new Set(this.productService.commandPaletteSuggestedCommandIds)
+			: undefined;
 		this.options.suggestedCommandIds = suggestedCommandIds;
 		this.useAiRelatedInfo = config.experimental.enableNaturalLanguageSearch;
 	}
 
 	protected async getCommandPicks(token: CancellationToken): Promise<Array<ICommandQuickPick>> {
+
+		// wait for extensions registration or 800ms once
+		await this.extensionRegistrationRace;
 
 		if (token.isCancellationRequested) {
 			return [];
@@ -116,7 +130,7 @@ export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAcce
 				tooltip: localize('configure keybinding', "Configure Keybinding"),
 			}],
 			trigger: (): TriggerAction => {
-				//this.preferencesService.openGlobalKeybindingSettings(false, { query: createKeybindingCommandQuery(picks.commandId, picks.commandWhen) });
+				this.preferencesService.openGlobalKeybindingSettings(false, { query: createKeybindingCommandQuery(picks.commandId, picks.commandWhen) });
 				return TriggerAction.CLOSE_PICKER;
 			},
 		}));
@@ -139,12 +153,12 @@ export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAcce
 			return [];
 		}
 
-		let additionalPicks: any[];
+		let additionalPicks;
 
 		try {
 			// Wait a bit to see if the user is still typing
 			await timeout(CommandsQuickAccessProvider.AI_RELATED_INFORMATION_DEBOUNCE, token);
-			additionalPicks = [];
+			additionalPicks = await this.getRelatedInformationPicks(allPicks, picksSoFar, filter, token);
 		} catch (e) {
 			return [];
 		}
@@ -153,6 +167,32 @@ export class CommandsQuickAccessProvider extends AbstractEditorCommandsQuickAcce
 			additionalPicks.push({
 				type: 'separator'
 			});
+		}
+
+		return additionalPicks;
+	}
+
+	private async getRelatedInformationPicks(allPicks: ICommandQuickPick[], picksSoFar: ICommandQuickPick[], filter: string, token: CancellationToken) {
+		const relatedInformation = await this.aiRelatedInformationService.getRelatedInformation(
+			filter,
+			[RelatedInformationType.CommandInformation],
+			token
+		) as CommandInformationResult[];
+
+		// Sort by weight descending to get the most relevant results first
+		relatedInformation.sort((a, b) => b.weight - a.weight);
+
+		const setOfPicksSoFar = new Set(picksSoFar.map(p => p.commandId));
+		const additionalPicks = new Array<ICommandQuickPick | IQuickPickSeparator>();
+
+		for (const info of relatedInformation) {
+			if (info.weight < CommandsQuickAccessProvider.AI_RELATED_INFORMATION_THRESHOLD || additionalPicks.length === CommandsQuickAccessProvider.AI_RELATED_INFORMATION_MAX_PICKS) {
+				break;
+			}
+			const pick = allPicks.find(p => p.commandId === info.command && !setOfPicksSoFar.has(p.commandId));
+			if (pick) {
+				additionalPicks.push(pick);
+			}
 		}
 
 		return additionalPicks;

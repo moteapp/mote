@@ -28,7 +28,7 @@ import { IConfigurationService } from 'vs/platform/configuration/common/configur
 import { INavigatorWithKeyboard } from 'mote/workbench/services/keybinding/browser/navigatorKeyboard';
 import { INotificationService } from 'vs/platform/notification/common/notification';
 import { ICommandService } from 'vs/platform/commands/common/commands';
-import { IStorageService } from 'mote/platform/storage/common/storage';
+import { IStorageService } from 'vs/platform/storage/common/storage';
 import { getKeyboardLayoutId, IKeyboardLayoutInfo, IKeyboardLayoutService, IKeyboardMapping, IMacLinuxKeyboardMapping, IWindowsKeyboardMapping } from 'vs/platform/keyboardLayout/common/keyboardLayout';
 
 export class BrowserKeyboardMapperFactoryBase extends Disposable {

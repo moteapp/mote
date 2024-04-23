@@ -7,7 +7,7 @@ import { isEqualOrParent, joinPath } from 'vs/base/common/resources';
 import Severity from 'vs/base/common/severity';
 import { URI } from 'vs/base/common/uri';
 import * as nls from 'vs/nls';
-import * as semver from 'vs/base/common/semver/semver';
+import * as semver from 'semver';
 import { IExtensionManifest } from 'vs/platform/extensions/common/extensions';
 
 export interface IParsedVersion {

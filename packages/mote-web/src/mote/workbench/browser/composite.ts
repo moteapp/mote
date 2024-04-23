@@ -1,13 +1,23 @@
-import { Dimension, IDomPosition, trackFocus } from 'mote/base/browser/dom';
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+import { IAction, IActionRunner, ActionRunner } from 'vs/base/common/actions';
 import { Component } from 'mote/workbench/common/component';
+import { ITelemetryService } from 'vs/platform/telemetry/common/telemetry';
 import { IComposite, ICompositeControl } from 'mote/workbench/common/composite';
-import { IBaseActionViewItemOptions } from 'vs/base/browser/ui/actionbar/actionViewItems';
-import { IActionViewItem } from 'vs/base/browser/ui/actionbar/actionbar';
-import { IBoundarySashes } from 'vs/base/browser/ui/sash/sash';
-import { ActionRunner, IAction, IActionRunner } from 'vs/base/common/actions';
 import { Event, Emitter } from 'vs/base/common/event';
+import { IThemeService } from 'vs/platform/theme/common/themeService';
+import { IConstructorSignature, IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
+import { trackFocus, Dimension, IDomPosition } from 'vs/base/browser/dom';
+import { IStorageService } from 'vs/platform/storage/common/storage';
+import { Disposable } from 'vs/base/common/lifecycle';
 import { assertIsDefined } from 'vs/base/common/types';
+import { IActionViewItem } from 'vs/base/browser/ui/actionbar/actionbar';
 import { MenuId } from 'vs/platform/actions/common/actions';
+import { IBoundarySashes } from 'vs/base/browser/ui/sash/sash';
+import { IBaseActionViewItemOptions } from 'vs/base/browser/ui/actionbar/actionViewItems';
 
 /**
  * Composites are layed out in the sidebar and panel part of the workbench. At a time only one composite
@@ -22,7 +32,8 @@ import { MenuId } from 'vs/platform/actions/common/actions';
  * layout and focus call, but only one create and dispose call.
  */
 export abstract class Composite extends Component implements IComposite {
-    private readonly _onTitleAreaUpdate = this._register(new Emitter<void>());
+
+	private readonly _onTitleAreaUpdate = this._register(new Emitter<void>());
 	readonly onTitleAreaUpdate = this._onTitleAreaUpdate.event;
 
 	protected _onDidFocus: Emitter<void> | undefined;
@@ -76,8 +87,11 @@ export abstract class Composite extends Component implements IComposite {
 
 	constructor(
 		id: string,
+		protected readonly telemetryService: ITelemetryService,
+		themeService: IThemeService,
+		storageService: IStorageService
 	) {
-		super(id);
+		super(id, themeService, storageService);
 	}
 
 	getTitle(): string | undefined {
@@ -220,5 +234,66 @@ export abstract class Composite extends Component implements IComposite {
 	 */
 	getControl(): ICompositeControl | undefined {
 		return undefined;
+	}
+}
+
+/**
+ * A composite descriptor is a lightweight descriptor of a composite in the workbench.
+ */
+export abstract class CompositeDescriptor<T extends Composite> {
+
+	constructor(
+		private readonly ctor: IConstructorSignature<T>,
+		readonly id: string,
+		readonly name: string,
+		readonly cssClass?: string,
+		readonly order?: number,
+		readonly requestedIndex?: number,
+	) { }
+
+	instantiate(instantiationService: IInstantiationService): T {
+		return instantiationService.createInstance(this.ctor);
+	}
+}
+
+export abstract class CompositeRegistry<T extends Composite> extends Disposable {
+
+	private readonly _onDidRegister = this._register(new Emitter<CompositeDescriptor<T>>());
+	readonly onDidRegister = this._onDidRegister.event;
+
+	private readonly _onDidDeregister = this._register(new Emitter<CompositeDescriptor<T>>());
+	readonly onDidDeregister = this._onDidDeregister.event;
+
+	private readonly composites: CompositeDescriptor<T>[] = [];
+
+	protected registerComposite(descriptor: CompositeDescriptor<T>): void {
+		if (this.compositeById(descriptor.id)) {
+			return;
+		}
+
+		this.composites.push(descriptor);
+		this._onDidRegister.fire(descriptor);
+	}
+
+	protected deregisterComposite(id: string): void {
+		const descriptor = this.compositeById(id);
+		if (!descriptor) {
+			return;
+		}
+
+		this.composites.splice(this.composites.indexOf(descriptor), 1);
+		this._onDidDeregister.fire(descriptor);
+	}
+
+	getComposite(id: string): CompositeDescriptor<T> | undefined {
+		return this.compositeById(id);
+	}
+
+	protected getComposites(): CompositeDescriptor<T>[] {
+		return this.composites.slice(0);
+	}
+
+	private compositeById(id: string): CompositeDescriptor<T> | undefined {
+		return this.composites.find(composite => composite.id === id);
 	}
 }

@@ -6,14 +6,14 @@
 import { localize } from 'vs/nls';
 import { URI } from 'vs/base/common/uri';
 import { IResourceEditorInput, IEditorOptions } from 'vs/platform/editor/common/editor';
-import { IEditorPane, IEditorCloseEvent, EditorResourceAccessor, IEditorIdentifier, GroupIdentifier, EditorsOrder, SideBySideEditor, IUntypedEditorInput, isResourceEditorInput, isEditorInput, isSideBySideEditorInput, EditorCloseContext, IEditorPaneSelection, EditorPaneSelectionCompareResult, EditorPaneSelectionChangeReason, isEditorPaneWithSelection, IEditorPaneSelectionChangeEvent, IEditorPaneWithSelection, IEditorWillMoveEvent } from 'mote/workbench/common/editorCommon';
+import { IEditorPane, IEditorCloseEvent, EditorResourceAccessor, IEditorIdentifier, GroupIdentifier, EditorsOrder, SideBySideEditor, IUntypedEditorInput, isResourceEditorInput, isEditorInput, isSideBySideEditorInput, EditorCloseContext, IEditorPaneSelection, EditorPaneSelectionCompareResult, EditorPaneSelectionChangeReason, isEditorPaneWithSelection, IEditorPaneSelectionChangeEvent, IEditorPaneWithSelection, IEditorWillMoveEvent } from 'mote/workbench/common/editor';
 import { EditorInput } from 'mote/workbench/common/editor/editorInput';
 import { IEditorService } from 'mote/workbench/services/editor/common/editorService';
 import { GoFilter, GoScope, IHistoryService } from 'mote/workbench/services/history/common/history';
 import { FileChangesEvent, IFileService, FileChangeType, FILES_EXCLUDE_CONFIG, FileOperationEvent, FileOperation } from 'vs/platform/files/common/files';
 import { IWorkspaceContextService } from 'vs/platform/workspace/common/workspace';
 import { dispose, Disposable, DisposableStore, IDisposable } from 'vs/base/common/lifecycle';
-import { IStorageService, StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
+import { IStorageService, StorageScope, StorageTarget } from 'vs/platform/storage/common/storage';
 import { Emitter, Event } from 'vs/base/common/event';
 import { IConfigurationService } from 'vs/platform/configuration/common/configuration';
 import { IEditorGroup, IEditorGroupsService } from 'mote/workbench/services/editor/common/editorGroupsService';
@@ -32,8 +32,8 @@ import { ResourceGlobMatcher } from 'mote/workbench/common/resources';
 import { IPathService } from 'mote/workbench/services/path/common/pathService';
 import { IUriIdentityService } from 'vs/platform/uriIdentity/common/uriIdentity';
 import { ILifecycleService, LifecyclePhase } from 'mote/workbench/services/lifecycle/common/lifecycle';
-import { ILogService, LogLevel } from 'mote/platform/log/common/log';
-import { mainWindow } from 'mote/base/browser/window';
+import { ILogService, LogLevel } from 'vs/platform/log/common/log';
+import { mainWindow } from 'vs/base/browser/window';
 
 interface ISerializedEditorHistoryEntry {
 	readonly editor: Omit<IResourceEditorInput, 'resource'> & { resource: string };

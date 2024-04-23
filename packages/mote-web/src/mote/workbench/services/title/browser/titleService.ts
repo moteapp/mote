@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
-import { ITitlebarPart } from 'mote/workbench/browser/parts/titlebar/titlebarPart';
-//import { IEditorGroupsContainer } from 'vs/workbench/services/editor/common/editorGroupsService';
+import { IAuxiliaryTitlebarPart, ITitlebarPart } from 'mote/workbench/browser/parts/titlebar/titlebarPart';
+import { IEditorGroupsContainer } from 'mote/workbench/services/editor/common/editorGroupsService';
 
 export const ITitleService = createDecorator<ITitleService>('titleService');
 
@@ -21,5 +21,5 @@ export interface ITitleService extends ITitlebarPart {
 	/**
 	 * Creates a new auxililary title bar part in the provided container.
 	 */
-	//createAuxiliaryTitlebarPart(container: HTMLElement, editorGroupsContainer: IEditorGroupsContainer): IAuxiliaryTitlebarPart;
+	createAuxiliaryTitlebarPart(container: HTMLElement, editorGroupsContainer: IEditorGroupsContainer): IAuxiliaryTitlebarPart;
 }

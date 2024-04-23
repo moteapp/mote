@@ -5,10 +5,10 @@
 
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { ICommandService, ICommandEvent, CommandsRegistry } from 'vs/platform/commands/common/commands';
-//import { IExtensionService } from 'vs/workbench/services/extensions/common/extensions';
+import { IExtensionService } from 'mote/workbench/services/extensions/common/extensions';
 import { Event, Emitter } from 'vs/base/common/event';
 import { Disposable } from 'vs/base/common/lifecycle';
-import { ILogService } from 'mote/platform/log/common/log';
+import { ILogService } from 'vs/platform/log/common/log';
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
 import { timeout } from 'vs/base/common/async';
 
@@ -27,11 +27,11 @@ export class CommandService extends Disposable implements ICommandService {
 
 	constructor(
 		@IInstantiationService private readonly _instantiationService: IInstantiationService,
-		//@IExtensionService private readonly _extensionService: IExtensionService,
+		@IExtensionService private readonly _extensionService: IExtensionService,
 		@ILogService private readonly _logService: ILogService
 	) {
 		super();
-		//this._extensionService.whenInstalledExtensionsRegistered().then(value => this._extensionHostIsReady = value);
+		this._extensionService.whenInstalledExtensionsRegistered().then(value => this._extensionHostIsReady = value);
 		this._starActivation = null;
 	}
 
@@ -39,7 +39,7 @@ export class CommandService extends Disposable implements ICommandService {
 		if (!this._starActivation) {
 			// wait for * activation, limited to at most 30s
 			this._starActivation = Promise.race<any>([
-				//this._extensionService.activateByEvent(`*`),
+				this._extensionService.activateByEvent(`*`),
 				timeout(30000)
 			]);
 		}
@@ -56,28 +56,26 @@ export class CommandService extends Disposable implements ICommandService {
 
 			// if the activation event has already resolved (i.e. subsequent call),
 			// we will execute the registered command immediately
-			/*
 			if (this._extensionService.activationEventIsDone(activationEvent)) {
 				return this._tryExecuteCommand(id, args);
 			}
-			*/
 
 			// if the extension host didn't start yet, we will execute the registered
 			// command immediately and send an activation event, but not wait for it
 			if (!this._extensionHostIsReady) {
-				//this._extensionService.activateByEvent(activationEvent); // intentionally not awaited
+				this._extensionService.activateByEvent(activationEvent); // intentionally not awaited
 				return this._tryExecuteCommand(id, args);
 			}
 
 			// we will wait for a simple activation event (e.g. in case an extension wants to overwrite it)
-			//await this._extensionService.activateByEvent(activationEvent);
+			await this._extensionService.activateByEvent(activationEvent);
 			return this._tryExecuteCommand(id, args);
 		}
 
 		// finally, if the command is not registered we will send a simple activation event
 		// as well as a * activation event raced against registration and against 30s
 		await Promise.all([
-			//this._extensionService.activateByEvent(activationEvent),
+			this._extensionService.activateByEvent(activationEvent),
 			Promise.race<any>([
 				// race * activation against command registration
 				this._activateStar(),

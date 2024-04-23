@@ -5,7 +5,7 @@
 
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
 import { IResourceEditorInput } from 'vs/platform/editor/common/editor';
-import { GroupIdentifier } from 'mote/workbench/common/editorCommon';
+import { GroupIdentifier } from 'mote/workbench/common/editor';
 import { EditorInput } from 'mote/workbench/common/editor/editorInput';
 import { URI } from 'vs/base/common/uri';
 

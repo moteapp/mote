@@ -8,9 +8,9 @@ import { autorun, derived } from 'vs/base/common/observable';
 import { IModelDeltaDecoration, MinimapPosition, OverviewRulerLane } from 'vs/editor/common/model';
 import { localize } from 'vs/nls';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
-import { LineRange } from 'vs/workbench/contrib/mergeEditor/browser/model/lineRange';
-import { applyObservableDecorations, join } from 'vs/workbench/contrib/mergeEditor/browser/utils';
-import { handledConflictMinimapOverViewRulerColor, unhandledConflictMinimapOverViewRulerColor } from 'vs/workbench/contrib/mergeEditor/browser/view/colors';
+import { LineRange } from 'mote/workbench/contrib/mergeEditor/browser/model/lineRange';
+import { applyObservableDecorations, join } from 'mote/workbench/contrib/mergeEditor/browser/utils';
+import { handledConflictMinimapOverViewRulerColor, unhandledConflictMinimapOverViewRulerColor } from 'mote/workbench/contrib/mergeEditor/browser/view/colors';
 import { CodeEditorView } from './codeEditorView';
 
 export class ResultCodeEditorView extends CodeEditorView {

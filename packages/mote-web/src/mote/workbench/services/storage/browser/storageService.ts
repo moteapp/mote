@@ -13,10 +13,10 @@ import { Emitter } from 'vs/base/common/event';
 import { Disposable, DisposableStore, IDisposable } from 'vs/base/common/lifecycle';
 import { assertIsDefined } from 'vs/base/common/types';
 import { InMemoryStorageDatabase, isStorageItemsChangeEvent, IStorage, IStorageDatabase, IStorageItemsChangeEvent, IUpdateRequest, Storage } from 'vs/base/parts/storage/common/storage';
-import { ILogService } from 'mote/platform/log/common/log';
-import { AbstractStorageService, isProfileUsingDefaultStorage, IS_NEW_KEY, StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
-import { isUserDataProfile, IUserDataProfile } from 'mote/platform/userDataProfile/common/userDataProfile';
-import { IAnyWorkspaceIdentifier } from 'mote/platform/workspace/common/workspace';
+import { ILogService } from 'vs/platform/log/common/log';
+import { AbstractStorageService, isProfileUsingDefaultStorage, IS_NEW_KEY, StorageScope, StorageTarget } from 'vs/platform/storage/common/storage';
+import { isUserDataProfile, IUserDataProfile } from 'vs/platform/userDataProfile/common/userDataProfile';
+import { IAnyWorkspaceIdentifier } from 'vs/platform/workspace/common/workspace';
 import { IUserDataProfileService } from 'mote/workbench/services/userDataProfile/common/userDataProfile';
 
 export class BrowserStorageService extends AbstractStorageService {
@@ -54,7 +54,7 @@ export class BrowserStorageService extends AbstractStorageService {
 	}
 
 	private registerListeners(): void {
-		//this._register(this.userDataProfileService.onDidChangeCurrentProfile(e => e.join(this.switchToProfile(e.profile))));
+		this._register(this.userDataProfileService.onDidChangeCurrentProfile(e => e.join(this.switchToProfile(e.profile))));
 	}
 
 	protected async doInitialize(): Promise<void> {

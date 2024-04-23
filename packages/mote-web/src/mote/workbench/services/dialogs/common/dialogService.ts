@@ -8,8 +8,8 @@ import { Disposable } from 'vs/base/common/lifecycle';
 import { IAsyncPromptResult, IAsyncPromptResultWithCancel, IConfirmation, IConfirmationResult, IDialogService, IInput, IInputResult, IPrompt, IPromptResult, IPromptResultWithCancel, IPromptWithCustomCancel, IPromptWithDefaultCancel } from 'vs/platform/dialogs/common/dialogs';
 import { DialogsModel } from 'mote/workbench/common/dialogs';
 import { InstantiationType, registerSingleton } from 'vs/platform/instantiation/common/extensions';
-//import { IWorkbenchEnvironmentService } from 'mote/workbench/services/environment/common/environmentService';
-import { ILogService } from 'mote/platform/log/common/log';
+import { IWorkbenchEnvironmentService } from 'mote/workbench/services/environment/common/environmentService';
+import { ILogService } from 'vs/platform/log/common/log';
 
 export class DialogService extends Disposable implements IDialogService {
 
@@ -22,14 +22,18 @@ export class DialogService extends Disposable implements IDialogService {
 	readonly onDidShowDialog = this.model.onDidShowDialog;
 
 	constructor(
-		//@IWorkbenchEnvironmentService private readonly environmentService: IWorkbenchEnvironmentService,
+		@IWorkbenchEnvironmentService private readonly environmentService: IWorkbenchEnvironmentService,
 		@ILogService private readonly logService: ILogService
 	) {
 		super();
 	}
 
 	private skipDialogs(): boolean {
-		return false;
+		if (this.environmentService.isExtensionDevelopment && this.environmentService.extensionTestsLocationURI) {
+			return true; // integration tests
+		}
+
+		return !!this.environmentService.enableSmokeTestDriver; // smoke tests
 	}
 
 	async confirm(confirmation: IConfirmation): Promise<IConfirmationResult> {

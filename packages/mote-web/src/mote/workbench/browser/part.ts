@@ -1,11 +1,17 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+import './media/part.css';
 import { Component } from 'mote/workbench/common/component';
-import { Dimension, IDimension, IDomPosition } from 'vs/base/browser/dom';
-import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/browser/workbenchLayoutService';
-import { ISerializableView } from 'vs/base/browser/ui/grid/grid';
+import { IThemeService, IColorTheme } from 'vs/platform/theme/common/themeService';
+import { Dimension, size, IDimension, getActiveDocument, prepend, IDomPosition } from 'vs/base/browser/dom';
+import { IStorageService } from 'vs/platform/storage/common/storage';
+import { ISerializableView, IViewSize } from 'vs/base/browser/ui/grid/grid';
 import { Event, Emitter } from 'vs/base/common/event';
-import { IViewSize } from 'vs/base/browser/ui/grid/gridview';
+import { IWorkbenchLayoutService } from 'mote/workbench/services/layout/browser/layoutService';
 import { assertIsDefined } from 'vs/base/common/types';
-import { getActiveDocument, size } from 'mote/base/browser/dom';
 import { IDisposable, toDisposable } from 'vs/base/common/lifecycle';
 
 export interface IPartOptions {
@@ -26,38 +32,57 @@ export interface ILayoutContentResult {
  */
 export abstract class Part extends Component implements ISerializableView {
 
-    private parent: HTMLElement | undefined;
+	private _dimension: Dimension | undefined;
+	get dimension(): Dimension | undefined { return this._dimension; }
+
+	private _contentPosition: IDomPosition | undefined;
+	get contentPosition(): IDomPosition | undefined { return this._contentPosition; }
+
+	protected _onDidVisibilityChange = this._register(new Emitter<boolean>());
+	readonly onDidVisibilityChange = this._onDidVisibilityChange.event;
+
+	private parent: HTMLElement | undefined;
 	private headerArea: HTMLElement | undefined;
 	private titleArea: HTMLElement | undefined;
 	private contentArea: HTMLElement | undefined;
 	private footerArea: HTMLElement | undefined;
 	private partLayout: PartLayout | undefined;
 
-    constructor(
+	constructor(
 		id: string,
 		private options: IPartOptions,
-        protected readonly layoutService: IWorkbenchLayoutService
-    ) {
-        super(id);
+		themeService: IThemeService,
+		storageService: IStorageService,
+		protected readonly layoutService: IWorkbenchLayoutService
+	) {
+		super(id, themeService, storageService);
 
 		this._register(layoutService.registerPart(this));
-    }
-    
-    /**
+	}
+
+	protected override onThemeChange(theme: IColorTheme): void {
+
+		// only call if our create() method has been called
+		if (this.parent) {
+			super.onThemeChange(theme);
+		}
+	}
+
+	/**
 	 * Note: Clients should not call this method, the workbench calls this
 	 * method. Calling it otherwise may result in unexpected behavior.
 	 *
 	 * Called to create title and content area of the part.
 	 */
 	create(parent: HTMLElement, options?: object): void {
-		this.element = parent;
-        this.parent = parent;
-
+		this.parent = parent;
 		this.titleArea = this.createTitleArea(parent, options);
 		this.contentArea = this.createContentArea(parent, options);
 
 		this.partLayout = new PartLayout(this.options, this.contentArea);
-    }
+
+		this.updateStyles();
+	}
 
 	/**
 	 * Returns the overall part container.
@@ -95,6 +120,77 @@ export abstract class Part extends Component implements ISerializableView {
 	}
 
 	/**
+	 * Sets the header area
+	 */
+	protected setHeaderArea(headerContainer: HTMLElement): void {
+		if (this.headerArea) {
+			throw new Error('Header already exists');
+		}
+
+		if (!this.parent || !this.titleArea) {
+			return;
+		}
+
+		prepend(this.parent, headerContainer);
+		headerContainer.classList.add('header-or-footer');
+		headerContainer.classList.add('header');
+
+		this.headerArea = headerContainer;
+		this.partLayout?.setHeaderVisibility(true);
+		this.relayout();
+	}
+
+	/**
+	 * Sets the footer area
+	 */
+	protected setFooterArea(footerContainer: HTMLElement): void {
+		if (this.footerArea) {
+			throw new Error('Footer already exists');
+		}
+
+		if (!this.parent || !this.titleArea) {
+			return;
+		}
+
+		this.parent.appendChild(footerContainer);
+		footerContainer.classList.add('header-or-footer');
+		footerContainer.classList.add('footer');
+
+		this.footerArea = footerContainer;
+		this.partLayout?.setFooterVisibility(true);
+		this.relayout();
+	}
+
+	/**
+	 * removes the header area
+	 */
+	protected removeHeaderArea(): void {
+		if (this.headerArea) {
+			this.headerArea.remove();
+			this.headerArea = undefined;
+			this.partLayout?.setHeaderVisibility(false);
+			this.relayout();
+		}
+	}
+
+	/**
+	 * removes the footer area
+	 */
+	protected removeFooterArea(): void {
+		if (this.footerArea) {
+			this.footerArea.remove();
+			this.footerArea = undefined;
+			this.partLayout?.setFooterVisibility(false);
+			this.relayout();
+		}
+	}
+
+	private relayout() {
+		if (this.dimension && this.contentPosition) {
+			this.layout(this.dimension.width, this.dimension.height, this.contentPosition.top, this.contentPosition.left);
+		}
+	}
+	/**
 	 * Layout title and content area in the given dimension.
 	 */
 	protected layoutContents(width: number, height: number): ILayoutContentResult {
@@ -102,7 +198,6 @@ export abstract class Part extends Component implements ISerializableView {
 
 		return partLayout.layout(width, height);
 	}
-
 
 	//#region ISerializableView
 
@@ -116,18 +211,11 @@ export abstract class Part extends Component implements ISerializableView {
 	abstract minimumHeight: number;
 	abstract maximumHeight: number;
 
-	private _dimension: Dimension | undefined;
-	get dimension(): Dimension | undefined { return this._dimension; }
-
-	private _contentPosition: IDomPosition | undefined;
-	get contentPosition(): IDomPosition | undefined { return this._contentPosition; }
 	layout(width: number, height: number, top: number, left: number): void {
 		this._dimension = new Dimension(width, height);
 		this._contentPosition = { top, left };
 	}
 
-	protected _onDidVisibilityChange = this._register(new Emitter<boolean>());
-	readonly onDidVisibilityChange = this._onDidVisibilityChange.event;
 	setVisible(visible: boolean) {
 		this._onDidVisibilityChange.fire(visible);
 	}
@@ -198,6 +286,7 @@ class PartLayout {
 		this.headerVisible = visible;
 	}
 }
+
 export interface IMultiWindowPart {
 	readonly element: HTMLElement;
 }

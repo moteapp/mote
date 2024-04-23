@@ -105,7 +105,7 @@ export class ExtensionHostStarter implements IDisposable, IExtensionHostStarter 
 		extHost.start({
 			...opts,
 			type: 'extensionHost',
-			entryPoint: 'vs/workbench/api/node/extensionHostProcess',
+			entryPoint: 'mote/workbench/api/node/extensionHostProcess',
 			args: ['--skipWorkspaceStorageLock'],
 			execArgv: opts.execArgv,
 			allowLoadingUnsignedLibraries: true,

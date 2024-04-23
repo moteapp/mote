@@ -8,7 +8,7 @@ import { getErrorMessage } from 'vs/base/common/errors';
 import { Disposable } from 'vs/base/common/lifecycle';
 import { Schemas } from 'vs/base/common/network';
 import { joinPath } from 'vs/base/common/resources';
-import * as semver from 'vs/base/common/semver/semver';
+import * as semver from 'semver';
 import { isBoolean } from 'vs/base/common/types';
 import { URI } from 'vs/base/common/uri';
 import { generateUuid } from 'vs/base/common/uuid';

@@ -100,16 +100,22 @@ export interface IWorkbenchThemeService extends IThemeService {
 	setColorTheme(themeId: string | undefined | IWorkbenchColorTheme, settingsTarget: ThemeSettingTarget): Promise<IWorkbenchColorTheme | null>;
 	getColorTheme(): IWorkbenchColorTheme;
 	getColorThemes(): Promise<IWorkbenchColorTheme[]>;
-	//getMarketplaceColorThemes(publisher: string, name: string, version: string): Promise<IWorkbenchColorTheme[]>;
+	getMarketplaceColorThemes(publisher: string, name: string, version: string): Promise<IWorkbenchColorTheme[]>;
 	onDidColorThemeChange: Event<IWorkbenchColorTheme>;
 
 	hasUpdatedDefaultThemes(): boolean;
 	getPreferredColorScheme(): ColorScheme | undefined;
 
+	setFileIconTheme(iconThemeId: string | undefined | IWorkbenchFileIconTheme, settingsTarget: ThemeSettingTarget): Promise<IWorkbenchFileIconTheme>;
+	getFileIconTheme(): IWorkbenchFileIconTheme;
+	getFileIconThemes(): Promise<IWorkbenchFileIconTheme[]>;
+	getMarketplaceFileIconThemes(publisher: string, name: string, version: string): Promise<IWorkbenchFileIconTheme[]>;
+	onDidFileIconThemeChange: Event<IWorkbenchFileIconTheme>;
+
 	setProductIconTheme(iconThemeId: string | undefined | IWorkbenchProductIconTheme, settingsTarget: ThemeSettingTarget): Promise<IWorkbenchProductIconTheme>;
 	getProductIconTheme(): IWorkbenchProductIconTheme;
 	getProductIconThemes(): Promise<IWorkbenchProductIconTheme[]>;
-	//getMarketplaceProductIconThemes(publisher: string, name: string, version: string): Promise<IWorkbenchProductIconTheme[]>;
+	getMarketplaceProductIconThemes(publisher: string, name: string, version: string): Promise<IWorkbenchProductIconTheme[]>;
 	onDidProductIconThemeChange: Event<IWorkbenchProductIconTheme>;
 }
 

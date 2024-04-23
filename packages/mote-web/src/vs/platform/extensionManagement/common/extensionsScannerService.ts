@@ -16,7 +16,7 @@ import { FileAccess, Schemas } from 'vs/base/common/network';
 import * as path from 'vs/base/common/path';
 import * as platform from 'vs/base/common/platform';
 import { basename, isEqual, joinPath } from 'vs/base/common/resources';
-import * as semver from 'vs/base/common/semver/semver';
+import * as semver from 'semver';
 import Severity from 'vs/base/common/severity';
 import { isEmptyObject } from 'vs/base/common/types';
 import { URI } from 'vs/base/common/uri';

@@ -7,7 +7,7 @@ import { CancellationToken } from 'vs/base/common/cancellation';
 import { getErrorMessage, isCancellationError } from 'vs/base/common/errors';
 import { Schemas } from 'vs/base/common/network';
 import { basename } from 'vs/base/common/resources';
-import { gt } from 'vs/base/common/semver/semver';
+import { gt } from 'semver';
 import { URI } from 'vs/base/common/uri';
 import { localize } from 'vs/nls';
 import { EXTENSION_IDENTIFIER_REGEX, IExtensionGalleryService, IExtensionInfo, IExtensionManagementService, IGalleryExtension, ILocalExtension, InstallOptions, InstallExtensionInfo, InstallOperation } from 'vs/platform/extensionManagement/common/extensionManagement';

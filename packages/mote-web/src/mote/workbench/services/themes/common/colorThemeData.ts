@@ -19,8 +19,9 @@ import { URI } from 'vs/base/common/uri';
 import { parse as parsePList } from 'mote/workbench/services/themes/common/plistParser';
 import { TokenStyle, SemanticTokenRule, ProbeScope, getTokenClassificationRegistry, TokenStyleValue, TokenStyleData, parseClassifierString } from 'vs/platform/theme/common/tokenClassificationRegistry';
 import { MatcherWithPriority, Matcher, createMatchers } from 'mote/workbench/services/themes/common/textMateScopeMatcher';
+import { IExtensionResourceLoaderService } from 'vs/platform/extensionResourceLoader/common/extensionResourceLoader';
 import { CharCode } from 'vs/base/common/charCode';
-import { StorageScope, IStorageService, StorageTarget } from 'mote/platform/storage/common/storage';
+import { StorageScope, IStorageService, StorageTarget } from 'vs/platform/storage/common/storage';
 import { ThemeConfiguration } from 'mote/workbench/services/themes/common/themeConfiguration';
 import { ColorScheme } from 'vs/platform/theme/common/theme';
 
@@ -507,6 +508,36 @@ export class ColorThemeData implements IWorkbenchColorTheme {
 		}
 	}
 
+	public ensureLoaded(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<void> {
+		return !this.isLoaded ? this.load(extensionResourceLoaderService) : Promise.resolve(undefined);
+	}
+
+	public reload(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<void> {
+		return this.load(extensionResourceLoaderService);
+	}
+
+	private load(extensionResourceLoaderService: IExtensionResourceLoaderService): Promise<void> {
+		if (!this.location) {
+			return Promise.resolve(undefined);
+		}
+		this.themeTokenColors = [];
+		this.clearCaches();
+
+		const result = {
+			colors: {},
+			textMateRules: [],
+			semanticTokenRules: [],
+			semanticHighlighting: false
+		};
+		return _loadColorTheme(extensionResourceLoaderService, this.location, result).then(_ => {
+			this.isLoaded = true;
+			this.semanticTokenRules = result.semanticTokenRules;
+			this.colorMap = result.colors;
+			this.themeTokenColors = result.textMateRules;
+			this.themeSemanticHighlighting = result.semanticHighlighting;
+		});
+	}
+
 	public clearCaches() {
 		this.tokenColorIndex = undefined;
 		this.textMateThemingRules = undefined;
@@ -658,6 +689,83 @@ function toCSSSelector(extensionId: string, path: string) {
 		str = '_' + str;
 	}
 	return str;
+}
+
+async function _loadColorTheme(extensionResourceLoaderService: IExtensionResourceLoaderService, themeLocation: URI, result: { textMateRules: ITextMateThemingRule[]; colors: IColorMap; semanticTokenRules: SemanticTokenRule[]; semanticHighlighting: boolean }): Promise<any> {
+	if (resources.extname(themeLocation) === '.json') {
+		const content = await extensionResourceLoaderService.readExtensionResource(themeLocation);
+		const errors: Json.ParseError[] = [];
+		const contentValue = Json.parse(content, errors);
+		if (errors.length > 0) {
+			return Promise.reject(new Error(nls.localize('error.cannotparsejson', "Problems parsing JSON theme file: {0}", errors.map(e => getParseErrorMessage(e.error)).join(', '))));
+		} else if (Json.getNodeType(contentValue) !== 'object') {
+			return Promise.reject(new Error(nls.localize('error.invalidformat', "Invalid format for JSON theme file: Object expected.")));
+		}
+		if (contentValue.include) {
+			await _loadColorTheme(extensionResourceLoaderService, resources.joinPath(resources.dirname(themeLocation), contentValue.include), result);
+		}
+		if (Array.isArray(contentValue.settings)) {
+			convertSettings(contentValue.settings, result);
+			return null;
+		}
+		result.semanticHighlighting = result.semanticHighlighting || contentValue.semanticHighlighting;
+		const colors = contentValue.colors;
+		if (colors) {
+			if (typeof colors !== 'object') {
+				return Promise.reject(new Error(nls.localize({ key: 'error.invalidformat.colors', comment: ['{0} will be replaced by a path. Values in quotes should not be translated.'] }, "Problem parsing color theme file: {0}. Property 'colors' is not of type 'object'.", themeLocation.toString())));
+			}
+			// new JSON color themes format
+			for (const colorId in colors) {
+				const colorHex = colors[colorId];
+				if (typeof colorHex === 'string') { // ignore colors tht are null
+					result.colors[colorId] = Color.fromHex(colors[colorId]);
+				}
+			}
+		}
+		const tokenColors = contentValue.tokenColors;
+		if (tokenColors) {
+			if (Array.isArray(tokenColors)) {
+				result.textMateRules.push(...tokenColors);
+			} else if (typeof tokenColors === 'string') {
+				await _loadSyntaxTokens(extensionResourceLoaderService, resources.joinPath(resources.dirname(themeLocation), tokenColors), result);
+			} else {
+				return Promise.reject(new Error(nls.localize({ key: 'error.invalidformat.tokenColors', comment: ['{0} will be replaced by a path. Values in quotes should not be translated.'] }, "Problem parsing color theme file: {0}. Property 'tokenColors' should be either an array specifying colors or a path to a TextMate theme file", themeLocation.toString())));
+			}
+		}
+		const semanticTokenColors = contentValue.semanticTokenColors;
+		if (semanticTokenColors && typeof semanticTokenColors === 'object') {
+			for (const key in semanticTokenColors) {
+				try {
+					const rule = readSemanticTokenRule(key, semanticTokenColors[key]);
+					if (rule) {
+						result.semanticTokenRules.push(rule);
+					}
+				} catch (e) {
+					return Promise.reject(new Error(nls.localize({ key: 'error.invalidformat.semanticTokenColors', comment: ['{0} will be replaced by a path. Values in quotes should not be translated.'] }, "Problem parsing color theme file: {0}. Property 'semanticTokenColors' contains a invalid selector", themeLocation.toString())));
+				}
+			}
+		}
+	} else {
+		return _loadSyntaxTokens(extensionResourceLoaderService, themeLocation, result);
+	}
+}
+
+function _loadSyntaxTokens(extensionResourceLoaderService: IExtensionResourceLoaderService, themeLocation: URI, result: { textMateRules: ITextMateThemingRule[]; colors: IColorMap }): Promise<any> {
+	return extensionResourceLoaderService.readExtensionResource(themeLocation).then(content => {
+		try {
+			const contentValue = parsePList(content);
+			const settings: ITextMateThemingRule[] = contentValue.settings;
+			if (!Array.isArray(settings)) {
+				return Promise.reject(new Error(nls.localize('error.plist.invalidformat', "Problem parsing tmTheme file: {0}. 'settings' is not array.")));
+			}
+			convertSettings(settings, result);
+			return Promise.resolve(null);
+		} catch (e) {
+			return Promise.reject(new Error(nls.localize('error.cannotparse', "Problems parsing tmTheme file: {0}", e.message)));
+		}
+	}, error => {
+		return Promise.reject(new Error(nls.localize('error.cannotload', "Problems loading tmTheme file {0}: {1}", themeLocation.toString(), error.message)));
+	});
 }
 
 const defaultThemeColors: { [baseTheme: string]: ITextMateThemingRule[] } = {
