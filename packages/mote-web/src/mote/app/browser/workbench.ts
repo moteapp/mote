@@ -1,3 +1,4 @@
+
 import { mainWindow } from 'mote/base/browser/window';
 import { ColorScheme, IWorkbenchConstructionOptions, IWorkspace, IWorkspaceProvider } from 'mote/workbench/browser/web.api';
 import { LogLevel, URI, create } from 'mote/workbench/workbench.web.main';
@@ -8,9 +9,9 @@ import { isEqual } from 'vs/base/common/resources';
 import { ltrim } from 'vs/base/common/strings';
 import { UriComponents } from 'vs/base/common/uri';
 import { isFolderToOpen, isWorkspaceToOpen } from 'vs/platform/window/common/window';
-
-import 'mote/workbench/workbench.web.main';
 import editorWorker from 'vs/editor/editor.worker?worker';
+import { LightModernColors } from './theme';
+
 
 self.MonacoEnvironment = {
     getWorker: (moduleId: string, label: string) => {
@@ -202,7 +203,7 @@ class WorkspaceProvider implements IWorkspaceProvider {
 }
 
 const config: IWorkbenchConstructionOptions & { folderUri?: UriComponents; workspaceUri?: UriComponents; callbackRoute: string } = {
-    initialColorTheme: { themeType: ColorScheme.LIGHT},
+    initialColorTheme: { themeType: ColorScheme.LIGHT, colors: LightModernColors},
     developmentOptions: {
         logLevel: LogLevel.Debug,
     }

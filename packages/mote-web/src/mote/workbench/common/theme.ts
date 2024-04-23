@@ -477,7 +477,7 @@ export const BANNER_ICON_FOREGROUND = registerColor('banner.iconForeground', {
 
 export const STATUS_BAR_FOREGROUND = registerColor('statusBar.foreground', {
 	dark: '#FFFFFF',
-	light: '#FFFFFF',
+	light: '#3B3B3B',
 	hcDark: '#FFFFFF',
 	hcLight: editorForeground
 }, localize('statusBarForeground', "Status bar foreground color when a workspace or folder is opened. The status bar is shown in the bottom of the window."));
@@ -498,7 +498,7 @@ export const STATUS_BAR_BACKGROUND = registerColor('statusBar.background', {
 
 export const STATUS_BAR_NO_FOLDER_BACKGROUND = registerColor('statusBar.noFolderBackground', {
 	dark: '#68217A',
-	light: '#68217A',
+	light: '#F8F8F8',
 	hcDark: null,
 	hcLight: null,
 }, localize('statusBarNoFolderBackground', "Status bar background color when no folder is opened. The status bar is shown in the bottom of the window."));
@@ -648,14 +648,14 @@ export const STATUS_BAR_WARNING_ITEM_HOVER_BACKGROUND = registerColor('statusBar
 
 export const ACTIVITY_BAR_BACKGROUND = registerColor('activityBar.background', {
 	dark: '#333333',
-	light: '#2C2C2C',
+	light: '#F8F8F8',
 	hcDark: '#000000',
 	hcLight: '#FFFFFF'
 }, localize('activityBarBackground', "Activity bar background color. The activity bar is showing on the far left or right and allows to switch between views of the side bar."));
 
 export const ACTIVITY_BAR_FOREGROUND = registerColor('activityBar.foreground', {
 	dark: Color.white,
-	light: Color.white,
+	light: '#1F1F1F',
 	hcDark: Color.white,
 	hcLight: editorForeground
 }, localize('activityBarForeground', "Activity bar item foreground color when it is active. The activity bar is showing on the far left or right and allows to switch between views of the side bar."));
