@@ -124,7 +124,7 @@ export class ExplorerViewletViewsContribution extends Disposable implements IWor
 			canToggleVisibility: true,
 			canMoveView: true,
 			collapsed: false,
-			hideByDefault: true,
+			hideByDefault: false,
 			focusCommand: {
 				id: 'workbench.files.action.focusPinnedFilesView',
 				keybindings: { primary: KeyChord(KeyMod.CtrlCmd | KeyCode.KeyK, KeyCode.KeyE) }
@@ -142,7 +142,7 @@ export class ExplorerViewletViewsContribution extends Disposable implements IWor
 			canToggleVisibility: true,
 			canMoveView: true,
 			collapsed: false,
-			hideByDefault: true,
+			hideByDefault: false,
 			focusCommand: {
 				id: 'workbench.files.action.focusSpaceView',
 				keybindings: { primary: KeyChord(KeyMod.CtrlCmd | KeyCode.KeyK, KeyCode.KeyE) }
