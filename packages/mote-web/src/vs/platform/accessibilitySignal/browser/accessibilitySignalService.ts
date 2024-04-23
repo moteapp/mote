@@ -111,9 +111,7 @@ export class AccessibilitySignalService extends Disposable implements IAccessibi
 		// Some sounds are reused. Don't play the same sound twice.
 		const sounds = new Set(signalArray.filter(signal => this.isSoundEnabled(signal)).map(signal => signal.sound.getSound()));
 		await Promise.all(Array.from(sounds).map(sound => this.playSound(sound, true)));
-
 	}
-
 
 	private sendSignalTelemetry(signal: AccessibilitySignal, source: string | undefined): void {
 		const isScreenReaderOptimized = this.accessibilityService.isScreenReaderOptimized();

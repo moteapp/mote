@@ -25,12 +25,12 @@ import { ByteSize, IFileService } from 'vs/platform/files/common/files';
 import { ILabelService } from 'vs/platform/label/common/label';
 import { isWeb } from 'vs/base/common/platform';
 import { IFilesConfigurationService } from 'mote/workbench/services/filesConfiguration/common/filesConfigurationService';
-import { ITerminalService } from 'mote/workbench/contrib/terminal/browser/terminal';
 import * as perf from 'mote/base/common/performance';
 import { ITextResourceConfigurationService } from 'vs/editor/common/services/textResourceConfiguration';
 import { Registry } from 'vs/platform/registry/common/platform';
 import { IWorkbenchContributionsRegistry, Extensions as WorkbenchExtensions, getWorkbenchContribution } from 'mote/workbench/common/contributions';
 import { ICustomEditorLabelService } from 'mote/workbench/services/editor/common/customEditorLabelService';
+import { LoaderEventType } from 'mote/base/common/loaderEvent';
 
 export class PerfviewContrib {
 
@@ -112,7 +112,6 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 		@ITimerService private readonly _timerService: ITimerService,
 		@IExtensionService private readonly _extensionService: IExtensionService,
 		@IProductService private readonly _productService: IProductService,
-		@ITerminalService private readonly _terminalService: ITerminalService
 	) { }
 
 	provideTextContent(resource: URI): Promise<ITextModel> {
@@ -139,7 +138,6 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 			this._timerService.whenReady(),
 			this._lifecycleService.when(LifecyclePhase.Eventually),
 			this._extensionService.whenInstalledExtensionsRegistered(),
-			this._terminalService.whenConnected
 		]).then(() => {
 			if (this._model && !this._model.isDisposed()) {
 
@@ -332,13 +330,6 @@ class PerfModelContentProvider implements ITextModelContentProvider {
 		map.set(LoaderEventType.CachedDataFound, []);
 		map.set(LoaderEventType.CachedDataMissed, []);
 		map.set(LoaderEventType.CachedDataRejected, []);
-		if (typeof require.getStats === 'function') {
-			for (const stat of require.getStats()) {
-				if (map.has(stat.type)) {
-					map.get(stat.type)!.push(stat.detail);
-				}
-			}
-		}
 
 		const printLists = (arr?: string[]) => {
 			if (arr) {
