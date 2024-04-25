@@ -96,6 +96,7 @@ import { ISecretStorageService } from 'vs/platform/secrets/common/secrets';
 import { TunnelSource } from 'mote/workbench/services/remote/common/tunnelModel';
 import { mainWindow } from 'vs/base/browser/window';
 import { INotificationService, Severity } from 'vs/platform/notification/common/notification';
+import { mountInstantiationService } from 'mote/app/common/hooks/instantiation';
 
 export class BrowserMain extends Disposable {
 
@@ -130,6 +131,8 @@ export class BrowserMain extends Disposable {
 
 		// Startup
 		const instantiationService = workbench.startup();
+		// Inject instantiation service into the mount hook
+		mountInstantiationService(instantiationService);
 
 		// Window
 		this._register(instantiationService.createInstance(BrowserWindow));

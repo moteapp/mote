@@ -1,0 +1,1 @@
+export const NOTEBOOK_EDITOR_ID = 'workbench.editor.notebook';
