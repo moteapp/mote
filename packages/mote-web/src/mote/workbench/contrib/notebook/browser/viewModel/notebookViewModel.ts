@@ -8,6 +8,7 @@ import { IModelService } from 'vs/editor/common/services/model';
 import { NotebookLayoutInfo } from '../notebookViewEvents';
 import { NotebookViewContext } from './notebookViewContext';
 import { generateUuid } from 'vs/base/common/uuid';
+import { INotebookCommand } from 'mote/workbench/contrib/notebook/common/notebookCommon';
 
 export class NotebookViewModel extends Disposable implements INotebookViewModel {
 
@@ -53,6 +54,14 @@ export class NotebookViewModel extends Disposable implements INotebookViewModel 
 
     //#region cursor operations
 
+    /**
+	 * Execute multiple (concomitant) commands on the editor.
+	 * @param source The source of the call.
+	 * @param command The commands to execute
+	 */
+	executeCommands(source: string | null | undefined, commands: (INotebookCommand | null)[]): void {
+
+    }
 
     //#endregion
 }

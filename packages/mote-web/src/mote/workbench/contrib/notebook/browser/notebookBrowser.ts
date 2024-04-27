@@ -1,6 +1,6 @@
 import { Event } from 'vs/base/common/event';
 import { MoteWindow } from 'mote/base/browser/window';
-import { IEditorPaneWithSelection } from 'mote/workbench/common/editor';
+import { IEditorPane, IEditorPaneWithSelection } from 'mote/workbench/common/editor';
 import { ITextModel } from 'vs/editor/common/model';
 import { ITextEditorOptions } from 'vs/platform/editor/common/editor';
 import { NotebookOptions } from './notebookOptions';
@@ -11,9 +11,20 @@ import { FontInfo } from 'vs/editor/common/config/fontInfo';
 import { IPosition } from 'vs/editor/common/core/position';
 import { IRange, Range } from 'vs/editor/common/core/range';
 import { Selection } from 'vs/editor/common/core/selection';
+import { INotebookCommand, NOTEBOOK_EDITOR_ID } from '../common/notebookCommon';
+import { isCompositeNotebookEditorInput } from '../common/notebookEditorInput';
 
 export interface INotebookViewModel {
 
+}
+
+export interface IFocusNotebookCellOptions {
+	readonly skipReveal?: boolean;
+	readonly focusEditorLine?: number;
+	//readonly revealBehavior?: ScrollToRevealBehavior | undefined;
+	readonly outputId?: string;
+	readonly altOutputId?: string;
+	readonly outputWebviewFocused?: boolean;
 }
 
 export interface INotebookEditor {
@@ -29,7 +40,9 @@ export interface INotebookEditor {
 
 	hasEditorFocus(): boolean;
 
+	hasModel(): this is IActiveNotebookEditor;
 	getViewModel(): INotebookViewModel | undefined;
+	getSelectionViewModels(): ICellViewModel[];
 
 	getDomNode(): HTMLElement;
 
@@ -38,10 +51,37 @@ export interface INotebookEditor {
 	 */
 	getLayoutInfo(): NotebookLayoutInfo;
 
+	//#region Cell
+
+	/**
+	 * Get current active cell
+	 */
+	getActiveCell(): ICellViewModel | undefined;
+
+	/**
+	 * Focus the container of a cell (the monaco editor inside is not focused).
+	 */
+	focusNotebookCell(cell: ICellViewModel, focus: 'editor' | 'container' | 'output', options?: IFocusNotebookCellOptions): Promise<void>;
+
+
+	//#endregion
+
+	/**
+	 * Execute multiple (concomitant) commands on the editor.
+	 * @param source The source of the call.
+	 * @param command The commands to execute
+	 */
+	executeCommands(source: string | null | undefined, commands: (INotebookCommand | null)[]): void;
+
+
 	/**
 	 * Reveal a range in notebook cell into viewport with minimal scrolling.
 	 */
 	revealRangeInViewAsync(cell: ICellViewModel, range: Selection | Range): Promise<void>;
+}
+
+export interface IActiveNotebookEditor extends INotebookEditor {
+	getViewModel(): INotebookViewModel;
 }
 
 /**
@@ -53,6 +93,7 @@ export interface INotebookEditorDelegate extends INotebookEditor {
 }
 
 export interface IActiveNotebookEditorDelegate extends INotebookEditorDelegate {
+	getViewModel(): INotebookViewModel;
 }
 
 export interface INotebookEditorPane extends IEditorPaneWithSelection {
@@ -118,4 +159,22 @@ export interface MarkupCellLayoutInfo {
 
 export interface INotebookEditorViewState {
 	
+}
+
+export function getNotebookEditorFromEditorPane(editorPane?: IEditorPane): INotebookEditor | undefined {
+	if (!editorPane) {
+		return;
+	}
+
+	if (editorPane.getId() === NOTEBOOK_EDITOR_ID) {
+		return editorPane.getControl() as INotebookEditor | undefined;
+	}
+
+	const input = editorPane.input;
+
+	if (input && isCompositeNotebookEditorInput(input)) {
+		return (editorPane.getControl() as { notebookEditor: INotebookEditor | undefined } | undefined)?.notebookEditor;
+	}
+
+	return undefined;
 }

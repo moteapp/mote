@@ -1,6 +1,6 @@
 import * as DOM from 'vs/base/browser/dom';
 import { Disposable, DisposableStore, dispose } from 'vs/base/common/lifecycle';
-import { IBaseCellEditorOptions, ICellViewModel, INotebookEditor, INotebookEditorCreationOptions, INotebookEditorDelegate, INotebookEditorViewState } from 'mote/workbench/contrib/notebook/browser/notebookBrowser';
+import { IActiveNotebookEditorDelegate, IBaseCellEditorOptions, ICellViewModel, INotebookEditor, INotebookEditorCreationOptions, INotebookEditorDelegate, INotebookEditorViewState } from 'mote/workbench/contrib/notebook/browser/notebookBrowser';
 import { ILayoutService } from 'mote/platform/layout/browser/layoutService';
 import { generateUuid } from 'vs/base/common/uuid';
 import { Range } from 'vs/editor/common/core/range';
@@ -20,6 +20,7 @@ import { NotebookViewContext } from './viewModel/notebookViewContext';
 import { NotebookEventDispatcher } from './viewModel/notebookEventDispatcher';
 import { NOTEBOOK_EDITOR_FOCUSED } from '../common/notebookContextKeys';
 import { ICodeEditor } from 'vs/editor/browser/editorBrowser';
+import { INotebookCommand } from '../common/notebookCommon';
 
 export class NotebookEditorWidget extends Disposable implements INotebookEditor, INotebookEditorDelegate {
 
@@ -122,6 +123,14 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
 		return false;
 	}
 
+	hasModel(): this is IActiveNotebookEditorDelegate {
+		return !!this._notebookViewModel;
+	}
+
+	getViewModel(): NotebookViewModel | undefined {
+		return this.viewModel;
+	}
+
 	hasEditorFocus() {
 		// _editorFocus is driven by the FocusTracker, which is only guaranteed to _eventually_ fire blur.
 		// If we need to know whether we have focus at this instant, we need to check the DOM manually.
@@ -205,6 +214,10 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
     //#endregion
 
 	//#region Interactive
+
+	executeCommands(source: string | null | undefined, commands: (INotebookCommand | null)[]): void {
+		this.viewModel?.executeCommands(source, commands);
+	}
 
 	async revealRangeInViewAsync(cell: ICellViewModel, range: Selection | Range): Promise<void> {
 
@@ -337,6 +350,19 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
 		this._overlayContainer.style.left = `${this._shadowElementViewInfo.left - (elementContainerRect?.left || 0)}px`;
 		this._overlayContainer.style.width = `${dimension ? dimension.width : this._shadowElementViewInfo.width}px`;
 		this._overlayContainer.style.height = `${dimension ? dimension.height : this._shadowElementViewInfo.height}px`;
+	}
+
+	//#endregion
+
+	//#region Focus tracker
+
+	focus() {
+		this._isVisible = true;
+		this._editorFocus.set(true);
+	}
+
+	onShow() {
+		this._isVisible = true;
 	}
 
 	//#endregion

@@ -69,3 +69,14 @@ export class NotebookEditorInput extends AbstractResourceEditorInput {
 		return false;
 	}
 }
+
+export interface ICompositeNotebookEditorInput {
+	readonly editorInputs: NotebookEditorInput[];
+}
+
+export function isCompositeNotebookEditorInput(thing: unknown): thing is ICompositeNotebookEditorInput {
+	return !!thing
+		&& typeof thing === 'object'
+		&& Array.isArray((<ICompositeNotebookEditorInput>thing).editorInputs)
+		&& ((<ICompositeNotebookEditorInput>thing).editorInputs.every(input => input instanceof NotebookEditorInput));
+}
