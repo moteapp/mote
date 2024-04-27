@@ -15,7 +15,7 @@ import { NEW_UNTITLED_FILE_COMMAND_ID } from '../fileConstants';
 export class SpaceView extends ViewPane {
 
     static readonly ID = 'workbench.explorer.spaceView';
-	static readonly NAME: ILocalizedString = nls.localize2({ key: 'openEditors', comment: ['Open is an adjective'] }, "Private");
+	static readonly NAME: ILocalizedString = nls.localize2({ key: 'privateSpaceView', comment: ['Open is an adjective'] }, "Private");
 
     private root!: Root;
 

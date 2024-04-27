@@ -251,7 +251,9 @@ export class BrowserWorkbenchEnvironmentService implements IBrowserWorkbenchEnvi
 	get skipReleaseNotes(): boolean { return this.payload?.get('skipReleaseNotes') === 'true'; }
 
 	@memoize
-	get skipWelcome(): boolean { return this.payload?.get('skipWelcome') === 'true'; }
+	get skipWelcome(): boolean { 
+		return true; //this.payload?.get('skipWelcome') === 'true'; 
+	}
 
 	@memoize
 	get disableWorkspaceTrust(): boolean { return !this.options.enableWorkspaceTrust; }

@@ -6,7 +6,7 @@ import { Root, createRoot } from 'react-dom/client';
 export class PinnedFilesView extends ViewPane {
 
     static readonly ID = 'workbench.explorer.pinnedFilesView';
-	static readonly NAME: ILocalizedString = nls.localize2({ key: 'openEditors', comment: ['Open is an adjective'] }, "Pinned");
+	static readonly NAME: ILocalizedString = nls.localize2({ key: 'pinnedFilesView', comment: ['Open is an adjective'] }, "Pinned");
 
     private root!: Root;
 

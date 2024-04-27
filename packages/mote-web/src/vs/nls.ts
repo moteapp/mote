@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import { NLS } from "mote/nls";
+
 let isPseudo = (typeof document !== 'undefined' && document.location && document.location.hash.indexOf('pseudo=true') >= 0);
 const DEFAULT_TAG = 'i-default';
 
@@ -161,7 +163,8 @@ export function localize(key: string, message: string, ...args: (string | number
  * @skipMangle
  */
 export function localize(data: ILocalizeInfo | string, message: string, ...args: (string | number | boolean | undefined | null)[]): string {
-	return _format(message, args);
+	return nlsConusmer.localize(data as any, message, ...args);
+	//return _format(message, args);
 }
 
 /**
@@ -198,11 +201,14 @@ export function localize2(key: string, message: string, ...args: (string | numbe
  * @skipMangle
  */
 export function localize2(data: ILocalizeInfo | string, message: string, ...args: (string | number | boolean | undefined | null)[]): ILocalizedString {
+	return nlsConusmer.localize2(data as any, message, ...args);
+	/*
 	const original = _format(message, args);
 	return {
 		value: original,
 		original
 	};
+	*/
 }
 
 /**
@@ -238,3 +244,5 @@ export function create(key: string, data: IBundledStrings & IConsumerAPI): ICons
 		getConfiguredDefaultLocale: data.getConfiguredDefaultLocale ?? ((_: string) => undefined)
 	};
 }
+
+const nlsConusmer = new NLS(_format);

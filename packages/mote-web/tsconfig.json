@@ -17,10 +17,11 @@
     /* Build */
     "paths": {
       "mote/*": ["./src/mote/*"],
-      "vs/*": ["./src/vs/*"]
+      "vs/*": ["./src/vs/*"],
+      "extensions/*": ["./extensions/*"]
     },
     "outDir": "./dist",
   },
-  "include": ["src"],
+  "include": ["src", "extensions"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

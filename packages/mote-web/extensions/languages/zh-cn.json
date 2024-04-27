@@ -1,0 +1,12 @@
+{
+    "watermark.showCommands": "显示所有命令",
+    "watermark.openFile": "打开文件",
+    "watermark.openRecent": "打开最近的文件",
+
+    "pinnedFilesView": "置顶",
+    "privateSpaceView": "私人空间",
+
+    
+    "gettingStarted.setup.title": "开始使用Mote",
+    "gettingStarted.setupWeb.title": "在网页上设置Mote"
+}

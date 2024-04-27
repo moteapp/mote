@@ -82,6 +82,9 @@ class WorkspaceProvider implements IWorkspaceProvider {
 			}
 		}
 
+		payload = payload || {};
+		payload['skipWelcome'] = 'true'; // always skip the welcome page
+
 		return new WorkspaceProvider(workspace, payload, config);
 	}
 
