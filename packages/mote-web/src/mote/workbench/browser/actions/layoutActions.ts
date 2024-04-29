@@ -20,7 +20,6 @@ import { QuickPickItem, IQuickInputService, IQuickPickItem, IQuickPickSeparator,
 import { IDialogService } from 'vs/platform/dialogs/common/dialogs';
 import { IPaneCompositePartService } from 'mote/workbench/services/panecomposite/browser/panecomposite';
 import { ToggleAuxiliaryBarAction } from 'mote/workbench/browser/parts/auxiliarybar/auxiliaryBarActions';
-import { TogglePanelAction } from 'mote/workbench/browser/parts/panel/panelActions';
 import { ICommandService } from 'vs/platform/commands/common/commands';
 import { AuxiliaryBarVisibleContext, PanelAlignmentContext, PanelVisibleContext, SideBarVisibleContext, FocusedViewContext, InEditorZenModeContext, IsMainEditorCenteredLayoutContext, MainEditorAreaVisibleContext, IsMainWindowFullscreenContext, PanelPositionContext, IsAuxiliaryWindowFocusedContext, TitleBarStyleContext } from 'mote/workbench/common/contextkeys';
 import { Codicon } from 'vs/base/common/codicons';
@@ -1033,11 +1032,6 @@ class MoveFocusedViewAction extends Action2 {
 				};
 			}));
 
-		items.push({
-			type: 'separator',
-			label: localize('panel', "Panel")
-		});
-
 		const pinnedPanels = paneCompositePartService.getPinnedPaneCompositeIds(ViewContainerLocation.Panel);
 		items.push(...pinnedPanels
 			.filter(panel => {
@@ -1337,7 +1331,6 @@ ToggleVisibilityActions.push(...[
 	CreateToggleLayoutItem(ToggleActivityBarVisibilityActionId, ContextKeyExpr.notEquals('config.workbench.activityBar.location', 'hidden'), localize('activityBar', "Activity Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: activityBarLeftIcon, iconB: activityBarRightIcon }),
 	CreateToggleLayoutItem(ToggleSidebarVisibilityAction.ID, SideBarVisibleContext, localize('sideBar', "Primary Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelLeftIcon, iconB: panelRightIcon }),
 	CreateToggleLayoutItem(ToggleAuxiliaryBarAction.ID, AuxiliaryBarVisibleContext, localize('secondarySideBar', "Secondary Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelRightIcon, iconB: panelLeftIcon }),
-	CreateToggleLayoutItem(TogglePanelAction.ID, PanelVisibleContext, localize('panel', "Panel"), panelIcon),
 	CreateToggleLayoutItem(ToggleStatusbarVisibilityAction.ID, ContextKeyExpr.equals('config.workbench.statusBar.visible', true), localize('statusBar', "Status Bar"), statusBarIcon),
 ]);
 
@@ -1437,11 +1430,6 @@ registerAction2(class CustomizeLayoutAction extends Action2 {
 				label: localize('sideBarPosition', "Primary Side Bar Position")
 			},
 			...MoveSideBarActions.map(toQuickPickItem),
-			{
-				type: 'separator',
-				label: localize('panelAlignment', "Panel Alignment")
-			},
-			...AlignPanelActions.map(toQuickPickItem),
 			{
 				type: 'separator',
 				label: localize('layoutModes', "Modes"),

@@ -13,7 +13,6 @@ import { IStorageService } from 'vs/platform/storage/common/storage';
 import { IContextMenuService } from 'vs/platform/contextview/browser/contextView';
 import { IKeybindingService } from 'vs/platform/keybinding/common/keybinding';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
-import { TogglePanelAction } from 'mote/workbench/browser/parts/panel/panelActions';
 import { IThemeService } from 'vs/platform/theme/common/themeService';
 import { PANEL_BACKGROUND, PANEL_BORDER, PANEL_ACTIVE_TITLE_FOREGROUND, PANEL_INACTIVE_TITLE_FOREGROUND, PANEL_ACTIVE_TITLE_BORDER, PANEL_DRAG_AND_DROP_BORDER } from 'mote/workbench/common/theme';
 import { contrastBorder, badgeBackground, badgeForeground } from 'vs/platform/theme/common/colorRegistry';
@@ -162,7 +161,6 @@ export class PanelPart extends AbstractPaneCompositePart {
 			new Separator(),
 			new SubmenuAction('workbench.action.panel.position', localize('panel position', "Panel Position"), positionActions),
 			new SubmenuAction('workbench.action.panel.align', localize('align panel', "Align Panel"), alignActions),
-			toAction({ id: TogglePanelAction.ID, label: localize('hidePanel', "Hide Panel"), run: () => this.commandService.executeCommand(TogglePanelAction.ID) })
 		]);
 	}
 

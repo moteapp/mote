@@ -1,5 +1,5 @@
 import { ICellRange } from "./notebookRange";
-import { IRecordWithRole } from "./recordCommon";
+import { IRecordWithRole, RecordEditType } from "../../../../platform/database/common/recordCommon";
 
 export const NOTEBOOK_EDITOR_ID = 'workbench.editor.notebook';
 
@@ -91,7 +91,7 @@ export type NotebookRecordModelChangedEvent = {
 };
 
 export interface ICellReplaceEdit {
-	editType: CellEditType.Replace;
+	editType: RecordEditType.Update;
 	index: number;
 	count: number;
 	cells: ICellData[];

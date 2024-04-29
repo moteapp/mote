@@ -49,7 +49,8 @@ export interface IRecord {
 	version: number;
 	lastVersion: number;
     table: string;
-	spaceId: string;
+	spaceId?: string;
+	userId: string;
 	type: string;
 }
 
@@ -88,4 +89,14 @@ export interface IOperation {
     type: RecordEditType;
     size?: number;
     args: any;
+}
+
+export interface IPointer {
+    table: string;
+    id: string;
+    spaceId?: string;
+}
+
+export function generateRecordKey(record: IRecord): string {
+    return `${record.table}:${record.id}`;
 }

@@ -654,8 +654,6 @@ class MarkersStatusBarContributions extends Disposable implements IWorkbenchCont
 	}
 }
 
-workbenchRegistry.registerWorkbenchContribution(MarkersStatusBarContributions, LifecyclePhase.Restored);
-
 class ActivityUpdater extends Disposable implements IWorkbenchContribution {
 
 	private readonly activity = this._register(new MutableDisposable<IDisposable>());

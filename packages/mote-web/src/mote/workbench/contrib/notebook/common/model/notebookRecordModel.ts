@@ -3,7 +3,7 @@ import { IUndoRedoElement, IUndoRedoService, IWorkspaceUndoRedoElement, UndoRedo
 import { CellEditType, ICellData, ICellEditOperation, ISelectionState, NotebookRecordModelChangedEvent } from '../notebookCommon';
 import { Emitter, PauseableEmitter } from 'vs/base/common/event';
 import { URI } from 'vs/base/common/uri';
-import { IRecord, IRecordWithRole } from '../recordCommon';
+import { IRecord, IRecordWithRole, RecordEditType } from '../../../../../platform/database/common/recordCommon';
 
 class NotebookEventEmitter extends PauseableEmitter<NotebookRecordModelChangedEvent> {
 	isDirtyEvent() {
@@ -252,7 +252,7 @@ export class NotebookRecordModel extends Disposable {
 
         for ( const { editType } of rawEdits ) {
             switch (editType) {
-                case CellEditType.Replace:
+                case RecordEditType.Update:
                     break;
             }
         }

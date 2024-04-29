@@ -260,7 +260,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private bannerPartView!: ISerializableView;
 	private activityBarPartView!: ISerializableView;
 	private sideBarPartView!: ISerializableView;
-	private panelPartView!: ISerializableView;
+	//private panelPartView!: ISerializableView;
 	private auxiliaryBarPartView!: ISerializableView;
 	private editorPartView!: ISerializableView;
 	private statusBarPartView!: ISerializableView;
@@ -1266,13 +1266,13 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			const takenWidth =
 				(this.isVisible(Parts.ACTIVITYBAR_PART) ? this.activityBarPartView.minimumWidth : 0) +
 				(this.isVisible(Parts.SIDEBAR_PART) ? this.sideBarPartView.minimumWidth : 0) +
-				(this.isVisible(Parts.PANEL_PART) && isColumn ? this.panelPartView.minimumWidth : 0) +
+				//(this.isVisible(Parts.PANEL_PART) && isColumn ? this.panelPartView.minimumWidth : 0) +
 				(this.isVisible(Parts.AUXILIARYBAR_PART) ? this.auxiliaryBarPartView.minimumWidth : 0);
 
 			const takenHeight =
 				(this.isVisible(Parts.TITLEBAR_PART, targetWindow) ? this.titleBarPartView.minimumHeight : 0) +
-				(this.isVisible(Parts.STATUSBAR_PART, targetWindow) ? this.statusBarPartView.minimumHeight : 0) +
-				(this.isVisible(Parts.PANEL_PART) && !isColumn ? this.panelPartView.minimumHeight : 0);
+				(this.isVisible(Parts.STATUSBAR_PART, targetWindow) ? this.statusBarPartView.minimumHeight : 0)
+				//(this.isVisible(Parts.PANEL_PART) && !isColumn ? this.panelPartView.minimumHeight : 0);
 
 			const availableWidth = containerDimension.width - takenWidth;
 			const availableHeight = containerDimension.height - takenHeight;
@@ -1468,7 +1468,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const bannerPart = this.getPart(Parts.BANNER_PART);
 		const editorPart = this.getPart(Parts.EDITOR_PART);
 		const activityBar = this.getPart(Parts.ACTIVITYBAR_PART);
-		const panelPart = this.getPart(Parts.PANEL_PART);
+		//const panelPart = this.getPart(Parts.PANEL_PART);
 		const auxiliaryBarPart = this.getPart(Parts.AUXILIARYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
@@ -1479,7 +1479,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.sideBarPartView = sideBar;
 		this.activityBarPartView = activityBar;
 		this.editorPartView = editorPart;
-		this.panelPartView = panelPart;
+		//this.panelPartView = panelPart;
 		this.auxiliaryBarPartView = auxiliaryBarPart;
 		this.statusBarPartView = statusBar;
 
@@ -1488,7 +1488,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.BANNER_PART]: this.bannerPartView,
 			[Parts.TITLEBAR_PART]: this.titleBarPartView,
 			[Parts.EDITOR_PART]: this.editorPartView,
-			[Parts.PANEL_PART]: this.panelPartView,
+			//[Parts.PANEL_PART]: this.panelPartView,
 			[Parts.SIDEBAR_PART]: this.sideBarPartView,
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
 			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView
@@ -1506,12 +1506,10 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.workbenchGrid = workbenchGrid;
 		this.workbenchGrid.edgeSnapping = this.state.runtime.mainWindowFullscreen;
 
-		for (const part of [titleBar, editorPart, activityBar, panelPart, sideBar, statusBar, auxiliaryBarPart, bannerPart]) {
+		for (const part of [titleBar, editorPart, activityBar, sideBar, statusBar, auxiliaryBarPart, bannerPart]) {
 			this._register(part.onDidVisibilityChange((visible) => {
 				if (part === sideBar) {
 					this.setSideBarHidden(!visible, true);
-				} else if (part === panelPart) {
-					this.setPanelHidden(!visible, true);
 				} else if (part === auxiliaryBarPart) {
 					this.setAuxiliaryBarHidden(!visible, true);
 				} else if (part === editorPart) {
@@ -1531,10 +1529,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 				this.stateModel.setInitializationValue(LayoutStateKeys.SIDEBAR_SIZE, sideBarSize as number);
 
 				// Panel Size
-				const panelSize = this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_HIDDEN)
-					? this.workbenchGrid.getViewCachedVisibleSize(this.panelPartView)
-					: (this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_POSITION) === Position.BOTTOM ? this.workbenchGrid.getViewSize(this.panelPartView).height : this.workbenchGrid.getViewSize(this.panelPartView).width);
-				this.stateModel.setInitializationValue(LayoutStateKeys.PANEL_SIZE, panelSize as number);
+				const panelSize = 0;
 
 				// Auxiliary Bar Size
 				const auxiliaryBarSize = this.stateModel.getRuntimeValue(LayoutStateKeys.AUXILIARYBAR_HIDDEN)
@@ -1615,16 +1610,6 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 					{
 						width: viewSize.width + sizeChangePxWidth,
 						height: viewSize.height
-					});
-
-				break;
-			case Parts.PANEL_PART:
-				viewSize = this.workbenchGrid.getViewSize(this.panelPartView);
-
-				this.workbenchGrid.resizeView(this.panelPartView,
-					{
-						width: viewSize.width + (this.getPanelPosition() !== Position.BOTTOM ? sizeChangePxWidth : 0),
-						height: viewSize.height + (this.getPanelPosition() !== Position.BOTTOM ? 0 : sizeChangePxHeight)
 					});
 
 				break;
@@ -1761,8 +1746,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		// Move activity bar and side bars
 		const sideBarSiblingToEditor = panelPosition !== Position.BOTTOM || !(panelAlignment === 'center' || (sideBarPosition === Position.LEFT && panelAlignment === 'right') || (sideBarPosition === Position.RIGHT && panelAlignment === 'left'));
 		const auxiliaryBarSiblingToEditor = panelPosition !== Position.BOTTOM || !(panelAlignment === 'center' || (sideBarPosition === Position.RIGHT && panelAlignment === 'right') || (sideBarPosition === Position.LEFT && panelAlignment === 'left'));
-		const preMovePanelWidth = !this.isVisible(Parts.PANEL_PART) ? Sizing.Invisible(this.workbenchGrid.getViewCachedVisibleSize(this.panelPartView) ?? this.panelPartView.minimumWidth) : this.workbenchGrid.getViewSize(this.panelPartView).width;
-		const preMovePanelHeight = !this.isVisible(Parts.PANEL_PART) ? Sizing.Invisible(this.workbenchGrid.getViewCachedVisibleSize(this.panelPartView) ?? this.panelPartView.minimumHeight) : this.workbenchGrid.getViewSize(this.panelPartView).height;
+		const preMovePanelWidth = 0;//!this.isVisible(Parts.PANEL_PART) ? Sizing.Invisible(this.workbenchGrid.getViewCachedVisibleSize(this.panelPartView) ?? this.panelPartView.minimumWidth) : this.workbenchGrid.getViewSize(this.panelPartView).width;
+		const preMovePanelHeight = 0;//!this.isVisible(Parts.PANEL_PART) ? Sizing.Invisible(this.workbenchGrid.getViewCachedVisibleSize(this.panelPartView) ?? this.panelPartView.minimumHeight) : this.workbenchGrid.getViewSize(this.panelPartView).height;
 		const preMoveSideBarSize = !this.isVisible(Parts.SIDEBAR_PART) ? Sizing.Invisible(this.workbenchGrid.getViewCachedVisibleSize(this.sideBarPartView) ?? this.sideBarPartView.minimumWidth) : this.workbenchGrid.getViewSize(this.sideBarPartView).width;
 		const preMoveAuxiliaryBarSize = !this.isVisible(Parts.AUXILIARYBAR_PART) ? Sizing.Invisible(this.workbenchGrid.getViewCachedVisibleSize(this.auxiliaryBarPartView) ?? this.auxiliaryBarPartView.minimumWidth) : this.workbenchGrid.getViewSize(this.auxiliaryBarPartView).width;
 
@@ -1784,16 +1769,6 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			}
 		}
 
-		// We moved all the side parts based on the editor and ignored the panel
-		// Now, we need to put the panel back in the right position when it is next to the editor
-		if (panelPosition !== Position.BOTTOM) {
-			this.workbenchGrid.moveView(this.panelPartView, preMovePanelWidth, this.editorPartView, panelPosition === Position.LEFT ? Direction.Left : Direction.Right);
-			this.workbenchGrid.resizeView(this.panelPartView, {
-				height: preMovePanelHeight as number,
-				width: preMovePanelWidth as number
-			});
-		}
-
 		// Moving views in the grid can cause them to re-distribute sizing unnecessarily
 		// Resize visible parts to the width they were before the operation
 		if (this.isVisible(Parts.SIDEBAR_PART)) {
@@ -1809,25 +1784,6 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 				width: preMoveAuxiliaryBarSize as number
 			});
 		}
-	}
-
-	setPanelAlignment(alignment: PanelAlignment, skipLayout?: boolean): void {
-
-		// Panel alignment only applies to a panel in the bottom position
-		if (this.getPanelPosition() !== Position.BOTTOM) {
-			this.setPanelPosition(Position.BOTTOM);
-		}
-
-		// the workbench grid currently prevents us from supporting panel maximization with non-center panel alignment
-		if (alignment !== 'center' && this.isPanelMaximized()) {
-			this.toggleMaximizedPanel();
-		}
-
-		this.stateModel.setRuntimeValue(LayoutStateKeys.PANEL_ALIGNMENT, alignment);
-
-		this.adjustPartPositions(this.getSideBarPosition(), alignment, this.getPanelPosition());
-
-		this._onDidChangePanelAlignment.fire(alignment);
 	}
 
 	private setPanelHidden(hidden: boolean, skipLayout?: boolean): void {
@@ -1887,7 +1843,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		}
 
 		// Propagate layout changes to grid
-		this.workbenchGrid.setViewVisible(this.panelPartView, !hidden);
+		//this.workbenchGrid.setViewVisible(this.panelPartView, !hidden);
 
 		// If in process of showing, toggle whether or not panel is maximized
 		if (!hidden) {
@@ -1902,30 +1858,6 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		if (focusEditor) {
 			this.editorGroupService.mainPart.activeGroup.focus(); // Pass focus to editor group if panel part is now hidden
 		}
-	}
-
-	toggleMaximizedPanel(): void {
-		const size = this.workbenchGrid.getViewSize(this.panelPartView);
-		const panelPosition = this.getPanelPosition();
-		const isMaximized = this.isPanelMaximized();
-		if (!isMaximized) {
-			if (this.isVisible(Parts.PANEL_PART)) {
-				if (panelPosition === Position.BOTTOM) {
-					this.stateModel.setRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_HEIGHT, size.height);
-				} else {
-					this.stateModel.setRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_WIDTH, size.width);
-				}
-			}
-
-			this.setEditorHidden(true);
-		} else {
-			this.setEditorHidden(false);
-			this.workbenchGrid.resizeView(this.panelPartView, {
-				width: panelPosition === Position.BOTTOM ? size.width : this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_WIDTH),
-				height: panelPosition === Position.BOTTOM ? this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_HEIGHT) : size.height
-			});
-		}
-		this.stateModel.setRuntimeValue(LayoutStateKeys.PANEL_WAS_LAST_MAXIMIZED, !isMaximized);
 	}
 
 	/**
@@ -2058,79 +1990,6 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		return this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_POSITION);
 	}
 
-	setPanelPosition(position: Position): void {
-		if (!this.isVisible(Parts.PANEL_PART)) {
-			this.setPanelHidden(false);
-		}
-
-		const panelPart = this.getPart(Parts.PANEL_PART);
-		const oldPositionValue = positionToString(this.getPanelPosition());
-		const newPositionValue = positionToString(position);
-
-		// Adjust CSS
-		const panelContainer = assertIsDefined(panelPart.getContainer());
-		panelContainer.classList.remove(oldPositionValue);
-		panelContainer.classList.add(newPositionValue);
-
-		// Update Styles
-		panelPart.updateStyles();
-
-		// Layout
-		const size = this.workbenchGrid.getViewSize(this.panelPartView);
-		const sideBarSize = this.workbenchGrid.getViewSize(this.sideBarPartView);
-		const auxiliaryBarSize = this.workbenchGrid.getViewSize(this.auxiliaryBarPartView);
-
-		let editorHidden = !this.isVisible(Parts.EDITOR_PART, mainWindow);
-
-		// Save last non-maximized size for panel before move
-		if (newPositionValue !== oldPositionValue && !editorHidden) {
-
-			// Save the current size of the panel for the new orthogonal direction
-			// If moving down, save the width of the panel
-			// Otherwise, save the height of the panel
-			if (position === Position.BOTTOM) {
-				this.stateModel.setRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_WIDTH, size.width);
-			} else if (positionFromString(oldPositionValue) === Position.BOTTOM) {
-				this.stateModel.setRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_HEIGHT, size.height);
-			}
-		}
-
-		if (position === Position.BOTTOM && this.getPanelAlignment() !== 'center' && editorHidden) {
-			this.toggleMaximizedPanel();
-			editorHidden = false;
-		}
-
-		this.stateModel.setRuntimeValue(LayoutStateKeys.PANEL_POSITION, position);
-
-		const sideBarVisible = this.isVisible(Parts.SIDEBAR_PART);
-		const auxiliaryBarVisible = this.isVisible(Parts.AUXILIARYBAR_PART);
-
-		if (position === Position.BOTTOM) {
-			this.workbenchGrid.moveView(this.panelPartView, editorHidden ? size.height : this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_HEIGHT), this.editorPartView, Direction.Down);
-		} else if (position === Position.RIGHT) {
-			this.workbenchGrid.moveView(this.panelPartView, editorHidden ? size.width : this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_WIDTH), this.editorPartView, Direction.Right);
-		} else {
-			this.workbenchGrid.moveView(this.panelPartView, editorHidden ? size.width : this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_LAST_NON_MAXIMIZED_WIDTH), this.editorPartView, Direction.Left);
-		}
-
-		// Reset sidebar to original size before shifting the panel
-		this.workbenchGrid.resizeView(this.sideBarPartView, sideBarSize);
-		if (!sideBarVisible) {
-			this.setSideBarHidden(true);
-		}
-
-		this.workbenchGrid.resizeView(this.auxiliaryBarPartView, auxiliaryBarSize);
-		if (!auxiliaryBarVisible) {
-			this.setAuxiliaryBarHidden(true);
-		}
-
-		if (position === Position.BOTTOM) {
-			this.adjustPartPositions(this.getSideBarPosition(), this.getPanelAlignment(), position);
-		}
-
-		this._onDidChangePanelPosition.fire(newPositionValue);
-	}
-
 	isWindowMaximized(targetWindow: Window): boolean {
 		return this.state.runtime.maximized.has(getWindowId(targetWindow));
 	}
@@ -2227,21 +2086,16 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		};
 	}
 
-	private arrangeMiddleSectionNodes(nodes: { editor: ISerializedNode; panel: ISerializedNode; activityBar: ISerializedNode; sideBar: ISerializedNode; auxiliaryBar: ISerializedNode }, availableWidth: number, availableHeight: number): ISerializedNode[] {
+	private arrangeMiddleSectionNodes(nodes: { editor: ISerializedNode; activityBar: ISerializedNode; sideBar: ISerializedNode; auxiliaryBar: ISerializedNode }, availableWidth: number, availableHeight: number): ISerializedNode[] {
 		const activityBarSize = this.stateModel.getRuntimeValue(LayoutStateKeys.ACTIVITYBAR_HIDDEN) ? 0 : nodes.activityBar.size;
 		const sideBarSize = this.stateModel.getRuntimeValue(LayoutStateKeys.SIDEBAR_HIDDEN) ? 0 : nodes.sideBar.size;
 		const auxiliaryBarSize = this.stateModel.getRuntimeValue(LayoutStateKeys.AUXILIARYBAR_HIDDEN) ? 0 : nodes.auxiliaryBar.size;
-		const panelSize = this.stateModel.getInitializationValue(LayoutStateKeys.PANEL_SIZE) ? 0 : nodes.panel.size;
+		const panelSize = 0; //this.stateModel.getInitializationValue(LayoutStateKeys.PANEL_SIZE) ? 0 : nodes.panel.size;
 
 		const result = [] as ISerializedNode[];
 		if (this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_POSITION) !== Position.BOTTOM) {
 			result.push(nodes.editor);
 			nodes.editor.size = availableWidth - activityBarSize - sideBarSize - panelSize - auxiliaryBarSize;
-			if (this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_POSITION) === Position.RIGHT) {
-				result.push(nodes.panel);
-			} else {
-				result.splice(0, 0, nodes.panel);
-			}
 
 			if (this.stateModel.getRuntimeValue(LayoutStateKeys.SIDEBAR_POSITON) === Position.LEFT) {
 				result.push(nodes.auxiliaryBar);
@@ -2265,7 +2119,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 					editor: nodes.editor,
 					sideBar: sideBarNextToEditor ? nodes.sideBar : undefined,
 					auxiliaryBar: auxiliaryBarNextToEditor ? nodes.auxiliaryBar : undefined
-				}, availableHeight - panelSize, editorSectionWidth), nodes.panel],
+				}, availableHeight - panelSize, editorSectionWidth)],
 				size: editorSectionWidth
 			});
 
@@ -2350,19 +2204,10 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			visible: !this.stateModel.getRuntimeValue(LayoutStateKeys.EDITOR_HIDDEN)
 		};
 
-		const panelNode: ISerializedLeafNode = {
-			type: 'leaf',
-			data: { type: Parts.PANEL_PART },
-			size: panelSize,
-			visible: !this.stateModel.getRuntimeValue(LayoutStateKeys.PANEL_HIDDEN)
-		};
-
-
 		const middleSection: ISerializedNode[] = this.arrangeMiddleSectionNodes({
 			activityBar: activityBarNode,
 			auxiliaryBar: auxiliaryBarNode,
 			editor: editorNode,
-			panel: panelNode,
 			sideBar: sideBarNode
 		}, width, middleSectionHeight);
 

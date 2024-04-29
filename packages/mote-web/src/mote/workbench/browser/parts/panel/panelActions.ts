@@ -27,45 +27,6 @@ const closeIcon = registerIcon('panel-close', Codicon.close, localize('closeIcon
 const panelIcon = registerIcon('panel-layout-icon', Codicon.layoutPanel, localize('togglePanelOffIcon', 'Icon to toggle the panel off when it is on.'));
 const panelOffIcon = registerIcon('panel-layout-icon-off', Codicon.layoutPanelOff, localize('togglePanelOnIcon', 'Icon to toggle the panel on when it is off.'));
 
-export class TogglePanelAction extends Action2 {
-
-	static readonly ID = 'workbench.action.togglePanel';
-	static readonly LABEL = localize2('togglePanelVisibility', "Toggle Panel Visibility");
-
-	constructor() {
-		super({
-			id: TogglePanelAction.ID,
-			title: TogglePanelAction.LABEL,
-			toggled: {
-				condition: PanelVisibleContext,
-				title: localize('toggle panel', "Panel"),
-				mnemonicTitle: localize({ key: 'toggle panel mnemonic', comment: ['&& denotes a mnemonic'] }, "&&Panel"),
-			},
-			f1: true,
-			category: Categories.View,
-			keybinding: { primary: KeyMod.CtrlCmd | KeyCode.KeyJ, weight: KeybindingWeight.WorkbenchContrib },
-			menu: [
-				{
-					id: MenuId.MenubarAppearanceMenu,
-					group: '2_workbench_layout',
-					order: 5
-				}, {
-					id: MenuId.LayoutControlMenuSubmenu,
-					group: '0_workbench_layout',
-					order: 4
-				},
-			]
-		});
-	}
-
-	override async run(accessor: ServicesAccessor): Promise<void> {
-		const layoutService = accessor.get(IWorkbenchLayoutService);
-		layoutService.setPartHidden(layoutService.isVisible(Parts.PANEL_PART), Parts.PANEL_PART);
-	}
-}
-
-registerAction2(TogglePanelAction);
-
 registerAction2(class extends Action2 {
 
 	static readonly ID = 'workbench.action.focusPanel';
@@ -362,34 +323,6 @@ registerAction2(class extends Action2 {
 		accessor.get(IWorkbenchLayoutService).setPartHidden(true, Parts.AUXILIARYBAR_PART);
 	}
 });
-
-MenuRegistry.appendMenuItems([
-	{
-		id: MenuId.LayoutControlMenu,
-		item: {
-			group: '0_workbench_toggles',
-			command: {
-				id: TogglePanelAction.ID,
-				title: localize('togglePanel', "Toggle Panel"),
-				icon: panelOffIcon,
-				toggled: { condition: PanelVisibleContext, icon: panelIcon }
-			},
-			when: ContextKeyExpr.or(ContextKeyExpr.equals('config.workbench.layoutControl.type', 'toggles'), ContextKeyExpr.equals('config.workbench.layoutControl.type', 'both')),
-			order: 1
-		}
-	}, {
-		id: MenuId.ViewTitleContext,
-		item: {
-			group: '3_workbench_layout_move',
-			command: {
-				id: TogglePanelAction.ID,
-				title: localize2('hidePanel', 'Hide Panel'),
-			},
-			when: ContextKeyExpr.and(PanelVisibleContext, ContextKeyExpr.equals('viewLocation', ViewContainerLocationToString(ViewContainerLocation.Panel))),
-			order: 2
-		}
-	}
-]);
 
 class MoveViewsBetweenPanelsAction extends Action2 {
 	constructor(private readonly source: ViewContainerLocation, private readonly destination: ViewContainerLocation, desc: Readonly<IAction2Options>) {
