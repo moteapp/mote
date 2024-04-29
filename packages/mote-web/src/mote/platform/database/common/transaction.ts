@@ -1,5 +1,5 @@
 import { generateUuid } from 'vs/base/common/uuid';
-import { IOperation } from '../../../../platform/database/common/recordCommon';
+import { IOperation } from 'mote/platform/database/common/recordCommon';
 
 export class Transaction {
     /**

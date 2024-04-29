@@ -210,6 +210,10 @@ export class NotebookRecordModel extends Disposable {
         this.document.record.lastVersion = alternativeVersionId;
     }
 
+	//#region Operations
+
+	//#endregion
+
     applyEdits(
         rawEdits: ICellEditOperation[], 
         synchronous: boolean, 

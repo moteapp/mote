@@ -49,9 +49,14 @@ export interface IRecord {
 	version: number;
 	lastVersion: number;
     table: string;
+	parentId?: string;
 	spaceId?: string;
 	userId: string;
 	type: string;
+}
+
+export interface IRecordModel extends IRecord {
+	
 }
 
 export enum Role {
@@ -89,6 +94,19 @@ export interface IOperation {
     type: RecordEditType;
     size?: number;
     args: any;
+}
+
+interface IListAfterArgs {
+	id: string;
+	after: string;
+}
+
+export interface IListAfterOperation extends IOperation {
+	args: {
+		id: string;
+		after: string;
+	};
+
 }
 
 export interface IPointer {

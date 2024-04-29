@@ -97,6 +97,9 @@ import { TunnelSource } from 'mote/workbench/services/remote/common/tunnelModel'
 import { mainWindow } from 'vs/base/browser/window';
 import { INotificationService, Severity } from 'vs/platform/notification/common/notification';
 import { mountInstantiationService } from 'mote/app/common/hooks/instantiation';
+import { RecordDatabaseProvider } from 'mote/platform/database/common/databaseProvider';
+import { DatabaseService } from 'mote/platform/database/common/databaseService';
+import { IDatabaseService } from 'mote/platform/database/common/database';
 
 export class BrowserMain extends Disposable {
 
@@ -429,6 +432,12 @@ export class BrowserMain extends Disposable {
 		}
 		const userDataInitializationService = new UserDataInitializationService(userDataInitializers);
 		serviceCollection.set(IUserDataInitializationService, userDataInitializationService);
+
+		// Database
+		const recordProvider = new RecordDatabaseProvider(storageService as any);
+		const databaseService = new DatabaseService();
+		databaseService.registerProvider('block', recordProvider);
+		serviceCollection.set(IDatabaseService, databaseService);
 
 		try {
 			await Promise.race([

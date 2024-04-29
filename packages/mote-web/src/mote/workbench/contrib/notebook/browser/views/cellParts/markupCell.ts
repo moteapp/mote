@@ -187,7 +187,7 @@ export class MarkupCell extends Disposable {
     }
 
 	private onLineBreakInsert() {
-		this.notebookEditor;
+		//this.notebookEditor.;
 	}
 
     private onCellEditorHeightChange(editor: CodeEditorWidget, newHeight: number): void {
