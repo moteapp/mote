@@ -10,6 +10,8 @@ import { ITextResourceConfigurationService } from 'vs/editor/common/services/tex
 import { IFileService } from 'vs/platform/files/common/files';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { ILabelService } from 'vs/platform/label/common/label';
+import { IResolvedNotebookEditorModel } from './notebookCommon';
+import { NotebookRecordModel } from './model/notebookRecordModel';
 
 export interface NotebookEditorInputOptions {
   
@@ -36,7 +38,8 @@ export class NotebookEditorInput extends AbstractResourceEditorInput {
         @IFileService fileService: IFileService,
 		@IFilesConfigurationService filesConfigurationService: IFilesConfigurationService,
         @ITextResourceConfigurationService textResourceConfigurationService: ITextResourceConfigurationService,
-		@ICustomEditorLabelService customEditorLabelService: ICustomEditorLabelService
+		@ICustomEditorLabelService customEditorLabelService: ICustomEditorLabelService,
+		@IInstantiationService private readonly instantiationService: IInstantiationService,
     ) {
         super(resource, preferredResource, labelService, fileService, filesConfigurationService, textResourceConfigurationService, customEditorLabelService);
     }
@@ -56,6 +59,11 @@ export class NotebookEditorInput extends AbstractResourceEditorInput {
 		}
         return capabilities;
     }
+
+	override async resolve(): Promise<IResolvedNotebookEditorModel> {
+		const notebook = this.instantiationService.createInstance(NotebookRecordModel, this.resource);
+		return { notebook, dispose: () => {} };
+	}
 
     override matches(otherInput: EditorInput | IUntypedEditorInput): boolean {
 		if (super.matches(otherInput)) {

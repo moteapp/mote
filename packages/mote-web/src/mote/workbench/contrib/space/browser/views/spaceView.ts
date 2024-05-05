@@ -3,14 +3,13 @@ import { ViewPane } from 'mote/workbench/browser/parts/views/viewPane';
 import { ILocalizedString } from 'vs/nls';
 import { Root, createRoot } from 'react-dom/client';
 import { Explorer } from 'mote/app/components/explorer/explorer';
-import React from 'react';
+import * as React from 'react';
 import { Action2, MenuId, registerAction2 } from 'vs/platform/actions/common/actions';
 import { Codicon } from 'vs/base/common/codicons';
 import { ServicesAccessor } from 'vs/platform/instantiation/common/instantiation';
 import { ContextKeyExpr } from 'vs/platform/contextkey/common/contextkey';
-import { VIEW_ID } from '../../common/files';
 import { ICommandService } from 'vs/platform/commands/common/commands';
-import { NEW_UNTITLED_FILE_COMMAND_ID } from '../fileConstants';
+import { NEW_UNTITLED_PAGE_COMMAND_ID } from '../../common/spaceConstants';
 
 export class SpaceView extends ViewPane {
 
@@ -46,6 +45,6 @@ registerAction2(class extends Action2 {
 
 	async run(accessor: ServicesAccessor): Promise<void> {
         const commandService = accessor.get(ICommandService);
-		await commandService.executeCommand(NEW_UNTITLED_FILE_COMMAND_ID);
+		await commandService.executeCommand(NEW_UNTITLED_PAGE_COMMAND_ID);
 	}
 });

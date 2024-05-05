@@ -21,6 +21,7 @@ import { NotebookEventDispatcher } from './viewModel/notebookEventDispatcher';
 import { NOTEBOOK_EDITOR_FOCUSED } from '../common/notebookContextKeys';
 import { ICodeEditor } from 'vs/editor/browser/editorBrowser';
 import { INotebookCommand } from '../common/notebookCommon';
+import { NotebookRecordModel } from '../common/model/notebookRecordModel';
 
 export class NotebookEditorWidget extends Disposable implements INotebookEditor, INotebookEditorDelegate {
 
@@ -152,6 +153,10 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
 		this.viewModel?.setEditorFocus(focused);
 	}
 
+	getCellIndex(cell: ICellViewModel) {
+		return this.viewModel?.getCellIndex(cell);
+	}
+
 	//#endregion
 
     //#region INotebookEditorDelegate
@@ -185,13 +190,13 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
 		return this._notebookViewModel;
 	}
 
-    async setModel(): Promise<void> {
+    async setModel(model: NotebookRecordModel): Promise<void> {
 		this._detachModel();
-		this._attachModel();
+		this._attachModel(model);
     }
 
-	private async _attachModel() {
-		this.viewModel = this.instantiationService.createInstance(NotebookViewModel, this._viewContext, this.getLayoutInfo());
+	private async _attachModel(model: NotebookRecordModel) {
+		this.viewModel = this.instantiationService.createInstance(NotebookViewModel, model, this._viewContext, this.getLayoutInfo(), {isReadOnly: this.isReadOnly});
 		// model attached
 		this._localCellStateListeners = this.viewModel.viewCells.map(cell => this._bindCellListener(cell));
 
@@ -214,6 +219,34 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
     //#endregion
 
 	//#region Interactive
+
+	private _activeCell: ICellViewModel | undefined;
+	getActiveCell(): ICellViewModel | undefined {
+		return this._activeCell;
+	}
+
+	setActiveCell(cell: ICellViewModel): void {
+		this._activeCell = cell;
+	}
+
+	getSelectionViewModels(): ICellViewModel[] {
+		if (!this.viewModel) {
+			return [];
+		}
+
+		const cellsSet = new Set<string>();
+
+		return this.viewModel.getSelections().map(range => this.viewModel!.viewCells.slice(range.start, range.end)).reduce((a, b) => {
+			b.forEach(cell => {
+				if (!cellsSet.has(cell.id)) {
+					cellsSet.add(cell.id);
+					a.push(cell);
+				}
+			});
+
+			return a;
+		}, [] as ICellViewModel[]);
+	}
 
 	executeCommands(source: string | null | undefined, commands: (INotebookCommand | null)[]): void {
 		this.viewModel?.executeCommands(source, commands);

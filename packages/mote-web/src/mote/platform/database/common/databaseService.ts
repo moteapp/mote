@@ -25,8 +25,7 @@ export class DatabaseService implements IDatabaseService {
     }
 
     public createRecord(resource: URI): IRecord {
-        const provider = this.withProvider(resource);
-        return provider.createRecord(resource);
+        return this.withProvider(resource).createRecord(resource);
     }
 
     public updateRecord(record: IRecord): void {
@@ -54,4 +53,4 @@ export class DatabaseService implements IDatabaseService {
     }
 }
 
-registerSingleton(IDatabaseService, DatabaseService, InstantiationType.Delayed);
+//registerSingleton(IDatabaseService, DatabaseService, InstantiationType.Delayed);

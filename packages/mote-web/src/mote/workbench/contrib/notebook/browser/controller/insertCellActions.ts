@@ -14,14 +14,7 @@ export function insertNewCell(accessor: ServicesAccessor, context: INotebookActi
 		context.notebookEditor.focus();
 	}
 
-    if (context.cell) {
-		const idx = context.notebookEditor.getCellIndex(context.cell);
-		newCell = insertCell(context.notebookEditor, idx, kind, direction, undefined, true);
-	} else {
-		const focusRange = context.notebookEditor.getFocus();
-		const next = Math.max(focusRange.end - 1, 0);
-		newCell = insertCell(context.notebookEditor, next, kind, direction, undefined, true);
-	}
+	newCell = insertCell(context.notebookEditor, context.cell!, direction, '');
     
     return newCell;
 }

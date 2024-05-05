@@ -1,4 +1,4 @@
-import { Disposable } from 'vs/base/common/lifecycle';
+import { Disposable, IDisposable } from 'vs/base/common/lifecycle';
 import { EditorPaneDescriptor, IEditorPaneRegistry } from 'mote/workbench/browser/editor';
 import { EditorExtensions, IEditorFactoryRegistry, IEditorSerializer } from 'mote/workbench/common/editor';
 import { Registry } from 'vs/platform/registry/common/platform';
@@ -17,6 +17,16 @@ import { ILabelService } from 'vs/platform/label/common/label';
 import { Schemas } from 'vs/base/common/network';
 import { isWindows } from 'vs/base/common/platform';
 import { sep } from 'vs/base/common/path';
+import { ITextModelContentProvider, ITextModelService } from 'vs/editor/common/services/resolverService';
+import { IModelService } from 'vs/editor/common/services/model';
+import { IDatabaseService } from 'mote/platform/database/common/database';
+import { DefaultEndOfLine, ITextBufferFactory, ITextModel } from 'vs/editor/common/model';
+import { PieceTreeTextBufferBuilder } from 'vs/editor/common/model/pieceTreeTextBuffer/pieceTreeTextBufferBuilder';
+import { createTextBufferFactory } from 'vs/editor/common/model/textModel';
+import { getTextFromSegments } from 'mote/platform/database/common/recordCommon';
+
+
+import 'mote/workbench/contrib/notebook/browser/controller/insertCellActions';
 
 Registry.as<IEditorPaneRegistry>(EditorExtensions.EditorPane).registerEditorPane(
 	EditorPaneDescriptor.create(
@@ -132,6 +142,46 @@ class NotebookUriLabelContribution implements IWorkbenchContribution {
 		});
 	}
 }
+
+class CellContentProvider implements ITextModelContentProvider {
+	
+	static readonly ID = 'workbench.contrib.cellContentProvider';
+
+	private readonly _registration: IDisposable;
+
+	
+	constructor(
+		@ITextModelService textModelService: ITextModelService,
+		@IModelService private readonly _modelService: IModelService,
+		@IDatabaseService private readonly _databaseService: IDatabaseService
+	) {
+		this._registration = textModelService.registerTextModelContentProvider('block', this);
+	}
+
+	async provideTextContent(resource: URI): Promise<ITextModel | null> {
+		const existing = this._modelService.getModel(resource);
+		if (existing) {
+			return existing;
+		}
+
+		const record = this._databaseService.getRecordModel(resource);
+		const txt = getTextFromSegments(record!.title);
+		const bufferFactory = createTextBufferFactory(txt);
+		const model = this._modelService.createModel(
+			bufferFactory,
+			null,
+			resource
+		);
+
+		return model;
+	}
+
+	dispose(): void {
+		this._registration.dispose();
+	}
+}
+
+registerWorkbenchContribution2(CellContentProvider.ID, CellContentProvider, WorkbenchPhase.BlockStartup);
 
 registerWorkbenchContribution2(NotebookEditorContributions.ID, NotebookEditorContributions, WorkbenchPhase.AfterRestored);
 

@@ -1,5 +1,8 @@
 import { ICellRange } from "./notebookRange";
 import { IRecordWithRole, RecordEditType } from "../../../../platform/database/common/recordCommon";
+import { IDisposable } from "vs/base/common/lifecycle";
+import { NotebookRecordModel } from "./model/notebookRecordModel";
+import { ICellViewModel } from "../browser/notebookBrowser";
 
 export const NOTEBOOK_EDITOR_ID = 'workbench.editor.notebook';
 
@@ -74,7 +77,7 @@ export enum NotebookCellsChangeType {
 
 export interface NotebookCellContentChangeEvent {
 	readonly kind: NotebookCellsChangeType.ChangeCellContent;
-	readonly index: number;
+	//readonly index: number;
 }
 
 export type NotebookRawContentEvent = (NotebookCellContentChangeEvent) & { transient: boolean };
@@ -90,13 +93,29 @@ export type NotebookRecordModelChangedEvent = {
 	readonly endSelectionState: ISelectionState | undefined;
 };
 
-export interface ICellReplaceEdit {
+export interface ICellUpdateEdit {
 	editType: RecordEditType.Update;
 	index: number;
 	count: number;
+	cell: ICellViewModel;
 	cells: ICellData[];
 }
 
-export type ICellEditOperation = ICellReplaceEdit;
+export interface ICellListEdit {
+	editType: RecordEditType.ListAfter | RecordEditType.ListBefore | RecordEditType.ListRemove;
+	index: number;
+	cell: ICellViewModel;
+	cells: ICellData[];
+}
+
+export type ICellEditOperation = ICellUpdateEdit | ICellListEdit;
 
 //#endregion
+
+export interface INotebookEditorModel extends IDisposable {
+	
+}
+
+export interface IResolvedNotebookEditorModel extends INotebookEditorModel {
+	notebook: NotebookRecordModel;
+}

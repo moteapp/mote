@@ -9,6 +9,12 @@ import { NotebookLayoutInfo } from '../notebookViewEvents';
 import { NotebookViewContext } from './notebookViewContext';
 import { generateUuid } from 'vs/base/common/uuid';
 import { INotebookCommand } from 'mote/workbench/contrib/notebook/common/notebookCommon';
+import { NotebookRecordModel } from 'mote/workbench/contrib/notebook/common/model/notebookRecordModel';
+import { NotebookCellSelectionCollection } from './cellSelectionCollection';
+
+export interface NotebookViewModelOptions {
+	isReadOnly: boolean;
+}
 
 export class NotebookViewModel extends Disposable implements INotebookViewModel {
 
@@ -18,8 +24,10 @@ export class NotebookViewModel extends Disposable implements INotebookViewModel 
 	}
 
     constructor(
+        private _notebook: NotebookRecordModel,
         private _viewContext: NotebookViewContext,
         private _layoutInfo: NotebookLayoutInfo | null,
+        private _options: NotebookViewModelOptions,
         @IModelService private readonly modelService: IModelService,
         @IInstantiationService private readonly instantiationService: IInstantiationService,
     ) {
@@ -28,6 +36,12 @@ export class NotebookViewModel extends Disposable implements INotebookViewModel 
         const id = generateUuid();
         this._viewCells.push(this.createViewCell(id));
     }
+
+    get options(): NotebookViewModelOptions { return this._options; }
+
+    get document() {
+		return this._notebook;
+	}
 
     get layoutInfo(): NotebookLayoutInfo | null {
 		return this._layoutInfo;
@@ -44,13 +58,30 @@ export class NotebookViewModel extends Disposable implements INotebookViewModel 
 	}
 
     private createViewCell(id: string) {
-        const uri = URI.from({ scheme: 'untitled', path: id });
+        const uri = URI.from({ scheme: 'block', path: id });
         const textModel = this.modelService.createModel('', null, uri, false);
         const cellTextModel = this.instantiationService.createInstance(NotebookCellTextModel, uri, '');
         cellTextModel.textModel = textModel as any;
         const cell = this.instantiationService.createInstance(MarkupCellViewModel, 'notebook', cellTextModel, this._layoutInfo, this._viewContext);
         return cell;
     }
+
+    //#region Properties
+
+    private _selectionCollection = this._register(new NotebookCellSelectionCollection());
+    getSelections() {
+		return this._selectionCollection.selections;
+	}
+
+    getFocus() {
+		return this._selectionCollection.focus;
+	}
+
+    getCellIndex(cell: ICellViewModel) {
+		return this._viewCells.indexOf(cell as CellViewModel);
+	}
+
+    //#endregion
 
     //#region cursor operations
 

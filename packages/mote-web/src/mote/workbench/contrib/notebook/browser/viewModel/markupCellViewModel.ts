@@ -3,11 +3,11 @@ import { BaseCellViewModel } from './baseCellViewModel';
 import { ITextModelService } from 'vs/editor/common/services/resolverService';
 import { NotebookLayoutInfo } from '../notebookViewEvents';
 import { NotebookViewContext } from './notebookViewContext';
-import { CellFocusMode, CellLayoutState, MarkupCellLayoutInfo } from '../notebookBrowser';
+import { CellFocusMode, CellLayoutState, ICellViewModel, MarkupCellLayoutInfo } from '../notebookBrowser';
 import { ICodeEditor } from 'vs/editor/browser/editorBrowser';
 import { IDisposable, dispose } from 'vs/base/common/lifecycle';
 
-export class MarkupCellViewModel extends BaseCellViewModel {
+export class MarkupCellViewModel extends BaseCellViewModel implements ICellViewModel {
 
     constructor(
         viewType: string,
@@ -35,6 +35,10 @@ export class MarkupCellViewModel extends BaseCellViewModel {
     }
 
 	//#region Properties
+
+	get id() {
+		return this.model.uri.path;
+	}
 
     private _layoutInfo: MarkupCellLayoutInfo;
     get layoutInfo() {

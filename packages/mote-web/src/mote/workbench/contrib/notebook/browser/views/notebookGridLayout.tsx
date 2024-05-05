@@ -4,6 +4,7 @@ import { MarkupCell } from './cellParts/markupCell';
 import { IActiveNotebookEditorDelegate } from '../notebookBrowser';
 import { useEffect, useRef } from 'react';
 import { MarkupCellViewModel } from '../viewModel/markupCellViewModel';
+import { NotebookTitle } from './notebookTitle';
 
 interface NotebookGirdLayoutProps {
     markUpCellRenderer: MarkupCellRenderer;
@@ -42,6 +43,7 @@ export const NotebookGirdLayout = (props: NotebookGirdLayoutProps) => {
 
     return (
         <div>
+            <NotebookTitle />
             {props.cells.map(cell => renderCell(cell))}
         </div>
     )

@@ -1,9 +1,15 @@
 import { Disposable } from 'vs/base/common/lifecycle';
 import { IUndoRedoElement, IUndoRedoService, IWorkspaceUndoRedoElement, UndoRedoElementType, UndoRedoGroup } from 'vs/platform/undoRedo/common/undoRedo';
-import { CellEditType, ICellData, ICellEditOperation, ISelectionState, NotebookRecordModelChangedEvent } from '../notebookCommon';
+import { CellEditType, ICellData, ICellEditOperation, ISelectionState, NotebookCellsChangeType, NotebookRecordModelChangedEvent } from '../notebookCommon';
 import { Emitter, PauseableEmitter } from 'vs/base/common/event';
 import { URI } from 'vs/base/common/uri';
-import { IRecord, IRecordWithRole, RecordEditType } from '../../../../../platform/database/common/recordCommon';
+import { IRecord, IRecordWithRole, RecordEditType, Role } from 'mote/platform/database/common/recordCommon';
+import { IDatabaseService } from 'mote/platform/database/common/database';
+import { CellOperations } from '../editOperation';
+import { generateUuid } from 'vs/base/common/uuid';
+import { ICellViewModel } from '../../browser/notebookBrowser';
+import { Transaction } from 'mote/platform/database/common/transaction';
+import { InsertCellEdit } from './cellEdit';
 
 class NotebookEventEmitter extends PauseableEmitter<NotebookRecordModelChangedEvent> {
 	isDirtyEvent() {
@@ -149,16 +155,20 @@ export class NotebookRecordModel extends Disposable {
 
     private readonly _onDidChangeContent = this._register(new Emitter<NotebookRecordModelChangedEvent>());
 
-    private document!: IRecordWithRole;
+    private document: IRecordWithRole;
 
     private _operationManager: NotebookOperationManager;
     private _pauseableEmitter: NotebookEventEmitter;
 
     constructor(
         readonly uri: URI,
+		@IDatabaseService private readonly _databaseService: IDatabaseService,
         @IUndoRedoService private readonly _undoService: IUndoRedoService,
     ) {
         super();
+
+		const record = this._databaseService.getRecord(uri)!;
+		this.document = { record, role: Role.ReadAndWrite}
 
         this._pauseableEmitter = new NotebookEventEmitter({
 			merge: (events: NotebookRecordModelChangedEvent[]) => {
@@ -194,6 +204,10 @@ export class NotebookRecordModel extends Disposable {
 		);
     }
 
+	get id() {
+		return this.document.record.id;
+	}
+
     get versionId() {
         return this.document.record.version;
     }
@@ -205,6 +219,10 @@ export class NotebookRecordModel extends Disposable {
         return this.document.record.lastVersion;
     }
 
+	get record() {
+		return this._databaseService.getRecord(this.uri);
+	}
+
     private postUndoRedo(alternativeVersionId: number) {
         // todo: apply it with edit operations
         this.document.record.lastVersion = alternativeVersionId;
@@ -212,7 +230,9 @@ export class NotebookRecordModel extends Disposable {
 
 	//#region Operations
 
-	//#endregion
+	public addCell(cell: ICellData, synchronous: boolean, undoRedoGroup: UndoRedoGroup | undefined): void {
+		this._operationManager.pushStackElement(this._alternativeVersionId, undefined);
+	}
 
     applyEdits(
         rawEdits: ICellEditOperation[], 
@@ -253,16 +273,48 @@ export class NotebookRecordModel extends Disposable {
     ): void {
 
         // todo: compress all edits which have no side effects on cell index
+		//const transaction = this._databaseService.
 
-        for ( const { editType } of rawEdits ) {
+        for ( const { editType, cell } of rawEdits ) {
             switch (editType) {
                 case RecordEditType.Update:
                     break;
+				case RecordEditType.ListAfter:
+					this.insertCellAfterTarget(cell, synchronous, computeUndoRedo, beginSelectionState, undoRedoGroup);
+					break;
             }
         }
     }
 
-    private replaceCells(index: number, count: number, cellDtos: ICellData[], synchronous: boolean, computeUndoRedo: boolean, beginSelectionState: ISelectionState | undefined, undoRedoGroup: UndoRedoGroup | undefined): void {
+	private executeEdits() {
 
-    }
+	}
+
+	private withTransaction(callback: (tx: Transaction) => void): void {
+
+	}
+
+	private insertCellAfterTarget(cell: ICellViewModel, synchronous: boolean, computeUndoRedo: boolean, beginSelectionState: ISelectionState | undefined, undoRedoGroup: UndoRedoGroup | undefined): void {
+		const parent = this._databaseService.getRecord(this.uri)!;
+		const target = this._databaseService.getRecord(URI.from({ scheme: 'block', path: cell.id }))!;
+		const id = generateUuid();
+        const uri = URI.from({ scheme: 'block', path: id });
+		const child = this._databaseService.createRecord(uri);
+		CellOperations.insertChildAfterTarget(parent, child, target, null as any);
+
+		if (computeUndoRedo)
+		{
+			this._operationManager.pushEditOperation(new InsertCellEdit(uri) , beginSelectionState, undefined, this._alternativeVersionId, undoRedoGroup);	
+		}
+
+		// should be deferred
+		this._pauseableEmitter.fire({
+			rawEvents: [{ kind: NotebookCellsChangeType.ChangeCellContent, transient: false }],
+			versionId: this.versionId,
+			synchronous: synchronous,
+			endSelectionState: undefined
+		});
+	}
+
+	//#endregion
 }

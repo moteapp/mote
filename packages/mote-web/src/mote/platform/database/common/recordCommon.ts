@@ -56,7 +56,6 @@ export interface IRecord {
 }
 
 export interface IRecordModel extends IRecord {
-	
 }
 
 export enum Role {
@@ -117,4 +116,12 @@ export interface IPointer {
 
 export function generateRecordKey(record: IRecord): string {
     return `${record.table}:${record.id}`;
+}
+
+export function getTextFromSegment(segment: ISegment): string {
+	return segment[0];
+}
+
+export function getTextFromSegments(segments: ISegment[]) {
+	return segments.map(segment => getTextFromSegment(segment)).join('');
 }

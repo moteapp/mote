@@ -346,5 +346,7 @@ import 'mote/workbench/contrib/scrollLocking/browser/scrollLocking.contribution'
 
 // Notebook
 import 'mote/workbench/contrib/notebook/browser/notebook.contribution';
+import 'mote/workbench/contrib/space/browser/space.contribution';
+import 'mote/workbench/contrib/space/browser/spaceCommands';
 
 //#endregion

@@ -38,7 +38,7 @@ import { isMacintosh, isWeb } from 'vs/base/common/platform';
 import { Codicon } from 'vs/base/common/codicons';
 import { registerIcon } from 'vs/platform/theme/common/iconRegistry';
 import { isMouseEvent } from 'vs/base/browser/dom';
-import { SpaceView } from './views/spaceView';
+import { SpaceView } from '../../space/browser/views/spaceView';
 import { PinnedFilesView } from './views/pinnedFilesView';
 
 const explorerViewIcon = registerIcon('explorer-view-icon', Codicon.files, localize('explorerViewIcon', 'View icon of the explorer view.'));
@@ -70,12 +70,14 @@ export class ExplorerViewletViewsContribution extends Disposable implements IWor
 		const viewDescriptorsToRegister: IViewDescriptor[] = [];
 		const viewDescriptorsToDeregister: IViewDescriptor[] = [];
 
-		const openEditorsViewDescriptor = this.createSpaceViewDescriptor();
+		//const openEditorsViewDescriptor = this.createSpaceViewDescriptor();
 		const pinnedFilesViewDescriptor = this.createPinnedFilesViewDescriptor();
 		viewDescriptorsToRegister.push(pinnedFilesViewDescriptor);
+		/*
 		if (!viewDescriptors.some(v => v.id === openEditorsViewDescriptor.id)) {
 			viewDescriptorsToRegister.push(openEditorsViewDescriptor);
 		}
+		*/
 
 		const explorerViewDescriptor = this.createExplorerViewDescriptor();
 		const registeredExplorerViewDescriptor = viewDescriptors.find(v => v.id === explorerViewDescriptor.id);

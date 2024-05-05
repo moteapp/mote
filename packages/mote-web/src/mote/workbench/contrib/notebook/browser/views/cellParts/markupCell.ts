@@ -9,11 +9,12 @@ import { ServiceCollection } from 'vs/platform/instantiation/common/serviceColle
 import { MarkdownCellRenderTemplate } from '../notebookRenderingCommon';
 import { MarkupCellViewModel } from 'mote/workbench/contrib/notebook/browser/viewModel/markupCellViewModel';
 import { CancellationTokenSource } from 'vs/base/common/cancellation';
-import { raceCancellation } from 'vs/base/common/async';
+import { disposableTimeout, raceCancellation } from 'vs/base/common/async';
 import { IEditorOptions } from 'vs/editor/common/config/editorOptions';
 import { CellEditorOptions } from './cellEditorOptions';
 import { IConfigurationService } from 'vs/platform/configuration/common/configuration';
 import { KeyCode } from 'vs/base/common/keyCodes';
+import { ICommandService } from 'vs/platform/commands/common/commands';
 
 export class MarkupCell extends Disposable {
 
@@ -31,6 +32,7 @@ export class MarkupCell extends Disposable {
         private readonly viewCell: MarkupCellViewModel,
         private readonly templateData: MarkdownCellRenderTemplate,
 		private readonly notebookEditor: IActiveNotebookEditorDelegate,
+		@ICommandService private readonly commandService: ICommandService,
         @IContextKeyService private readonly contextKeyService: IContextKeyService,
         @IInstantiationService private readonly instantiationService: IInstantiationService,
         @IConfigurationService private configurationService: IConfigurationService,
@@ -184,10 +186,35 @@ export class MarkupCell extends Disposable {
 				this.onLineBreakInsert();
 			}
 		}));
+
+		const updateFocusMode = () => {
+			if (editor.hasWidgetFocus()) {
+				this.notebookEditor.setActiveCell(this.viewCell);
+				this.viewCell.focusMode = CellFocusMode.Editor;
+			} else {
+				this.viewCell.focusMode = CellFocusMode.Container;
+			}
+		};
+		this.localDisposables.add(editor.onDidFocusEditorWidget(() => {
+			updateFocusMode();
+		}));
+
+		this.localDisposables.add(editor.onDidBlurEditorWidget(() => {
+			// this is for a special case:
+			// users click the status bar empty space, which we will then focus the editor
+			// so we don't want to update the focus state too eagerly
+			if (this.templateData.container.ownerDocument.activeElement?.contains(this.templateData.container)) {
+				this.focusSwitchDisposable.value = disposableTimeout(() => updateFocusMode(), 300);
+			} else {
+				updateFocusMode();
+			}
+		}));
+
+		updateFocusMode();
     }
 
 	private onLineBreakInsert() {
-		//this.notebookEditor.;
+		this.commandService.executeCommand('notebook.cell.insertMarkdownCellBelow');
 	}
 
     private onCellEditorHeightChange(editor: CodeEditorWidget, newHeight: number): void {

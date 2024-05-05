@@ -82,13 +82,14 @@ export interface INotebookEditor {
 
 export interface IActiveNotebookEditor extends INotebookEditor {
 	getViewModel(): INotebookViewModel;
+	getCellIndex(cell: ICellViewModel): number;
 }
 
 /**
  * A mix of public interface and internal one (used by internal rendering code, e.g., cellRenderer)
  */
 export interface INotebookEditorDelegate extends INotebookEditor {
-
+	setActiveCell(cell: ICellViewModel | null): void;
 	getBaseCellEditorOptions(): IBaseCellEditorOptions;
 }
 
@@ -113,7 +114,7 @@ export interface INotebookEditorCreationOptions {
 //#region Cell Model
 
 export interface ICellViewModel {
-	
+	id: string;
 }
 
 export interface IEditableCellViewModel extends ICellViewModel {

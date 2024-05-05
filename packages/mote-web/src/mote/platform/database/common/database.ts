@@ -1,5 +1,5 @@
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
-import { IPointer, IRecord } from './recordCommon';
+import { IPointer, IRecord, IRecordModel } from './recordCommon';
 import { URI } from 'vs/base/common/uri';
 
 export interface IDatabaseProvider {
@@ -30,4 +30,6 @@ export interface IDatabaseService {
     destroyRecord(resource: URI): void;
 
     getRecord(resource: URI): IRecord | null;
+
+    getRecordModel(resource: URI): IRecordModel | null;
 }
