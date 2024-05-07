@@ -6,6 +6,8 @@ import { useEffect, useRef } from 'react';
 import { MarkupCellViewModel } from '../viewModel/markupCellViewModel';
 import { NotebookTitle } from './notebookTitle';
 
+import './media/notebookLayout.css';
+
 interface NotebookGirdLayoutProps {
     markUpCellRenderer: MarkupCellRenderer;
     notebookEditor: IActiveNotebookEditorDelegate;
@@ -42,7 +44,8 @@ export const NotebookGirdLayout = (props: NotebookGirdLayoutProps) => {
     }
 
     return (
-        <div>
+        <div className='notebook-layout'>
+            <div></div>
             <NotebookTitle />
             {props.cells.map(cell => renderCell(cell))}
         </div>

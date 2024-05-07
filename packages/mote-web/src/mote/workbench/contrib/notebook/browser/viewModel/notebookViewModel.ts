@@ -32,9 +32,6 @@ export class NotebookViewModel extends Disposable implements INotebookViewModel 
         @IInstantiationService private readonly instantiationService: IInstantiationService,
     ) {
         super();
-
-        const id = generateUuid();
-        this._viewCells.push(this.createViewCell(id));
     }
 
     get options(): NotebookViewModelOptions { return this._options; }

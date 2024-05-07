@@ -1,0 +1,41 @@
+.section {
+    user-select: none; 
+    transition: background 20ms ease-in 0s; 
+    display: flex; 
+    align-items: center; 
+    border-radius: 6px; 
+    padding-left: 8px; 
+    padding-right: 8px; 
+    height: 30px;
+    pointer-events: auto;
+}
+
+.section > .title {
+    text-transform: initial; 
+    font-size: 14px; 
+    line-height: 1; 
+    color: rgb(145, 145, 142); 
+    font-weight: 500; 
+    transition: color 100ms ease-out 0s;
+}
+
+.action-container {
+    display: flex; 
+    align-items: center; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 150ms ease 0s;
+}
+
+.action-container > .action {
+    user-select: none; 
+    transition: background 20ms ease-in 0s; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    height: 20px; 
+    width: 20px; 
+    border-radius: 4px; 
+    margin-left: 4px;
+}
