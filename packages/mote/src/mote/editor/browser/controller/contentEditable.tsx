@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import './media/editable.css';
-import { isEmpty } from "vs/platform/userDataSync/common/settingsMerge";
 
 export interface EditableProps {
     tagName?: string;

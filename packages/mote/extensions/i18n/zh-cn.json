@@ -1,3 +1,4 @@
 {
-    "sidebar.private": "私有空间"
+    "sidebar.private": "私有空间",
+    "notebookTitle.placeholder": "标题"
 }

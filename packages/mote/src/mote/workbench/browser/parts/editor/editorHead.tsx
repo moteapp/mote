@@ -1,10 +1,9 @@
-import { ContentEditable } from "mote/editor/browser/contentEditable";
-import { Selectable } from "mote/editor/browser/selectable";
-import { useEffect, useRef, useState } from "react";
-import { InputBox } from "vs/base/browser/ui/inputbox/inputBox";
-import { localize } from "vs/nls";
+import { localize } from "mote/base/common/i18n";
+import { ContentEditable } from "mote/editor/browser/controller/contentEditable";
+import { Selectable } from "mote/editor/browser/controller/selectable";
+import { useState } from "react";
 
-export const NotebookTitle = () => {
+export const EditorHead = () => {
     const [title, setTitle] = useState<string>('');
 
     const handleMutation = (mutation: any) => {
@@ -18,7 +17,6 @@ export const NotebookTitle = () => {
     }
 
     const getHtml = () => {
-        //console.log('getHtml', title)
         return title;
     }
 

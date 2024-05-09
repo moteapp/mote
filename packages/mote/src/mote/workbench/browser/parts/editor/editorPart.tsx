@@ -4,6 +4,7 @@ import { TextEditor } from "mote/editor/browser/controller/textEditor"
 
 
 import './editor.css'
+import { EditorHead } from './editorHead';
 
 export const EditorPart = () => {
     const [text, setText] = useState<string>('');
@@ -14,7 +15,8 @@ export const EditorPart = () => {
 
     return (
         <div className="editor-container">
-            <TextEditor initialText={text} />
+            <div></div>
+            <EditorHead />
         </div>
     )
 }

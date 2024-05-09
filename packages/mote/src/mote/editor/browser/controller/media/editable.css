@@ -1,0 +1,33 @@
+[contenteditable] {
+    -webkit-tap-highlight-color: transparent
+}
+
+[contenteditable]:empty:after {
+    content: attr(placeholder)
+}
+
+.selectable {
+    max-width: 100%;
+    width: 100%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    caret-color: rgb(55, 53, 47);
+    padding-top: 3px;
+    padding-left: 2px;
+    padding-right: 2px;
+    font-size: 1em;
+    font-weight: inherit;
+    margin: 0px;
+    min-height: 1em;
+    color: rgb(55, 53, 47);
+    cursor: text;
+}
+
+.editable {
+    max-width: 100%; 
+    width: 100%; white-space: pre-wrap; 
+    word-break: break-word; 
+    caret-color: rgb(55, 53, 47); 
+    padding: 3px 2px; min-height: 1em; 
+    color: rgb(55, 53, 47); 
+}
