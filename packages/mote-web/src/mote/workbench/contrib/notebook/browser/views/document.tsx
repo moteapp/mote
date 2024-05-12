@@ -40,7 +40,7 @@ export const Document = (props: IDocumentProps) => {
     });
 
     return (
-        <div className="layout-content">
+        <div className="layout-content page-content" style={{fontSize: 16}}>
             {blocks.map((model, index) => renderBlock(model))}
         </div>
     )

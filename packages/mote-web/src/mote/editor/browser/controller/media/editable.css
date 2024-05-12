@@ -31,3 +31,8 @@
     padding: 3px 2px; min-height: 1em; 
     color: rgb(55, 53, 47); 
 }
+
+.page-content .selectable {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
