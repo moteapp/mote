@@ -6,6 +6,7 @@
 //#region --- editor/workbench core
 
 import 'vs/editor/editor.all';
+import 'mote/editor/editor.all';
 
 //import 'mote/workbench/api/browser/extensionHost.contribution';
 import 'mote/workbench/browser/workbench.contribution';

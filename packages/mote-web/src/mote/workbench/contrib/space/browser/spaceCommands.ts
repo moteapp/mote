@@ -6,6 +6,8 @@ import { IEditorService } from 'mote/workbench/services/editor/common/editorServ
 import { generateUuid } from 'vs/base/common/uuid';
 import { URI } from 'vs/base/common/uri';
 import { IDatabaseService } from 'mote/platform/database/common/database';
+import { Schemas } from 'mote/base/common/network';
+import { IRecordService } from 'mote/editor/common/services/record';
 
 
 KeybindingsRegistry.registerCommandAndKeybindingRule({
@@ -19,7 +21,7 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 		args: [
 			{
 				isOptional: true,
-				name: 'New Untitled Text File arguments',
+				name: 'New Untitled Page arguments',
 				description: 'The editor view type or language ID if known',
 				schema: {
 					'type': 'object',
@@ -37,11 +39,11 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 	},
 	handler: async (accessor, args?: { languageId?: string; viewType?: string }) => {
 		const editorService = accessor.get(IEditorService);
-		const databaseService = accessor.get(IDatabaseService);
+		const recordService = accessor.get(IRecordService);
 
-        const id = generateUuid();
-        const uri = URI.from({ scheme: 'block', path: id });
-		databaseService.createRecord(uri);
+        const path = '/' + generateUuid();
+        const uri = URI.from({ scheme: Schemas.record, authority: 'block', path });
+		recordService.createRecord(uri, '');
 
 		await editorService.openEditor({
 			resource: uri,

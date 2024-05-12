@@ -16,7 +16,7 @@ Registry.as<IViewsRegistry>(ViewExtensions.ViewsRegistry).registerViews([{
     name: SpaceView.NAME,
     ctorDescriptor: new SyncDescriptor(SpaceView),
     containerIcon: openEditorsViewIcon,
-    order: 0,
+    order: 1,
     canToggleVisibility: true,
     canMoveView: true,
     collapsed: false,

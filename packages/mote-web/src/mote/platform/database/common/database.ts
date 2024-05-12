@@ -1,5 +1,5 @@
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
-import { IPointer, IRecord, IRecordModel } from './recordCommon';
+import { IPointer, IRecord, IRecordModel } from '../../../editor/common/recordCommon';
 import { URI } from 'vs/base/common/uri';
 
 export interface IDatabaseProvider {

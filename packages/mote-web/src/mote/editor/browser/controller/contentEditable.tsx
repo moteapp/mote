@@ -1,9 +1,10 @@
 import * as React from "react";
 
 import './media/editable.css';
-import { isEmpty } from "vs/platform/userDataSync/common/settingsMerge";
+
 
 export interface EditableProps {
+    ref?: any;
     tagName?: string;
     placeholder?: string;
     onChange?: (value: string) => void;
@@ -18,6 +19,11 @@ export interface IMutation {
     isComposing: boolean;
 }
 
+export const ContentEditableWrapper = React.forwardRef((props: EditableProps, ref: React.Ref<ContentEditable>) => {
+
+    return <ContentEditable {...props} ref={ref} />;
+});
+
 export class ContentEditable extends React.Component<EditableProps> {
     html: string = '';
     previousHtml: string = '';
@@ -30,18 +36,11 @@ export class ContentEditable extends React.Component<EditableProps> {
         return this.ownNodeIsComposing;
     }
 
-    handleChange = (e: React.FormEvent<HTMLDivElement>) => {
-        if (this.getText() === '') {
-            this.setState({isEmpty: true});
-        } else {
-            this.setState({isEmpty: false});
-        }
-        this.props.onChange?.(this.getText());
-    }
-
     getText() {
         return this.root?.textContent || '';
     }
+
+    //#region Handlers
 
     handleInput = () => {
         this.handleMutation({
@@ -54,6 +53,25 @@ export class ContentEditable extends React.Component<EditableProps> {
     handleMutation = (mutation: IMutation) => {
         this.props.onMutation?.(mutation);
     }
+
+    handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        this.props.onKeyDown?.(e);
+    }
+
+    handleBeforeInput = (e: InputEvent) => {
+        if (e.inputType === 'insertLineBreak' || e.inputType === 'insertParagraph') {
+            e.preventDefault();
+            this.handleMutation({
+                newValue: this.getText(),
+                insertedLine: true,
+                isComposing: this.isComposing()
+            });
+        }
+    }
+
+    //#endregion
+
+    //#region lifecycle
 
     updateContainer(force: boolean) {
         if (this.root) {
@@ -85,8 +103,15 @@ export class ContentEditable extends React.Component<EditableProps> {
         this.html = e.getHtml!();
     }
 
+    componentWillUnmount(): void {
+        this.root?.removeEventListener("beforeinput", this.handleBeforeInput);
+    }
+
     didMount() {
         this.updateContainer(true);
+        if (this.root) {
+            this.root.addEventListener("beforeinput", this.handleBeforeInput)
+        }
     }
 
     didUpdate() {
@@ -100,6 +125,8 @@ export class ContentEditable extends React.Component<EditableProps> {
     componentDidUpdate(prevProps: Readonly<EditableProps>, prevState: Readonly<{}>, snapshot?: any): void {
         this.didUpdate();
     }
+
+    //#endregion
 
     render() {
         const placeholderStyle = Boolean(!this.html) ? {WebkitTextFillColor: 'rgba(55, 53, 47, 0.5)'} : {};

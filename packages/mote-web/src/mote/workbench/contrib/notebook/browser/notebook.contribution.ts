@@ -21,12 +21,13 @@ import { ITextModelContentProvider, ITextModelService } from 'vs/editor/common/s
 import { IModelService } from 'vs/editor/common/services/model';
 import { IDatabaseService } from 'mote/platform/database/common/database';
 import { DefaultEndOfLine, ITextBufferFactory, ITextModel } from 'vs/editor/common/model';
-import { PieceTreeTextBufferBuilder } from 'vs/editor/common/model/pieceTreeTextBuffer/pieceTreeTextBufferBuilder';
 import { createTextBufferFactory } from 'vs/editor/common/model/textModel';
-import { getTextFromSegments } from 'mote/platform/database/common/recordCommon';
+import { getTextFromSegments } from 'mote/editor/common/recordCommon';
 
 
 import 'mote/workbench/contrib/notebook/browser/controller/insertCellActions';
+import { RecordService } from 'mote/editor/common/services/recordService';
+import { IRecordService } from 'mote/editor/common/services/record';
 
 Registry.as<IEditorPaneRegistry>(EditorExtensions.EditorPane).registerEditorPane(
 	EditorPaneDescriptor.create(
@@ -153,9 +154,9 @@ class CellContentProvider implements ITextModelContentProvider {
 	constructor(
 		@ITextModelService textModelService: ITextModelService,
 		@IModelService private readonly _modelService: IModelService,
-		@IDatabaseService private readonly _databaseService: IDatabaseService
+		@IRecordService private readonly _databaseService: IRecordService
 	) {
-		this._registration = textModelService.registerTextModelContentProvider('block', this);
+		this._registration = textModelService.registerTextModelContentProvider('record', this);
 	}
 
 	async provideTextContent(resource: URI): Promise<ITextModel | null> {
@@ -164,7 +165,7 @@ class CellContentProvider implements ITextModelContentProvider {
 			return existing;
 		}
 
-		const record = this._databaseService.getRecordModel(resource);
+		const record = this._databaseService.getRecord(resource);
 		const txt = getTextFromSegments(record!.title);
 		const bufferFactory = createTextBufferFactory(txt);
 		const model = this._modelService.createModel(

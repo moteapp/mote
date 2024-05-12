@@ -1,8 +1,9 @@
 import { ICellRange } from "./notebookRange";
-import { IRecordWithRole, RecordEditType } from "../../../../platform/database/common/recordCommon";
+import { IRecordWithRole, RecordEditType } from "../../../../editor/common/recordCommon";
 import { IDisposable } from "vs/base/common/lifecycle";
 import { NotebookRecordModel } from "./model/notebookRecordModel";
 import { ICellViewModel } from "../browser/notebookBrowser";
+import { BlockModel } from "mote/editor/common/model/blockModel";
 
 export const NOTEBOOK_EDITOR_ID = 'workbench.editor.notebook';
 
@@ -117,5 +118,5 @@ export interface INotebookEditorModel extends IDisposable {
 }
 
 export interface IResolvedNotebookEditorModel extends INotebookEditorModel {
-	notebook: NotebookRecordModel;
+	notebook: BlockModel;
 }

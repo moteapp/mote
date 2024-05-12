@@ -12,6 +12,9 @@ import { IInstantiationService } from 'vs/platform/instantiation/common/instanti
 import { ILabelService } from 'vs/platform/label/common/label';
 import { IResolvedNotebookEditorModel } from './notebookCommon';
 import { NotebookRecordModel } from './model/notebookRecordModel';
+import { IRecordService } from 'mote/editor/common/services/record';
+import { IRecordProvider } from 'mote/editor/common/recordCommon';
+import { BlockModel } from 'mote/editor/common/model/blockModel';
 
 export interface NotebookEditorInputOptions {
   
@@ -39,6 +42,7 @@ export class NotebookEditorInput extends AbstractResourceEditorInput {
 		@IFilesConfigurationService filesConfigurationService: IFilesConfigurationService,
         @ITextResourceConfigurationService textResourceConfigurationService: ITextResourceConfigurationService,
 		@ICustomEditorLabelService customEditorLabelService: ICustomEditorLabelService,
+		@IRecordService	private readonly recordService: IRecordService,
 		@IInstantiationService private readonly instantiationService: IInstantiationService,
     ) {
         super(resource, preferredResource, labelService, fileService, filesConfigurationService, textResourceConfigurationService, customEditorLabelService);
@@ -61,7 +65,12 @@ export class NotebookEditorInput extends AbstractResourceEditorInput {
     }
 
 	override async resolve(): Promise<IResolvedNotebookEditorModel> {
-		const notebook = this.instantiationService.createInstance(NotebookRecordModel, this.resource);
+		const recordProvider: IRecordProvider = {
+			provideRecord: (uri: URI) => { 
+				return this.recordService.getRecord(uri)!;
+			}
+		}
+		const notebook = new BlockModel(this.resource, recordProvider);
 		return { notebook, dispose: () => {} };
 	}
 

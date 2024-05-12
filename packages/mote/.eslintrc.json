@@ -11,10 +11,6 @@
   "root": true,
   "ignorePatterns": ["dist"],
   "rules": {
-    "@typescript-eslint/consistent-type-imports": [
-      2,
-      { "fixStyle": "separate-type-imports" }
-    ],
     "@typescript-eslint/no-restricted-imports": [
       2,
       {

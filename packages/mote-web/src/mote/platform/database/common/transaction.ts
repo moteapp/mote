@@ -1,7 +1,18 @@
 import { generateUuid } from 'vs/base/common/uuid';
-import { IOperation } from 'mote/platform/database/common/recordCommon';
+import { IOperation } from 'mote/editor/common/recordCommon';
 
 export class Transaction {
+
+    static createAndCommit(perform: (transaction: Transaction) => void) {
+        const transaction = new Transaction('user', 'space');
+        const result = perform(transaction);
+        transaction.commit();
+        return {
+            transaction,
+            result
+        };
+    }
+    
     /**
      * The unique identifier of the transaction.
      */
@@ -26,6 +37,10 @@ export class Transaction {
         public readonly spaceId: string,
     ) {
         this.id = generateUuid();
+    }
+
+    public commit() {
+
     }
 
     public addOperation(operation: IOperation) {

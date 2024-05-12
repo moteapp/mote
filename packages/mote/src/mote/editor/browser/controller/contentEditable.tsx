@@ -101,7 +101,7 @@ export class ContentEditable extends React.Component<EditableProps> {
     }
 
     render() {
-        const placeholderStyle = Boolean(!this.html) ? {WebkitTextFillColor: 'rgba(55, 53, 47, 0.5)'} : {};
+        const placeholderStyle = !this.html ? {WebkitTextFillColor: 'rgba(55, 53, 47, 0.5)'} : {};
         const style = Object.assign({}, placeholderStyle);
 
         return React.createElement(this.props.tagName || 'div', {

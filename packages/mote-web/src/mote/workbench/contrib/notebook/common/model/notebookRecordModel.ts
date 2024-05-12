@@ -3,7 +3,7 @@ import { IUndoRedoElement, IUndoRedoService, IWorkspaceUndoRedoElement, UndoRedo
 import { CellEditType, ICellData, ICellEditOperation, ISelectionState, NotebookCellsChangeType, NotebookRecordModelChangedEvent } from '../notebookCommon';
 import { Emitter, PauseableEmitter } from 'vs/base/common/event';
 import { URI } from 'vs/base/common/uri';
-import { IRecord, IRecordWithRole, RecordEditType, Role } from 'mote/platform/database/common/recordCommon';
+import { IRecord, IRecordWithRole, RecordEditType, Role } from 'mote/editor/common/recordCommon';
 import { IDatabaseService } from 'mote/platform/database/common/database';
 import { CellOperations } from '../editOperation';
 import { generateUuid } from 'vs/base/common/uuid';

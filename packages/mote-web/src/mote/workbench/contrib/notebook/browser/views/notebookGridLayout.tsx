@@ -4,50 +4,48 @@ import { MarkupCell } from './cellParts/markupCell';
 import { IActiveNotebookEditorDelegate } from '../notebookBrowser';
 import { useEffect, useRef } from 'react';
 import { MarkupCellViewModel } from '../viewModel/markupCellViewModel';
-import { NotebookTitle } from './notebookTitle';
+import { NotebookHead } from './notebookHead';
 
 import './media/notebookLayout.css';
+import { SpaceModel } from 'mote/editor/common/model/spaceModel';
+import { BlockModel } from 'mote/editor/common/model/blockModel';
+import { ViewModel } from 'mote/editor/common/viewModel/viewModel';
+import { ICommandDelegate } from 'mote/editor/browser/view/viewController';
+import { ViewController } from 'mote/editor/browser/view/viewController';
+import { IRecordService } from 'mote/editor/common/services/record';
+import { IPointer, IRecordProvider, ISegment } from 'mote/editor/common/recordCommon';
+import { URI } from 'vs/base/common/uri';
+import { RecordModel } from 'mote/editor/common/model/recordModel';
+import { Document } from './document';
 
 interface NotebookGirdLayoutProps {
-    markUpCellRenderer: MarkupCellRenderer;
+    model: BlockModel;
     notebookEditor: IActiveNotebookEditorDelegate;
-    cells: any[];
-}
-
-interface MarkupCellContainerProps {
-    viewCell: MarkupCellViewModel;
-    markUpCellRenderer: MarkupCellRenderer;
-    notebookEditor: IActiveNotebookEditorDelegate;
-}
-
-const MarkupCellContainer = (props: MarkupCellContainerProps) => {
-    const containerEl = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        if (containerEl) {
-            const template = props.markUpCellRenderer.renderTemplate(containerEl.current!);
-            template.instantiationService.createInstance(MarkupCell, props.viewCell, template, props.notebookEditor)
-        }
-    }, [containerEl])
-
-    return (
-        <div ref={containerEl}></div>
-    )
+    recordService: IRecordService;
 }
 
 export const NotebookGirdLayout = (props: NotebookGirdLayoutProps) => {
 
-    const renderCell = (cell:any,) => {
-       return (
-            <MarkupCellContainer key={cell.uri} viewCell={cell} markUpCellRenderer={props.markUpCellRenderer} notebookEditor={props.notebookEditor}/>
-        )
-    }
+    const { recordService } = props;
+    
+    const pageModel = props.model;
+
+    const viewModel = new ViewModel(pageModel, recordService);
+    const commandDelegate: ICommandDelegate = {
+        type: (text: string, model: RecordModel<ISegment[]>) => viewModel.type(text, model),
+        lineBreak: (model: RecordModel<ISegment[]>) => viewModel.lineBreak(model),
+    } as any;
+
+    const viewController = new ViewController(commandDelegate);
 
     return (
         <div className='notebook-layout'>
             <div></div>
-            <NotebookTitle />
-            {props.cells.map(cell => renderCell(cell))}
+            <NotebookHead
+                viewController={viewController}
+                model={pageModel.getTitleModel()}
+            />
+            <Document model={pageModel} viewController={viewController}/>
         </div>
     )
 }

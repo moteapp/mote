@@ -125,3 +125,7 @@ export function getTextFromSegment(segment: ISegment): string {
 export function getTextFromSegments(segments: ISegment[]) {
 	return segments.map(segment => getTextFromSegment(segment)).join('');
 }
+
+export interface IRecordProvider {
+	provideRecord(pointer: IPointer): IRecord;
+}

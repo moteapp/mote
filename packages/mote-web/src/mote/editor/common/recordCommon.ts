@@ -1,6 +1,8 @@
 
 //#region Basic definitions
 
+import { URI } from "vs/base/common/uri";
+
 export enum AnnotationType {
 	Bold = 'b',
 	Italics = 'i',
@@ -52,10 +54,14 @@ export interface IRecord {
 	parentId?: string;
 	spaceId?: string;
 	userId: string;
-	type: string;
+	
 }
 
-export interface IRecordModel extends IRecord {
+export interface IBlockRecord extends IRecord {
+	type: 'block' | 'page';
+}
+
+export interface IRecordModel {
 }
 
 export enum Role {
@@ -95,6 +101,10 @@ export interface IOperation {
     args: any;
 }
 
+export interface ISetOperation extends IOperation {
+	type: RecordEditType.Set;
+}
+
 interface IListAfterArgs {
 	id: string;
 	after: string;
@@ -124,4 +134,8 @@ export function getTextFromSegment(segment: ISegment): string {
 
 export function getTextFromSegments(segments: ISegment[]) {
 	return segments.map(segment => getTextFromSegment(segment)).join('');
+}
+
+export interface IRecordProvider {
+	provideRecord(uri: URI): IRecord;
 }

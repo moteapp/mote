@@ -1,6 +1,6 @@
 import { URI } from 'mote/workbench/workbench.web.main';
 import { IDatabaseProvider } from './database';
-import { IRecord, generateRecordKey } from './recordCommon';
+import { IRecord, generateRecordKey } from '../../../editor/common/recordCommon';
 import { IStorageService } from 'mote/platform/storage/common/storage';
 import { StorageScope, StorageTarget } from 'mote/platform/storage/common/storage';
 

@@ -1,4 +1,4 @@
-import { IRecord, IRecordModel, ISegment, RecordMetadata } from './recordCommon';
+import { IRecord, IRecordModel, ISegment, RecordMetadata } from '../../../editor/common/recordCommon';
 
 export class RecordModel implements IRecordModel {
 

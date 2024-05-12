@@ -1,10 +1,11 @@
-import { ContentEditable } from "mote/editor/browser/contentEditable";
-import { Selectable } from "mote/editor/browser/selectable";
-import { useEffect, useRef, useState } from "react";
-import { InputBox } from "vs/base/browser/ui/inputbox/inputBox";
+import { ContentEditable } from "mote/editor/browser/controller/contentEditable";
+import { CellViewModel } from "../../workbench/contrib/notebook/browser/viewModel/notebookViewModel";
+import { Selectable } from "mote/editor/browser/controller/selectable";
 import { localize } from "vs/nls";
+import { useState } from "react";
 
-export const NotebookTitle = () => {
+export const TextCell = (props: { cell: CellViewModel }) => {
+
     const [title, setTitle] = useState<string>('');
 
     const handleMutation = (mutation: any) => {
@@ -22,8 +23,7 @@ export const NotebookTitle = () => {
         return title;
     }
 
-    const placeholder = localize('notebookTitle.placeholder', "Untitled");
-
+    const placeholder = localize('notebookCell.placeholder', "Wrtie something or type `/` for commands");
     return (
         <div>
             <Selectable >
@@ -37,4 +37,4 @@ export const NotebookTitle = () => {
             </Selectable>
         </div>
     )
-}
+};

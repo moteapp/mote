@@ -6,3 +6,6 @@
     width: 100%;
     padding-bottom: 30vh;
 }
+.layout-content {
+    grid-column: content;
+}

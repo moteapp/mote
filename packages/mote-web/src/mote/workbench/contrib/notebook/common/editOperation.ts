@@ -1,5 +1,5 @@
 import { Lodash } from 'mote/base/common/lodash';
-import { IOperation, IRecord, RecordEditType } from 'mote/platform/database/common/recordCommon';
+import { IOperation, IRecord, RecordEditType } from 'mote/editor/common/recordCommon';
 import { Transaction } from 'mote/platform/database/common/transaction';
 
 interface ListAfterArgs {

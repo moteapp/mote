@@ -30,8 +30,8 @@ export class SpaceView extends ViewPane {
 registerAction2(class extends Action2 {
 	constructor() {
 		super({
-			id: 'space.newUntitledFile',
-			title: nls.localize2('newUntitledFile', "New Untitled File"),
+			id: 'space.newUntitledPage',
+			title: nls.localize2('newUntitledPage', "New Untitled Page"),
 			f1: false,
 			icon: Codicon.add,
 			menu: {

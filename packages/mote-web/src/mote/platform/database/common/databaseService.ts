@@ -1,4 +1,4 @@
-import { IPointer, IRecord } from 'mote/platform/database/common/recordCommon';
+import { IPointer, IRecord } from 'mote/editor/common/recordCommon';
 import { IDatabaseProvider, IDatabaseService } from './database';
 import { URI } from 'vs/base/common/uri';
 import { ErrorNoTelemetry } from 'vs/base/common/errors';

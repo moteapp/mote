@@ -22,6 +22,8 @@ import { NOTEBOOK_EDITOR_FOCUSED } from '../common/notebookContextKeys';
 import { ICodeEditor } from 'vs/editor/browser/editorBrowser';
 import { INotebookCommand } from '../common/notebookCommon';
 import { NotebookRecordModel } from '../common/model/notebookRecordModel';
+import { IRecordService } from 'mote/editor/common/services/record';
+import { BlockModel } from 'mote/editor/common/model/blockModel';
 
 export class NotebookEditorWidget extends Disposable implements INotebookEditor, INotebookEditorDelegate {
 
@@ -55,6 +57,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
         @IContextKeyService contextKeyService: IContextKeyService,
         @IInstantiationService instantiationService: IInstantiationService,
         @ILayoutService private readonly layoutService: ILayoutService,
+		@IRecordService private readonly recordService: IRecordService,
 		@IConfigurationService private readonly configurationService: IConfigurationService,
     ) {
         super();
@@ -190,17 +193,21 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
 		return this._notebookViewModel;
 	}
 
-    async setModel(model: NotebookRecordModel): Promise<void> {
+    async setModel(model: BlockModel): Promise<void> {
 		this._detachModel();
 		this._attachModel(model);
     }
 
-	private async _attachModel(model: NotebookRecordModel) {
+	private async _attachModel(model: BlockModel) {
 		this.viewModel = this.instantiationService.createInstance(NotebookViewModel, model, this._viewContext, this.getLayoutInfo(), {isReadOnly: this.isReadOnly});
 		// model attached
 		this._localCellStateListeners = this.viewModel.viewCells.map(cell => this._bindCellListener(cell));
 
-		this.root.render(React.createElement(NotebookGirdLayout, {markUpCellRenderer: this.renderer, notebookEditor: this, cells: this.viewModel?.viewCells || []}));
+		this.root.render(React.createElement(NotebookGirdLayout, {
+			model,
+			notebookEditor: this,
+			recordService: this.recordService
+		}));
 	}
 
 	private _bindCellListener(cell: ICellViewModel) {
