@@ -1,6 +1,6 @@
 import { Position } from "./core/position";
 import { EditorRange } from "./core/range";
-import { EditorSelection } from "./core/selection";
+import { EditorSelection, ISelection } from "./core/selection";
 import { ICommand } from "./editorCommon";
 
 /**
@@ -14,6 +14,70 @@ export const enum EditOperationType {
 	TypingOther = 4,
 	TypingFirstSpace = 5,
 	TypingConsecutiveSpace = 6,
+}
+
+export type PartialCursorState = CursorState | PartialModelCursorState | PartialViewCursorState;
+
+export class CursorState {
+	_cursorStateBrand: void = undefined;
+
+	public static fromModelState(modelState: SingleCursorState): PartialModelCursorState {
+		return new PartialModelCursorState(modelState);
+	}
+
+	public static fromViewState(viewState: SingleCursorState): PartialViewCursorState {
+		return new PartialViewCursorState(viewState);
+	}
+
+	public static fromModelSelection(modelSelection: ISelection): PartialModelCursorState {
+		const selection = EditorSelection.liftSelection(modelSelection);
+		const modelState = new SingleCursorState(
+			EditorRange.fromPositions(selection.getSelectionStart()),
+			SelectionStartKind.Simple, 0,
+			selection.getPosition(), 0
+		);
+		return CursorState.fromModelState(modelState);
+	}
+
+	public static fromModelSelections(modelSelections: readonly ISelection[]): PartialModelCursorState[] {
+		const states: PartialModelCursorState[] = [];
+		for (let i = 0, len = modelSelections.length; i < len; i++) {
+			states[i] = this.fromModelSelection(modelSelections[i]);
+		}
+		return states;
+	}
+
+	readonly modelState: SingleCursorState;
+	readonly viewState: SingleCursorState;
+
+	constructor(modelState: SingleCursorState, viewState: SingleCursorState) {
+		this.modelState = modelState;
+		this.viewState = viewState;
+	}
+
+	public equals(other: CursorState): boolean {
+		return (this.viewState.equals(other.viewState) && this.modelState.equals(other.modelState));
+	}
+}
+
+export class PartialModelCursorState {
+	readonly modelState: SingleCursorState;
+	readonly viewState: null;
+
+	constructor(modelState: SingleCursorState) {
+		this.modelState = modelState;
+		this.viewState = null;
+	}
+}
+
+export class PartialViewCursorState {
+	readonly modelState: null;
+	readonly viewState: SingleCursorState;
+
+	constructor(viewState: SingleCursorState) {
+		this.modelState = null;
+		this.viewState = viewState;
+	}
 }
 
 export const enum SelectionStartKind {

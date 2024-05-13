@@ -17,6 +17,8 @@ import { IPointer, IRecordProvider, ISegment } from 'mote/editor/common/recordCo
 import { URI } from 'vs/base/common/uri';
 import { RecordModel } from 'mote/editor/common/model/recordModel';
 import { Document } from './document';
+import { KeyboardShortcut, KeyboardShortcutsRegistry } from 'mote/editor/browser/controller/keyboardBindingRegistry';
+import { Lodash } from 'mote/base/common/lodash';
 
 interface NotebookGirdLayoutProps {
     model: BlockModel;
@@ -26,6 +28,8 @@ interface NotebookGirdLayoutProps {
 
 export const NotebookGirdLayout = (props: NotebookGirdLayoutProps) => {
 
+    const documentElement = useRef<HTMLDivElement>(null);
+
     const { recordService } = props;
     
     const pageModel = props.model;
@@ -34,12 +38,49 @@ export const NotebookGirdLayout = (props: NotebookGirdLayoutProps) => {
     const commandDelegate: ICommandDelegate = {
         type: (text: string, model: RecordModel<ISegment[]>) => viewModel.type(text, model),
         lineBreak: (model: RecordModel<ISegment[]>) => viewModel.lineBreak(model),
+        getSelection: () => viewModel.selection,
     } as any;
 
-    const viewController = new ViewController(commandDelegate);
+    const viewController = new ViewController(viewModel, commandDelegate);
+
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        handleEvent(e, e.key);
+    }
+
+    const handleInput = (e: Event) => {
+        handleEvent(e as KeyboardEvent, 'Input');
+    }
+
+    const handleEvent = (e: KeyboardEvent, key: string) => {
+        Lodash.findLast(KeyboardShortcutsRegistry.getStack(), (entry) => {
+            if (entry.shortcuts) {
+                const handler = entry.shortcuts[key];
+                if (handler) {
+                    return handler(e);
+                }
+            }
+            return false;
+        });
+    }
+
+    useEffect(() => {
+        if (documentElement.current) {
+            const element = documentElement.current;
+            element.addEventListener('keydown', handleKeyDown);
+            element.addEventListener('input', handleInput);
+
+            return () => {
+                element.removeEventListener('keydown', handleKeyDown);
+            };
+        }
+    });
 
     return (
-        <div className='notebook-layout'>
+        <div className='notebook-layout' 
+            contentEditable
+            ref={documentElement}
+        >
             <div></div>
             <NotebookHead
                 viewController={viewController}

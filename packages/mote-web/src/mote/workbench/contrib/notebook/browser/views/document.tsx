@@ -18,10 +18,11 @@ export const Document = (props: IDocumentProps) => {
     const blocks = props.model.getChildrenModels();
     const placeholder = localize('notebook.placeholder', 'Type something...');
 
-    const renderBlock = (model: BlockModel) => {
+    const renderBlock = (model: BlockModel, index: number) => {
         return (
             <TextEditable
                 key={model.id}
+                lineNumber={index+1}
                 model={model.getTitleModel()}
                 placeholder={placeholder}
                 viewController={props.viewController}
@@ -41,7 +42,7 @@ export const Document = (props: IDocumentProps) => {
 
     return (
         <div className="layout-content page-content" style={{fontSize: 16}}>
-            {blocks.map((model, index) => renderBlock(model))}
+            {blocks.map((model, index) => renderBlock(model, index))}
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import { Transaction } from "mote/platform/database/common/transaction";
 import { TypeOperations } from "./cursorTypeOperation";
 import { BlockModel } from "mote/editor/common/model/blockModel";
-import { IEditOperationResult, SelectionStartKind } from "mote/editor/common/cursorCommon";
+import { IEditOperationResult, PartialCursorState, SelectionStartKind } from "mote/editor/common/cursorCommon";
 import { CursorCommand } from "../commands/cursorCommand";
 import { IRecordProvider, ISegment, Role } from "mote/editor/common/recordCommon";
 import { SingleCursorState } from "mote/editor/common/cursorCommon";
@@ -11,6 +11,7 @@ import { EditorSelection } from "../core/selection";
 import { RecordModel } from "mote/editor/common/model/recordModel";
 import { ICommand } from "../editorCommon";
 import { IRecordService } from "../services/record";
+import { CursorChangeReason } from "../cursorEvents";
 
 export class CursorsController {
 
@@ -20,11 +21,30 @@ export class CursorsController {
         private model: BlockModel,
         private recordService: IRecordService,
     ){
-        this.modelState = new SingleCursorState(new EditorRange(1, 1, 1, 1), SelectionStartKind.Simple, 0, new Position(1, 1), 0);
+        this.modelState = new SingleCursorState(new EditorRange(0, 1, 0, 1), SelectionStartKind.Simple, 0, new Position(0, 1), 0);
     }
 
     get selection(): EditorSelection {
         return this.modelState.selection;
+    }
+
+    public setStates(source: string | null | undefined, reason: CursorChangeReason, states: SingleCursorState[]): boolean {
+        this.setState(states[0]);
+        return true;
+    }
+
+    public setState( modelState: SingleCursorState) {
+        const selectionStart = this.model.validateRange(modelState.selectionStart);
+
+        const position = this.model.validatePosition(modelState.position.lineNumber, modelState.position.column);
+
+        const selectionStartLeftoverVisibleColumns = modelState.selectionStart.equalsRange(selectionStart) ? modelState.selectionStartLeftoverVisibleColumns : 0;
+
+        const leftoverVisibleColumns = modelState.position.equals(position) ? modelState.leftoverVisibleColumns : 0;
+
+        modelState = new SingleCursorState(selectionStart, modelState.selectionStartKind, selectionStartLeftoverVisibleColumns, position, leftoverVisibleColumns);
+
+        this.modelState = modelState;
     }
 
     public type(text: string, model: RecordModel<ISegment[]>) {

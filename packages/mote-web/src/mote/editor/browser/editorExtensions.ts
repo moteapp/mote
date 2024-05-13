@@ -4,8 +4,9 @@ import { IEditorContribution } from "../common/editorCommon";
 import { IKeybindings, KeybindingsRegistry } from "vs/platform/keybinding/common/keybindingsRegistry";
 import { CommandsRegistry, ICommandMetadata } from "vs/platform/commands/common/commands";
 import { MenuId, MenuRegistry } from "vs/platform/actions/common/actions";
-import { ContextKeyExpr, ContextKeyExpression } from "vs/platform/contextkey/common/contextkey";
+import { ContextKeyExpr, ContextKeyExpression, IContextKeyService } from "vs/platform/contextkey/common/contextkey";
 import { ThemeIcon } from "vs/base/common/themables";
+import { IMoteEditorService } from "./services/moteEditorService";
 
 export type EditorContributionCtor = IConstructorSignature<IEditorContribution, [IMoteEditor]>;
 
@@ -147,6 +148,74 @@ export abstract class Command {
 	}
 
 	public abstract runCommand(accessor: ServicesAccessor, args: any): void | Promise<void>;
+}
+
+//#endregion
+
+//#region EditorCommand
+
+export interface IContributionCommandOptions<T> extends ICommandOptions {
+	handler: (controller: T, args: any) => void;
+}
+export interface EditorControllerCommand<T extends IEditorContribution> {
+	new(opts: IContributionCommandOptions<T>): EditorCommand;
+}
+
+export abstract class EditorCommand extends Command {
+
+	/**
+	 * Create a command class that is bound to a certain editor contribution.
+	 */
+	public static bindToContribution<T extends IEditorContribution>(controllerGetter: (editor: IMoteEditor) => T | null): EditorControllerCommand<T> {
+		return class EditorControllerCommandImpl extends EditorCommand {
+			private readonly _callback: (controller: T, args: any) => void;
+
+			constructor(opts: IContributionCommandOptions<T>) {
+				super(opts);
+
+				this._callback = opts.handler;
+			}
+
+			public runEditorCommand(accessor: ServicesAccessor, editor: IMoteEditor, args: any): void {
+				const controller = controllerGetter(editor);
+				if (controller) {
+					this._callback(controller, args);
+				}
+			}
+		};
+	}
+
+	public static runEditorCommand(
+		accessor: ServicesAccessor,
+		args: any,
+		precondition: ContextKeyExpression | undefined,
+		runner: (accessor: ServicesAccessor | null, editor: IMoteEditor, args: any) => void | Promise<void>
+	): void | Promise<void> {
+		const moteEditorService = accessor.get(IMoteEditorService);
+
+		// Find the editor with text focus or active
+		const editor = moteEditorService.getFocusedMoteEditor() || moteEditorService.getActiveMoteEditor();
+		if (!editor) {
+			// well, at least we tried...
+			return;
+		}
+
+		return editor.invokeWithinContext((editorAccessor) => {
+			const kbService = editorAccessor.get(IContextKeyService);
+			if (!kbService.contextMatchesRules(precondition ?? undefined)) {
+				// precondition does not hold
+				return;
+			}
+
+			return runner(editorAccessor, editor, args);
+		});
+	}
+
+	public runCommand(accessor: ServicesAccessor, args: any): void | Promise<void> {
+		return EditorCommand.runEditorCommand(accessor, args, this.precondition, (accessor, editor, args) => this.runEditorCommand(accessor, editor, args));
+	}
+
+	public abstract runEditorCommand(accessor: ServicesAccessor | null, editor: IMoteEditor, args: any): void | Promise<void>;
 }
 
 //#endregion

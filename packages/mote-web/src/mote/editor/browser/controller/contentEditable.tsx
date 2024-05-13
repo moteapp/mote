@@ -1,16 +1,22 @@
 import * as React from "react";
 
 import './media/editable.css';
+import * as ranges from 'mote/base/common/ranges';
+import { EditorSelection } from "mote/editor/common/core/selection";
+import { createRange } from "../element";
 
 
 export interface EditableProps {
     ref?: any;
+    lineNumber: number;
     tagName?: string;
     placeholder?: string;
     onChange?: (value: string) => void;
     onMutation?: (mutation: IMutation) => void;
     onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
-    getHtml?: () => string;
+    onSelect?: (e: EditorSelection) => void;
+    getHtml: () => string;
+    getSelection: () => EditorSelection | null;
 }
 
 export interface IMutation {
@@ -28,6 +34,7 @@ export class ContentEditable extends React.Component<EditableProps> {
     html: string = '';
     previousHtml: string = '';
     ownNodeIsComposing: boolean = false;
+    selection!: EditorSelection | null;
 
     root: HTMLDivElement | null = null;
     testDiv = document.createElement("div");
@@ -56,6 +63,22 @@ export class ContentEditable extends React.Component<EditableProps> {
 
     handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         this.props.onKeyDown?.(e);
+    }
+
+    handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const range = ranges.get()
+        if (range) {
+            this.props.onSelect?.(new EditorSelection(
+                this.props.lineNumber,
+                range.startOffset + 1||1,
+                this.props.lineNumber,
+                range.endOffset + 1||1
+            ));
+        }
+    }
+
+    handleSelect = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+
     }
 
     handleBeforeInput = (e: InputEvent) => {
@@ -88,6 +111,19 @@ export class ContentEditable extends React.Component<EditableProps> {
                     this.root.innerHTML = this.html;
                 }
             }
+
+            if (this.selection) {
+                const isContains = this.selection.startColumn != this.selection.endColumn;
+                const isSameLine = this.selection.startLineNumber === this.props.lineNumber && this.selection.endLineNumber === this.props.lineNumber;
+                if (isSameLine && !isContains) {
+                    this.root.focus();
+                    const rangeShouldBe = createRange(this.root, this.selection.startColumn-1, this.selection.endColumn-1);
+                    const currentRange = ranges.get();
+                    if (!ranges.isEqual(rangeShouldBe, currentRange)) {
+                        ranges.set(rangeShouldBe);
+                    }
+                }
+            }
         }
     }
 
@@ -101,6 +137,7 @@ export class ContentEditable extends React.Component<EditableProps> {
 
     UNSAFE_willMountOrUpdate(e: Readonly<EditableProps>) {
         this.html = e.getHtml!();
+        this.selection = e.getSelection();
     }
 
     componentWillUnmount(): void {
@@ -140,6 +177,7 @@ export class ContentEditable extends React.Component<EditableProps> {
             style: style,
             onInput: this.handleInput,
             onKeyDown: this.props.onKeyDown,
+            onClick: this.handleClick
         });
     }
 }

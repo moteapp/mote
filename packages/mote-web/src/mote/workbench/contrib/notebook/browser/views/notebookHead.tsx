@@ -20,6 +20,7 @@ export const NotebookHead = (props: INotebookHeadProps) => {
         <div className="layout-content">
             <TextEditable
                 tag='h1'
+                lineNumber={0}
                 placeholder={placeholder}
                 {...props}
             />
