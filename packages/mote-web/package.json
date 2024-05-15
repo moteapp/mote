@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mote/base": "workspace:^",
     "@mote/editor": "workspace:*",
     "marked": "4.1.0",
     "monaco-editor": "^0.48.0",

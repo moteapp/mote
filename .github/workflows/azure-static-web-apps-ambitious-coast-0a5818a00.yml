@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
+      - name: Setup Yarn
+        run: corepack enable && yarn set version stable && yarn install
       - name: Build App
         id: buildapp
         run: yarn workspace mote-web install && yarn workspace mote-web build

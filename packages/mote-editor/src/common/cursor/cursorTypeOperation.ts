@@ -6,7 +6,6 @@ import { BlockModel } from "../model/blockModel";
 import { URI } from "vs/base/common/uri";
 import { Schemas } from "@mote/base/common/network";
 import { generateUuid } from "vs/base/common/uuid";
-import { insert } from "vs/base/common/arrays";
 
 export class TypeOperations {
 

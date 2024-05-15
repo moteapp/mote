@@ -1,15 +1,15 @@
 import { Disposable } from 'vs/base/common/lifecycle';
-import { BlockModel } from "mote/editor/common/model/blockModel";
+import { BlockModel } from "@mote/editor/common/model/blockModel";
 import { CursorsController } from "../cursor/cursor";
 import { IRecordService } from "../services/record";
-import { RecordModel } from "../model/recordModel";
-import { ISegment } from "../recordCommon";
-import { IViewModel } from "../viewModelCommon";
-import { CursorChangeReason } from "../cursorEvents";
-import { PartialCursorState, SingleCursorState } from "../cursorCommon";
-import { EditorSelection } from "../core/selection";
-import { Emitter, Event } from "mote/workbench/workbench.web.main";
-import { ViewCursorStateChangedEvent } from "../viewEvents";
+import { RecordModel } from "@mote/editor/common/model/recordModel";
+import { ISegment } from "@mote/editor/common/recordCommon";
+import { IViewModel } from "@mote/editor/common/viewModelCommon";
+import { CursorChangeReason } from "@mote/editor/common/cursorEvents";
+import { SingleCursorState } from "@mote/editor/common/cursorCommon";
+import { EditorSelection } from "@mote/editor/common/core/selection";
+import { Emitter, Event } from "vs/base/common/event";
+import { ViewCursorStateChangedEvent } from "@mote/editor/common/viewEvents";
 
 export class ViewModel extends Disposable implements IViewModel {
 

@@ -1,22 +1,22 @@
-import './media/notebookLayout.css';
+import './media/moteEditor.css';
 import { useEffect, useRef } from 'react';
 import { BlockModel } from '@mote/editor/common/model/blockModel';
 import { ViewModel } from '@mote/editor/common/viewModel/viewModel';
 import { ICommandDelegate, ViewController } from '@mote/editor/browser/view/viewController';
-import { IRecordService } from 'mote/editor/common/services/record';
+import { IRecordService } from '@mote/editor/common/services/record';
 import { ISegment } from '@mote/editor/common/recordCommon';
 import { RecordModel } from '@mote/editor/common/model/recordModel';
 import { Document } from './document';
 import { KeyboardShortcutsRegistry } from '@mote/editor/browser/controller/keyboardBindingRegistry';
-import { Lodash } from 'mote/base/common/lodash';
+import { Lodash } from '@mote/base/common/lodash';
 import { EditorHead } from '@mote/editor/browser/widget/editorHead';
 
-interface NotebookGirdLayoutProps {
+interface MoteEditorWidgetProps {
     model: BlockModel;
     recordService: IRecordService;
 }
 
-export const NotebookGirdLayout = (props: NotebookGirdLayoutProps) => {
+export const MoteEditorWidget = (props: MoteEditorWidgetProps) => {
 
     const documentElement = useRef<HTMLDivElement>(null);
 
@@ -68,7 +68,7 @@ export const NotebookGirdLayout = (props: NotebookGirdLayoutProps) => {
     });
 
     return (
-        <div className='notebook-layout' 
+        <div className='page-layout' 
             contentEditable
             ref={documentElement}
         >

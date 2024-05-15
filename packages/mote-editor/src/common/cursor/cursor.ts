@@ -1,4 +1,4 @@
-import { Transaction } from "@mote/platform/database/common/transaction";
+import { Transaction } from "@mote/editor/common/transaction";
 import { TypeOperations } from "./cursorTypeOperation";
 import { BlockModel } from "@mote/editor/common/model/blockModel";
 import { IEditOperationResult, PartialCursorState, SelectionStartKind } from "@mote/editor/common/cursorCommon";
@@ -71,6 +71,7 @@ export class CursorsController {
                 const record = cursorCmd.runCommand(this.model.recordProvider);
                 this.recordService.updateRecord(record);
                 this.model.pushEditOperations(null, []);
+                console.log('executeEditOperation', record);
             });
         });
     }

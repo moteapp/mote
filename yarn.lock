@@ -2257,7 +2257,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mote/base@workspace:*, @mote/base@workspace:packages/mote-base":
+"@mote/base@workspace:*, @mote/base@workspace:^, @mote/base@workspace:packages/mote-base":
   version: 0.0.0-use.local
   resolution: "@mote/base@workspace:packages/mote-base"
   dependencies:
@@ -8539,6 +8539,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mote-web@workspace:packages/mote-web"
   dependencies:
+    "@mote/base": "workspace:^"
     "@mote/editor": "workspace:*"
     "@types/marked": "npm:^4.3.0"
     "@types/mocha": "npm:^10.0.6"

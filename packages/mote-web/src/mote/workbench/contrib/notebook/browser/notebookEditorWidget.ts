@@ -7,7 +7,6 @@ import { Range } from 'vs/editor/common/core/range';
 import { Selection } from 'vs/editor/common/core/selection';
 import { Root, createRoot } from 'react-dom/client';
 import * as React from 'react';
-import { NotebookGirdLayout } from './views/notebookGridLayout';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
 import { ServiceCollection } from 'vs/platform/instantiation/common/serviceCollection';
 import { IContextKey, IContextKeyService } from 'vs/platform/contextkey/common/contextkey';
@@ -24,6 +23,7 @@ import { INotebookCommand } from '../common/notebookCommon';
 import { NotebookRecordModel } from '../common/model/notebookRecordModel';
 import { IRecordService } from 'mote/editor/common/services/record';
 import { BlockModel } from 'mote/editor/common/model/blockModel';
+import { MoteEditorWidget } from '@mote/editor/browser/widget/moteEditorWidget';
 
 export class NotebookEditorWidget extends Disposable implements INotebookEditor, INotebookEditorDelegate {
 
@@ -203,9 +203,8 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditor,
 		// model attached
 		this._localCellStateListeners = this.viewModel.viewCells.map(cell => this._bindCellListener(cell));
 
-		this.root.render(React.createElement(NotebookGirdLayout, {
+		this.root.render(React.createElement(MoteEditorWidget, {
 			model,
-			notebookEditor: this,
 			recordService: this.recordService
 		}));
 	}
