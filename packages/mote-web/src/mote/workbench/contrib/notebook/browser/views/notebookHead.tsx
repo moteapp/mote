@@ -1,6 +1,6 @@
 import { ContentEditable, IMutation } from "mote/editor/browser/controller/contentEditable";
 import { Selectable } from "mote/editor/browser/controller/selectable";
-import { TextEditable } from "mote/editor/browser/controller/textbased";
+import { TextEditable } from "@mote/editor/browser/controller/textbased";
 import { ICommandDelegate, ViewController } from "mote/editor/browser/view/viewController";
 import { IRecord, ISegment, getTextFromSegments } from "mote/editor/common/recordCommon";
 import { RecordModel } from "mote/editor/common/model/recordModel";

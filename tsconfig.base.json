@@ -11,6 +11,7 @@
         "noFallthroughCasesInSwitch": true,
     },
     "references": [
+        { "path": "./packages/mote-editor/tsconfig.json" },
         { "path": "./packages/mote-web/tsconfig.json" }
     ]
 }

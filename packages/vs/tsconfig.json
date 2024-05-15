@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+     /* Build */
+     "paths": {
+      "vs/*": ["./*"],
+      "extensions/*": ["./extensions/*"]
+    },
+    "outDir": "./dist",
+  },
+  "include": ["base", "editor", "platform", "amdX.ts", "nls.ts"]
+}

@@ -1,5 +1,3 @@
-import { localize } from "vs/nls";
-import { Selectable } from "./selectable";
 import { ContentEditable, ContentEditableWrapper, IMutation } from "./contentEditable";
 import { ISegment, getTextFromSegments } from "mote/editor/common/recordCommon";
 import { createRef, useState, useEffect } from "react";

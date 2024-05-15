@@ -1,0 +1,1 @@
+import 'mote/editor/common/services/recordService';

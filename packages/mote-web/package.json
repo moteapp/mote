@@ -7,10 +7,12 @@
     "dev": "vite",
     "genversion": "buildnumgen",
     "build": "vite build",
+    "build:editor": "vite build -c vite.config.editor.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mote/editor": "workspace:*",
     "marked": "4.1.0",
     "monaco-editor": "^0.48.0",
     "react": "^18.2.0",

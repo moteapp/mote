@@ -12,5 +12,6 @@
     "ios": "yarn workspace mote ios"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "packageManager": "yarn@4.2.2"
 }

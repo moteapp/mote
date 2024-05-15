@@ -1,9 +1,0 @@
-.sidebar {
-    flex-grow: 0; flex-shrink: 0; pointer-events: none; position: relative; z-index: 111; background: rgb(247, 247, 245); box-shadow: rgba(0, 0, 0, 0.024) -1px 0px 0px 0px inset; width: 240px;
-}
-
-.private-section {
-    display: flex; 
-    flex-direction: column; 
-    cursor: pointer;
-}

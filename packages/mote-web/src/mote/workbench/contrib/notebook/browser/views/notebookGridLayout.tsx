@@ -1,9 +1,5 @@
-import * as DOM from 'vs/base/browser/dom';
-import { MarkupCellRenderer } from './renderers/cellRenderers';
-import { MarkupCell } from './cellParts/markupCell';
 import { IActiveNotebookEditorDelegate } from '../notebookBrowser';
 import { useEffect, useRef } from 'react';
-import { MarkupCellViewModel } from '../viewModel/markupCellViewModel';
 import { NotebookHead } from './notebookHead';
 
 import './media/notebookLayout.css';
@@ -14,7 +10,6 @@ import { ICommandDelegate } from 'mote/editor/browser/view/viewController';
 import { ViewController } from 'mote/editor/browser/view/viewController';
 import { IRecordService } from 'mote/editor/common/services/record';
 import { IPointer, IRecordProvider, ISegment } from 'mote/editor/common/recordCommon';
-import { URI } from 'vs/base/common/uri';
 import { RecordModel } from 'mote/editor/common/model/recordModel';
 import { Document } from './document';
 import { KeyboardShortcut, KeyboardShortcutsRegistry } from 'mote/editor/browser/controller/keyboardBindingRegistry';
