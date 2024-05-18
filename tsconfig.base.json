@@ -4,6 +4,8 @@
         "experimentalDecorators": true,
         "useDefineForClassFields": false,
 
+        "skipLibCheck": true,
+
         /* Linting */
         "strict": true,
         "noUnusedLocals": false,

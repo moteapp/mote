@@ -1,0 +1,27 @@
+{
+  "name": "@mote/platform",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "exports": {
+    "./*": "./dist/*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mote/base": "workspace:^"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

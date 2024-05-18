@@ -6,8 +6,8 @@ import { URI } from "vs/base/common/uri";
 import { InstantiationType, registerSingleton } from "vs/platform/instantiation/common/extensions";
 import { ErrorNoTelemetry } from "vs/base/common/errors";
 import { localize } from "vs/nls";
-import { IStorageService, StorageScope, StorageTarget } from "mote/platform/storage/common/storage";
-import { Schemas } from "mote/base/common/network";
+import { IStorageService, StorageScope, StorageTarget } from "@mote/platform/storage/common/storage";
+import { Schemas } from "@mote/base/common/network";
 
 class RecordProvider implements IRecordProvider {
 

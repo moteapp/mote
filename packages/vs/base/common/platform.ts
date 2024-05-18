@@ -103,7 +103,7 @@ if (typeof nodeProcess === 'object') {
 }
 
 // Web environment
-else if (typeof navigator === 'object' && !isElectronRenderer) {
+else if (typeof navigator === 'object' && !isElectronRenderer && navigator.userAgent) {
 	_userAgent = navigator.userAgent;
 	_isWindows = _userAgent.indexOf('Windows') >= 0;
 	_isMacintosh = _userAgent.indexOf('Macintosh') >= 0;

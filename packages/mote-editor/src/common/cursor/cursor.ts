@@ -70,8 +70,10 @@ export class CursorsController {
                 tx.addOperation(cursorCmd.operation);
                 const record = cursorCmd.runCommand(this.model.recordProvider);
                 this.recordService.updateRecord(record);
-                this.model.pushEditOperations(null, []);
-                console.log('executeEditOperation', record);
+                for (const model of opResult.models) {
+                    model.pushEditOperations(null, []);
+                }
+                console.log('executeEditOperation', cursorCmd.operation, record);
             });
         });
     }

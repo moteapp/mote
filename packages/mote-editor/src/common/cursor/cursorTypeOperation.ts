@@ -16,6 +16,7 @@ export class TypeOperations {
             commands: [
                 TypeOperations.createSetCommand(model, [[text]])
             ],
+            models: [model],
             shouldPushStackElementBefore: true,
             shouldPushStackElementAfter: true,
         }
@@ -41,6 +42,7 @@ export class TypeOperations {
             commands: [
                 command
             ],
+            models: [parent],
             shouldPushStackElementBefore: true,
             shouldPushStackElementAfter: true,
         }

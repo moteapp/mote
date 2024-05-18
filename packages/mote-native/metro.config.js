@@ -6,10 +6,16 @@ const extraNodeModules = {
 };
 
 const watchFolders = [
-    path.resolve(path.join(__dirname, '../../node_modules'))
+    path.resolve(path.join(__dirname, '../../node_modules')),
+    path.resolve(path.join(__dirname, '../'))
 ];
 
-const nodeModulesPaths = [path.resolve(path.join(__dirname, './node_modules'))];
+const nodeModulesPaths = [
+    path.resolve(path.join(__dirname, './node_modules')),
+    path.resolve(path.join(__dirname, '../'))
+];
+
+console.log('nodeModulesPaths', nodeModulesPaths);
 
 /**
  * Metro configuration

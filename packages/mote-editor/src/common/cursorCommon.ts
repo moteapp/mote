@@ -2,6 +2,7 @@ import { Position } from "./core/position";
 import { EditorRange } from "./core/range";
 import { EditorSelection, ISelection } from "./core/selection";
 import { ICommand } from "./editorCommon";
+import { RecordModel } from "./model/recordModel";
 
 /**
  * This is an operation type that will be recorded for undo/redo purposes.
@@ -152,6 +153,7 @@ export class SingleCursorState {
 
 export interface IEditOperationResult {
     type: EditOperationType;
+	models: RecordModel[];
     commands: Array<ICommand>;
     shouldPushStackElementBefore: boolean;
     shouldPushStackElementAfter: boolean;
