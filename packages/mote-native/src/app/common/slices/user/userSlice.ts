@@ -1,13 +1,16 @@
 import { createAppSlice } from "mote/app/common/createAppSlice";
 import { generateUuid } from "vs/base/common/uuid";
 
+export interface IUserProfile {
+    id: string;
+    username?: string;
+    email?: string;
+
+}
+
 export interface IUser {
     initialized: boolean;
-    profile?: {
-        id: string;
-        username?: string;
-        email?: string;
-    }
+    profile?: IUserProfile;
 }
 
 const initialState: IUser = {initialized: false, profile: undefined};

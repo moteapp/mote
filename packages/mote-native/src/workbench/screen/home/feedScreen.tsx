@@ -10,6 +10,8 @@ import { recordService } from 'mote/workbench/service/record/common/recordServic
 import { BlockModel } from '@mote/editor/common/model/blockModel';
 import { useNavigation } from '@react-navigation/native';
 import { HomeStackParamList } from './home';
+import { ICommandDelegate } from '@mote/editor/browser/view/viewController';
+import { Document } from 'mote/editor/widget/document';
 
 export const HomeScreenIcon = (props: {
   focused: boolean;
@@ -51,17 +53,17 @@ const VisitGallery = () => {
         <ScrollView style={{paddingTop: 20, flex: 1,}}>
             <View style={{flex:1, flexWrap: 'wrap', flexDirection: 'row'}}>
                 <View style={{ flexBasis: '50%'}}>
-                    {documents.filter((_, idx)=>(idx+1)%2 ===1).map((entry, index) => <Document key={index} height={180} entry={entry}/>)}
+                    {documents.filter((_, idx)=>(idx+1)%2 ===1).map((entry, index) => <DocumentContainer key={index} height={180} entry={entry}/>)}
                 </View>
                 <View style={{ flexBasis: '50%'}}>
-                    {documents.filter((_, idx)=>(idx+1)%2 ===0).map((entry, index) => <Document key={index} height={200} entry={entry}/>)}
+                    {documents.filter((_, idx)=>(idx+1)%2 ===0).map((entry, index) => <DocumentContainer key={index} height={200} entry={entry}/>)}
                 </View>
             </View>
         </ScrollView>
     )
 }
 
-const Document = (props: {entry: IPointer, height: number}) => {
+const DocumentContainer = (props: {entry: IPointer, height: number}) => {
     const { height, entry } = props;
     const navigation = useNavigation<DocumentScreenNavigationProp>(); 
     const recordProvider: IRecordProvider = {
@@ -79,8 +81,11 @@ const Document = (props: {entry: IPointer, height: number}) => {
     return (
         <TouchableOpacity style={style.documentContainer} onPress={handlePress}>
             <View style={[style.document, {height}]}>
-                <Text style={{fontWeight: 'bold'}}>{pageModel.getText()}</Text>
+                <Text style={{fontWeight: 'bold', fontSize: 16}}>{pageModel.getText()}</Text>
                 <View style={{borderColor: '#91918E32', borderBottomWidth: 1, paddingTop: 5}}></View>
+                <View>
+                   <Document model={pageModel} fontSize={8} readonly={true}/>
+                </View>
             </View>
         </TouchableOpacity>
     )

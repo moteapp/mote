@@ -1,9 +1,9 @@
 {
     "compilerOptions": {
+        "typeRoots": ["mote.d.ts"],
 
         "experimentalDecorators": true,
         "useDefineForClassFields": false,
-
         "skipLibCheck": true,
 
         /* Linting */

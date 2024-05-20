@@ -5,6 +5,7 @@ export interface IEditableProps {
     placeholder: string;
     style: StyleProp<TextStyle>;
     autoFocus?: boolean;
+    readonly?: boolean;
     children?: React.ReactNode;
 
     handleKeyPress?: (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => void;
@@ -14,7 +15,7 @@ export interface IEditableProps {
 }
 
 export const Editable = React.forwardRef<TextInput, IEditableProps>((props, ref) => {
-    const { placeholder, style, autoFocus } = props;
+    const { placeholder, style, autoFocus, readonly } = props;
 
     console.log('')
     console.log('TextInput render');
@@ -23,6 +24,7 @@ export const Editable = React.forwardRef<TextInput, IEditableProps>((props, ref)
     return (
         <TextInput 
             ref={ref}
+            readOnly={readonly}
             placeholder={placeholder} 
             style={style} 
             autoFocus={autoFocus}

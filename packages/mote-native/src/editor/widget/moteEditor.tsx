@@ -42,7 +42,7 @@ export const MoteEditor = (props: IMoteEditorProps) => {
             <ScrollView>
                 <View style={{ paddingLeft: 20, paddingRight: 20,}}>
                     <EditorHead model={pageModel.getTitleModel()} viewController={viewController}/>
-                    <Document model={pageModel} viewController={viewController}/>
+                    <Document model={pageModel} viewController={viewController} readonly={false}/>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>

@@ -6,12 +6,14 @@ import { ScrollView, View } from "react-native";
 
 export interface IDocumentProps {
     model: BlockModel;
-    viewController: ViewController;
+    viewController?: ViewController;
+    fontSize?: number;
+    readonly: boolean;
 }
 
 export const Document = (props: IDocumentProps) => {
 
-    const { model: pageModel, viewController } = props;
+    const { model: pageModel, viewController, fontSize, readonly } = props;
 
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -25,10 +27,11 @@ export const Document = (props: IDocumentProps) => {
                 <TextBased
                     key={model.id}
                     lineNumber={index+1}
-                    style={{fontSize: 16}}
+                    readonly={readonly}
+                    style={{fontSize: fontSize ?? 16}}
                     model={model.getTitleModel()}
                     placeholder={placeholder}
-                    viewController={props.viewController}
+                    viewController={viewController}
                 />
             </View>
         )

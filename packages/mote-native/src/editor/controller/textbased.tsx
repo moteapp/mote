@@ -11,10 +11,11 @@ export interface ITextbasedProps {
     placeholder: string;
     style: StyleProp<TextStyle>;
     autoFocus?: boolean;
+    readonly?: boolean;
 
     lineNumber: number;
     model: RecordModel<ISegment[]>;
-    viewController: ViewController;
+    viewController?: ViewController;
 }
 
 export const TextBased = (props: ITextbasedProps) => {
@@ -28,18 +29,18 @@ export const TextBased = (props: ITextbasedProps) => {
 
     const handleEndEditing = (e: NativeSyntheticEvent<TextInputEndEditingEventData>) => {
         console.log('end editing', e.nativeEvent.text);
-        viewController.lineBreak(model);
+        viewController?.lineBreak(model);
     }
 
     const handleChange = (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-        viewController.type(e.nativeEvent.text, model);
+        viewController?.type(e.nativeEvent.text, model);
     }
 
     const handleSelectionChange = (e: NativeSyntheticEvent<TextInputSelectionChangeEventData>) => {
         console.log('selection change', e.nativeEvent.selection);
         const selection = e.nativeEvent.selection;
         if (selection.start == selection.end) {
-            viewController.moveTo(new Position(lineNumber, selection.start), NavigationCommandRevealType.Regular);
+            viewController?.moveTo(new Position(lineNumber, selection.start), NavigationCommandRevealType.Regular);
         }
     }
 

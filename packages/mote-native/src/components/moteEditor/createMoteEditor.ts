@@ -1,9 +1,8 @@
-import { RecordService } from "@mote/editor/common/services/recordService";
-import { MoteEditor } from "./moteEditor";
+import * as mote from '@mote/editor/standalone/browser/standloneEditor';
 
 export const createMoteEditor = (
     parentElement: HTMLElement,
 ) => {
-    const moteEditor = new MoteEditor(parentElement, {} as any);
+    const moteEditor = mote.create(parentElement, {});;
     return moteEditor;
 };
