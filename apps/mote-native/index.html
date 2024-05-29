@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    </head>
+    <body>
+        <h1>Native Mote Editor</h1>
+        <div id="root"></div>
+        <span id="debug">Debug</span>
+
+        <script src="/dist/createMoteEditor.umd.js"></script>
+        <script>
+            const parentElement = document.getElementById('root');
+
+            window.moteEditor = createMoteEditor(parentElement, {});
+            moteEditor.render("debug");
+        </script>
+    </body>
+</html>

@@ -3,6 +3,8 @@ import { Root, createRoot } from 'react-dom/client';
 import { IRecordService } from "@mote/editor/common/services/record";
 import { BlockModel } from '@mote/editor/common/model/blockModel';
 import { MoteEditorWidget } from '@mote/editor/browser/widget/moteEditorWidget';
+import { IRecordProvider } from '@mote/editor/common/recordCommon';
+import { URI } from 'vs/base/common/uri';
 
 export interface IStandaloneEditorConstructionOptions {
 
@@ -24,7 +26,14 @@ export class StandaloneEditor implements IStandaloneMoteEditor {
         this.root = createRoot(this.parent);
     }
 
-    render(model: BlockModel) {
+    render(id: string) {
+        const resource = URI.from({scheme: 'record', authority: 'block', path: '/'+id})
+        const recordProvider: IRecordProvider = {
+            provideRecord: (uri: URI) => { 
+                return this.recordService.getRecord(uri)!;
+            }
+        };
+        const model = new BlockModel(resource, recordProvider);
         this.root.render(React.createElement(MoteEditorWidget, {
 			model,
 			recordService: this.recordService

@@ -11,6 +11,10 @@ export function create(domElement: HTMLElement, options?: IStandaloneEditorConst
 	return instantiationService.createInstance(StandaloneEditor, domElement, options);
 }
 
+export function onDidChange() {
+    
+}
+
 export function createMoteEditorAPI() {
     return {
         create: <any>create

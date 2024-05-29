@@ -19,6 +19,7 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 
 
 export default function App() {
+    console.log('app', store)
     return (
         <Provider store={store}>
             <NavigationContainer>

@@ -1,21 +1,29 @@
 const path = require('path');
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
+const moteBundlePath = path.resolve(path.join(__dirname, './dist/createMoteEditor.bundle'));
+
+const localPackages = {
+    '@mote/editor': path.resolve(path.join(__dirname, '../mote-editor')),
+    '@mote/base': path.resolve(path.join(__dirname, '../mote-base')),
+    '@mote/platform': path.resolve(path.join(__dirname, '../mote-platform')),
+    'vs': path.resolve(path.join(__dirname, '../vs')),
+}
+
 const extraNodeModules = {
     'modules': path.resolve(path.join(__dirname, '../../node_modules'))
 };
 
-const watchFolders = [
-    path.resolve(path.join(__dirname, '../../node_modules')),
-    path.resolve(path.join(__dirname, '../'))
-];
-
 const nodeModulesPaths = [
     path.resolve(path.join(__dirname, './node_modules')),
-    path.resolve(path.join(__dirname, '../'))
-];
+]
 
-console.log('nodeModulesPaths', nodeModulesPaths);
+const watchFolders = [
+    path.resolve(path.join(__dirname, '../../node_modules'))
+];
+for (const [, v] of Object.entries(localPackages)) {
+	watchFolders.push(v);
+}
 
 /**
  * Metro configuration
@@ -33,8 +41,8 @@ const config = {
         }),
     },
     resolver: {
-        extraNodeModules,
-        nodeModulesPaths
+        nodeModulesPaths,
+        extraNodeModules
     },
     watchFolders
 };

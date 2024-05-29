@@ -5,6 +5,8 @@ import { InstantiationService } from 'vs/platform/instantiation/common/instantia
 import { DisposableStore, IDisposable } from "vs/base/common/lifecycle";
 import { SyncDescriptor } from "vs/platform/instantiation/common/descriptors";
 import { Emitter } from "vs/base/common/event";
+import { RecordService } from "@mote/editor/common/services/recordService";
+import { IRecordService } from "@mote/editor/common/services/record";
 
 /**
  * We don't want to eagerly instantiate services because embedders get a one time chance
@@ -15,6 +17,17 @@ export module StandaloneServices {
 	for (const [id, descriptor] of getSingletonServiceDescriptors()) {
 		serviceCollection.set(id, descriptor);
 	}
+
+	const memory: Record<string, any> = {};
+	const storageService: any = {
+		get: (key: string) => memory[key],
+		store: (key: string, value: string) => {
+			console.log('set record', value)
+			memory[key] = value;
+		}
+	}
+	const recordService = new RecordService(storageService);
+	serviceCollection.set(IRecordService, recordService);
 
 	const instantiationService = new InstantiationService(serviceCollection, true);
 	serviceCollection.set(IInstantiationService, instantiationService);

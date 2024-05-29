@@ -9,6 +9,7 @@ import { useAppDispatch } from 'mote/app/common/hooks';
 import { addToHistory } from 'mote/app/common/slices/history/historySlice';
 import { MoteEditor } from 'mote/editor/widget/moteEditor';
 import { useEffect, useState } from 'react';
+import { NativeMoteEditor } from 'mote/components/moteEditor/nativeMoteEditor';
 
 export const CreateScreenIcon = (props: {
     focused: boolean;
@@ -40,7 +41,7 @@ export const CreateScreen = ({ navigation }: CreateScreenProps) => {
             <View style={{flexDirection: 'row-reverse'}}>
                 <DoneButton uri={resource}/>
             </View>
-            <MoteEditor resource={resource}/>
+            <NativeMoteEditor />
         </SafeAreaView>
     );
 };

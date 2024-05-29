@@ -2,7 +2,6 @@
   "name": "@mote/editor",
   "private": true,
   "version": "0.1.1",
-  "type": "module",
   "exports": {
     "./*": "./dist/*"
   },

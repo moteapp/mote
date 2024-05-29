@@ -5,7 +5,14 @@
   "main": "index.js",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
+  ],
+  "nohoist": [
+    "**/react-native",
+    "**/react-native/**",
+    "**/@react-native",
+    "**/@react-native/**"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

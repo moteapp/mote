@@ -6,3 +6,6 @@ export const createMoteEditor = (
     const moteEditor = mote.create(parentElement, {});;
     return moteEditor;
 };
+
+// eslint-disable-next-line import/prefer-default-export
+window.createMoteEditor = createMoteEditor;
