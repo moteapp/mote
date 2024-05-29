@@ -13,6 +13,8 @@ import { setTimeout0 } from 'vs/base/common/platform';
 import { MicrotaskDelay } from './symbols';
 import { Lazy } from 'vs/base/common/lazy';
 
+export type Thenable<T> = PromiseLike<T>;
+
 export function isThenable<T>(obj: unknown): obj is Promise<T> {
 	return !!obj && typeof (obj as unknown as Promise<T>).then === 'function';
 }

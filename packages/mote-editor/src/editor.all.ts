@@ -1,1 +1,1 @@
-import 'mote/editor/common/services/recordService';
+import '@mote/editor/common/services/recordService';

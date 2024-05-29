@@ -23,7 +23,7 @@ import { assertType } from 'vs/base/common/types';
 import { ThemeIcon } from 'vs/base/common/themables';
 import { IDisposable } from 'vs/base/common/lifecycle';
 import { KeyMod, KeyCode } from 'vs/base/common/keyCodes';
-import { ILogService } from 'mote/platform/log/common/log';
+import { ILogService } from 'vs/platform/log/common/log';
 import { getActiveElement } from 'vs/base/browser/dom';
 
 export type ServicesAccessor = InstantiationServicesAccessor;

@@ -12,9 +12,9 @@ import { IInstantiationService } from 'vs/platform/instantiation/common/instanti
 import { ILabelService } from 'vs/platform/label/common/label';
 import { IResolvedNotebookEditorModel } from './notebookCommon';
 import { NotebookRecordModel } from './model/notebookRecordModel';
-import { IRecordService } from 'mote/editor/common/services/record';
-import { IRecordProvider } from 'mote/editor/common/recordCommon';
-import { BlockModel } from 'mote/editor/common/model/blockModel';
+import { IRecordService } from '@mote/editor/common/services/record';
+import { IRecordProvider } from '@mote/editor/common/recordCommon';
+import { BlockModel } from '@mote/editor/common/model/blockModel';
 
 export interface NotebookEditorInputOptions {
   

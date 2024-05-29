@@ -21,8 +21,8 @@ import { NOTEBOOK_EDITOR_FOCUSED } from '../common/notebookContextKeys';
 import { ICodeEditor } from 'vs/editor/browser/editorBrowser';
 import { INotebookCommand } from '../common/notebookCommon';
 import { NotebookRecordModel } from '../common/model/notebookRecordModel';
-import { IRecordService } from 'mote/editor/common/services/record';
-import { BlockModel } from 'mote/editor/common/model/blockModel';
+import { IRecordService } from '@mote/editor/common/services/record';
+import { BlockModel } from '@mote/editor/common/model/blockModel';
 import { MoteEditorWidget } from '@mote/editor/browser/widget/moteEditorWidget';
 
 export class NotebookEditorWidget extends Disposable implements INotebookEditor, INotebookEditorDelegate {

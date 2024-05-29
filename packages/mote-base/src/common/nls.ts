@@ -29,6 +29,10 @@ interface IConsumerAPI {
 	getConfiguredDefaultLocale(stringFromLocalizeCall: string): string | undefined;
 }
 
+interface IBundledStrings {
+	[moduleId: string]: string[];
+}
+
 type Formatter = (message: string, args: (string | number | boolean | undefined | null)[]) => string;
 
 class NLS implements IConsumerAPI {
@@ -41,6 +45,10 @@ class NLS implements IConsumerAPI {
     ) {
         //this.bundles.set(this.locale, zhCNBundle);
     }
+
+	public register(locale: string, data: Record<string, string>): void {
+		this.bundles.set(locale, data);
+	}
 
     getConfiguredDefaultLocale(stringFromLocalizeCall: string): string | undefined {
         return this.locale;
@@ -136,4 +144,28 @@ export function localize(key: string, message: string, ...args: (string | number
  */
 export function localize(data: ILocalizeInfo | string, message: string, ...args: (string | number | boolean | undefined | null)[]): string {
 	return NLSConsumer.localize(data as any, message, ...args);
+}
+
+/**
+ *
+ * @param stringFromLocalizeCall You must pass in a string that was returned from a `nls.localize()` call
+ * in order to ensure the loader plugin has been initialized before this function is called.
+ */
+export function getConfiguredDefaultLocale(stringFromLocalizeCall: string): string | undefined;
+/**
+ * @skipMangle
+ */
+export function getConfiguredDefaultLocale(_: string): string | undefined {
+	// This returns undefined because this implementation isn't used and is overwritten by the loader
+	// when loaded.
+	return NLSConsumer.getConfiguredDefaultLocale(_);
+}
+
+/**
+ * Invoked in a built product at run-time
+ * @skipMangle
+ */
+export function create(key: string, data: Record<string, string> ): IConsumerAPI {
+	NLSConsumer.register(key, data);
+	return NLSConsumer;
 }

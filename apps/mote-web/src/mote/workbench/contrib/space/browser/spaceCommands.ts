@@ -7,7 +7,7 @@ import { generateUuid } from 'vs/base/common/uuid';
 import { URI } from 'vs/base/common/uri';
 import { IDatabaseService } from 'mote/platform/database/common/database';
 import { Schemas } from 'mote/base/common/network';
-import { IRecordService } from 'mote/editor/common/services/record';
+import { IRecordService } from '@mote/editor/common/services/record';
 
 
 KeybindingsRegistry.registerCommandAndKeybindingRule({

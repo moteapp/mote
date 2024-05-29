@@ -48,6 +48,7 @@ export class ViewController {
 			viewPosition,
 			0
 		);
+		console.log('moveTo->', cursorState.position);
 		this.viewModel.setCursorStates('', CursorChangeReason.ContentFlush, [cursorState]);
 	}
 

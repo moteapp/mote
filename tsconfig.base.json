@@ -1,7 +1,5 @@
 {
     "compilerOptions": {
-        "typeRoots": ["mote.d.ts"],
-
         "experimentalDecorators": true,
         "useDefineForClassFields": false,
         "skipLibCheck": true,
@@ -14,6 +12,6 @@
     },
     "references": [
         { "path": "./packages/mote-editor/tsconfig.json" },
-        { "path": "./packages/mote-web/tsconfig.json" }
+        { "path": "./packages/mote-base/tsconfig.json" }
     ]
 }

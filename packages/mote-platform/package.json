@@ -19,7 +19,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mote/base": "workspace:^"
+    "@mote/base": "file:../packages/mote-base"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

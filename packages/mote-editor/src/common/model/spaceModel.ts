@@ -1,6 +1,7 @@
 import { BlockModel } from "./blockModel";
 import type { IPointer, IRecord, IRecordProvider } from "../recordCommon";
 import { RecordModel } from "./recordModel";
+import { URI } from "@mote/base/common/uri";
 
 export interface ISpaceRootRecord extends IRecord {
 
@@ -8,17 +9,17 @@ export interface ISpaceRootRecord extends IRecord {
 
 export class SpaceRootModel extends RecordModel<ISpaceRootRecord> {
 
-    static createChildSpaceModel(parentModel: SpaceRootModel, pointer: IPointer, recordProvider: IRecordProvider) : SpaceModel {
-        const model = new SpaceModel(pointer, recordProvider);
+    static createChildSpaceModel(parentModel: SpaceRootModel, uri: URI, recordProvider: IRecordProvider) : SpaceModel {
+        const model = new SpaceModel(uri, recordProvider);
         model.setParent(parentModel);
         return model;
     }
 
     constructor(
-        pointer: IPointer,
+        uri: URI,
         recordProvider: IRecordProvider
     ) {
-        super(pointer, [], recordProvider);
+        super(uri, [], recordProvider);
     }
 
     get spaceIds() {
@@ -27,29 +28,29 @@ export class SpaceRootModel extends RecordModel<ISpaceRootRecord> {
 
     get spaces() {
         return this.spaceIds.map(id => 
-            SpaceRootModel.createChildSpaceModel(this, { id: id, table: 'space' }, this.recordProvider)
+            SpaceRootModel.createChildSpaceModel(this, this.uri, this.recordProvider)
         );
     }
 }
 
 export class SpaceModel extends RecordModel<IRecord> {
 
-    static createChildBlockModel(parent: SpaceModel, pointer: IPointer, recordProvider: IRecordProvider) : BlockModel {
-        let childModel = parent.getChildModel(pointer, []) as BlockModel;
+    static createChildBlockModel(parent: SpaceModel, uri: URI, recordProvider: IRecordProvider) : BlockModel {
+        let childModel = parent.getChildModel(uri, []) as BlockModel;
         if (childModel) {
             return childModel;
         }
-        childModel = new BlockModel(pointer, recordProvider);
+        childModel = new BlockModel(uri, recordProvider);
         childModel.setParent(parent);
         parent.addChildModel(childModel);
         return childModel;
     }
 
     constructor(
-        pointer: IPointer,
+        uri: URI,
         recordProvider: IRecordProvider
     ) {
-        super(pointer, [], recordProvider);
+        super(uri, [], recordProvider);
     }
 
     get pageIds() {
@@ -57,6 +58,6 @@ export class SpaceModel extends RecordModel<IRecord> {
     }
 
     get pages() {
-        return this.pageIds.map(id => SpaceModel.createChildBlockModel(this, { id: id, table: 'block' }, this.recordProvider));
+        return this.pageIds.map(id => SpaceModel.createChildBlockModel(this, this.uri, this.recordProvider));
     }
 }

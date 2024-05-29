@@ -1,5 +1,3 @@
-import { IDisposable } from "vs/base/common/lifecycle";
-
 export type EventHandler = (e: any) => boolean;
 
 export interface KeyboardShortcut {

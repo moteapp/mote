@@ -1,5 +1,5 @@
 import { Event } from 'vs/base/common/event';
-import { IRecord } from 'mote/editor/common/recordCommon';
+import { IRecord } from '@mote/editor/common/recordCommon';
 import { URI } from 'vs/base/common/uri';
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
 

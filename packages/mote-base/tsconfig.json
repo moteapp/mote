@@ -10,15 +10,20 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": false,
-    "jsx": "react-jsx",
+
+    "noFallthroughCasesInSwitch": false,
 
     /* Build */
     "declaration": true,
     "paths": {
       "@mote/base/*": ["./src/*"],
-      "vs/*": ["../vs/*"]
     },
     "outDir": "./dist",
+
+    "types": [
+      "node",
+      "trusted-types",
+    ]
   },
-  "include": ["src"]
+  "include": ["src", "./typings",]
 }

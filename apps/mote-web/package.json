@@ -6,14 +6,14 @@
   "scripts": {
     "dev": "vite",
     "genversion": "buildnumgen",
-    "build": "vite build",
-    "build:editor": "vite build -c vite.config.editor.ts",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "build": "nx vite:build",
+    "lint": "nx eslint:lint --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "nx vite:preview"
   },
   "dependencies": {
-    "@mote/base": "workspace:^",
-    "@mote/editor": "workspace:*",
+    "@mote/base": "file:../packages/mote-base",
+    "@mote/editor": "file:../packages/mote-editor",
+    "@mote/platform": "file:../packages/mote-platform",
     "marked": "4.1.0",
     "monaco-editor": "^0.48.0",
     "react": "^18.2.0",
@@ -25,6 +25,7 @@
     "@types/mocha": "^10.0.6",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
+    "@types/trusted-types": "^1.0.6",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react": "^4.2.1",

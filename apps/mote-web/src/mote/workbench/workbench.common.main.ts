@@ -6,7 +6,7 @@
 //#region --- editor/workbench core
 
 import 'vs/editor/editor.all';
-import 'mote/editor/editor.all';
+import '@mote/editor/editor.all';
 
 //import 'mote/workbench/api/browser/extensionHost.contribution';
 import 'mote/workbench/browser/workbench.contribution';
@@ -107,7 +107,7 @@ import 'mote/workbench/services/authentication/browser/authenticationService';
 import 'mote/workbench/services/authentication/browser/authenticationExtensionsService';
 import 'mote/workbench/services/authentication/browser/authenticationUsageService';
 import 'mote/workbench/services/authentication/browser/authenticationAccessService';
-import 'mote/editor/browser/services/hoverService/hoverService';
+import '@mote/editor/browser/services/hoverService/hoverService';
 import 'mote/workbench/services/outline/browser/outlineService';
 import 'mote/workbench/services/languageDetection/browser/languageDetectionWorkerServiceImpl';
 import 'vs/editor/common/services/languageFeaturesService';

@@ -1,7 +1,7 @@
 import { CellKind, ISelectionState, SelectionStateType } from 'mote/workbench/contrib/notebook/common/notebookCommon';
 import { IActiveNotebookEditor, ICellViewModel } from '../notebookBrowser';
 import { CellViewModel, NotebookViewModel } from '../viewModel/notebookViewModel';
-import { RecordEditType } from 'mote/editor/common/recordCommon';
+import { RecordEditType } from '@mote/editor/common/recordCommon';
 
 export function insertCell(
 	editor: IActiveNotebookEditor,

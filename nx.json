@@ -1,0 +1,64 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "copycss": {
+      "dependsOn": ["^copycss"],
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    },
+    "build:base": {
+      "dependsOn": ["^build:base"],
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    },
+    "build:platform": {
+      "dependsOn": ["^build:base", "^build:platform"],
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    },
+    "build:editor": {
+      "dependsOn": ["^build:editor", "^copycss"],
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    },
+    "build:web": {
+      "dependsOn": ["^build:editor", "^build:web", "^build:platform"],
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    },
+    "start:web": {
+      "dependsOn": ["^build:editor"]
+    }
+  },
+  "defaultBase": "master",
+  "plugins": [
+    {
+      "plugin": "@nx/vite/plugin",
+      "options": {
+        "buildTargetName": "vite:build",
+        "testTargetName": "test",
+        "serveTargetName": "serve",
+        "previewTargetName": "vite:preview",
+        "serveStaticTargetName": "serve-static"
+      }
+    },
+    {
+      "plugin": "@nx/react-native/plugin",
+      "options": {
+        "startTargetName": "react-native:start",
+        "upgradeTargetname": "update",
+        "bundleTargetName": "bundle",
+        "podInstallTargetName": "pod-install",
+        "runIosTargetName": "run-ios",
+        "runAndroidTargetName": "run-android",
+        "buildIosTargetName": "build-ios",
+        "buildAndroidTargetName": "build-android",
+        "syncDepsTargetName": "sync-deps"
+      }
+    }
+  ]
+}

@@ -19,7 +19,7 @@ import { ITextAreaWrapper, ITypeData, TextAreaState, _debugComposition } from 'v
 import { Position } from 'vs/editor/common/core/position';
 import { Selection } from 'vs/editor/common/core/selection';
 import { IAccessibilityService } from 'vs/platform/accessibility/common/accessibility';
-import { ILogService } from 'mote/platform/log/common/log';
+import { ILogService } from '@mote/platform/log/common/log';
 
 export namespace TextAreaSyntethicEvents {
 	export const Tap = '-monaco-textarea-synthetic-tap';

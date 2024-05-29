@@ -5,7 +5,7 @@
 
 import { toErrorMessage } from 'vs/base/common/errorMessage';
 import { ErrorNoTelemetry, getErrorMessage } from 'vs/base/common/errors';
-import { mark } from 'mote/base/common/performance';
+import { mark } from '@mote/base/common/performance';
 
 class MissingStoresError extends Error {
 	constructor(readonly db: IDBDatabase) {

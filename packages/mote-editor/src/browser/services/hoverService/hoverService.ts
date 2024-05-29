@@ -9,7 +9,7 @@ import { editorHoverBorder } from 'vs/platform/theme/common/colorRegistry';
 import { IHoverService } from 'vs/platform/hover/browser/hover';
 import { IContextMenuService } from 'vs/platform/contextview/browser/contextView';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
-import { HoverWidget } from 'mote/editor/browser/services/hoverService/hoverWidget';
+import { HoverWidget } from 'vs/editor/browser/services/hoverService/hoverWidget';
 import { IContextViewProvider, IDelegate } from 'vs/base/browser/ui/contextview/contextview';
 import { Disposable, DisposableStore, IDisposable, toDisposable } from 'vs/base/common/lifecycle';
 import { addDisposableListener, EventType, getActiveElement, isAncestorOfActiveElement, isAncestor, getWindow } from 'vs/base/browser/dom';
@@ -17,12 +17,12 @@ import { IKeybindingService } from 'vs/platform/keybinding/common/keybinding';
 import { StandardKeyboardEvent } from 'vs/base/browser/keyboardEvent';
 import { ResultKind } from 'vs/platform/keybinding/common/keybindingResolver';
 import { IAccessibilityService } from 'vs/platform/accessibility/common/accessibility';
-import { ILayoutService } from 'mote/platform/layout/browser/layoutService';
+import { ILayoutService } from 'vs/platform/layout/browser/layoutService';
 import { mainWindow } from 'vs/base/browser/window';
 import { ContextViewHandler } from 'vs/platform/contextview/browser/contextViewService';
 import type { IHoverOptions, IHoverWidget, IUpdatableHover, IUpdatableHoverContentOrFactory, IUpdatableHoverOptions } from 'vs/base/browser/ui/hover/hover';
 import type { IHoverDelegate, IHoverDelegateTarget } from 'vs/base/browser/ui/hover/hoverDelegate';
-import { UpdatableHoverWidget } from 'mote/editor/browser/services/hoverService/updatableHoverWidget';
+import { UpdatableHoverWidget } from 'vs/editor/browser/services/hoverService/updatableHoverWidget';
 import { TimeoutTimer } from 'vs/base/common/async';
 
 export class HoverService extends Disposable implements IHoverService {

@@ -22,12 +22,12 @@ import { IModelService } from 'vs/editor/common/services/model';
 import { IDatabaseService } from 'mote/platform/database/common/database';
 import { DefaultEndOfLine, ITextBufferFactory, ITextModel } from 'vs/editor/common/model';
 import { createTextBufferFactory } from 'vs/editor/common/model/textModel';
-import { getTextFromSegments } from 'mote/editor/common/recordCommon';
+import { getTextFromSegments } from '@mote/editor/common/recordCommon';
 
 
 import 'mote/workbench/contrib/notebook/browser/controller/insertCellActions';
-import { RecordService } from 'mote/editor/common/services/recordService';
-import { IRecordService } from 'mote/editor/common/services/record';
+import { RecordService } from '@mote/editor/common/services/recordService';
+import { IRecordService } from '@mote/editor/common/services/record';
 
 Registry.as<IEditorPaneRegistry>(EditorExtensions.EditorPane).registerEditorPane(
 	EditorPaneDescriptor.create(

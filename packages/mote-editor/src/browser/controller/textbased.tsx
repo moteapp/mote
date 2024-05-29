@@ -7,7 +7,7 @@ import { Editable } from "./editable";
 import { EditorSelection } from "@mote/editor/common/core/selection";
 import { NavigationCommandRevealType } from "../commands/navigation";
 import { Position } from "@mote/editor/common/core/position";
-import { DisposableStore } from "vs/base/common/lifecycle";
+import { DisposableStore } from "@mote/base/common/lifecycle";
 
 export interface TextBasedProps {
     tag?: string;

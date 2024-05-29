@@ -17,8 +17,8 @@
     "copycss": "copyfiles -u 1 src/**/*.css dist"
   },
   "dependencies": {
-    "@mote/base": "workspace:*",
-    "@mote/platform": "workspace:^",
+    "@mote/base": "file:../packages/mote-base",
+    "@mote/platform": "file:../packages/mote-platform",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

@@ -199,14 +199,11 @@ export function localize2(key: string, message: string, ...args: (string | numbe
  * @skipMangle
  */
 export function localize2(data: ILocalizeInfo | string, message: string, ...args: (string | number | boolean | undefined | null)[]): ILocalizedString {
-	return nlsConusmer.localize2(data as any, message, ...args);
-	/*
 	const original = _format(message, args);
 	return {
 		value: original,
 		original
 	};
-	*/
 }
 
 /**

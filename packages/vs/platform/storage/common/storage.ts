@@ -6,7 +6,7 @@
 import { Promises, RunOnceScheduler, runWhenGlobalIdle } from 'vs/base/common/async';
 import { Emitter, Event, PauseableEmitter } from 'vs/base/common/event';
 import { Disposable, DisposableStore, dispose, MutableDisposable } from 'vs/base/common/lifecycle';
-import { mark } from 'mote/base/common/performance';
+import { mark } from '@mote/base/common/performance';
 import { isUndefinedOrNull } from 'vs/base/common/types';
 import { InMemoryStorageDatabase, IStorage, IStorageChangeEvent, Storage, StorageHint, StorageValue } from 'vs/base/parts/storage/common/storage';
 import { createDecorator } from 'vs/platform/instantiation/common/instantiation';

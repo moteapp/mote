@@ -10,7 +10,7 @@ import * as dom from 'vs/base/browser/dom';
 import { IKeybindingService } from 'vs/platform/keybinding/common/keybinding';
 import { KeyCode } from 'vs/base/common/keyCodes';
 import { IConfigurationService } from 'vs/platform/configuration/common/configuration';
-import { EDITOR_FONT_DEFAULTS, IEditorOptions } from 'mote/editor/common/config/editorOptions';
+import { EDITOR_FONT_DEFAULTS, IEditorOptions } from '@mote/editor/common/config/editorOptions';
 import { HoverAction, HoverPosition, HoverWidget as BaseHoverWidget, getHoverAccessibleViewHint } from 'vs/base/browser/ui/hover/hoverWidget';
 import { Widget } from 'vs/base/browser/ui/widget';
 import { AnchorPosition } from 'vs/base/browser/ui/contextview/contextview';
@@ -158,7 +158,7 @@ export class HoverWidget extends Widget implements IHoverWidget {
 			const markdown = options.content;
 			const mdRenderer = this._instantiationService.createInstance(
 				MarkdownRenderer,
-				{ codeBlockFontFamily: this._configurationService.getValue<IEditorOptions>('editor').fontFamily || EDITOR_FONT_DEFAULTS.fontFamily }
+				{ codeBlockFontFamily: EDITOR_FONT_DEFAULTS.fontFamily }
 			);
 
 			const { element } = mdRenderer.render(markdown, {

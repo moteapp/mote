@@ -21,5 +21,5 @@
     },
     "outDir": "./dist",
   },
-  "include": ["base", "editor", "platform", "amdX.ts", "nls.ts"]
+  "include": ["base", "editor", "platform", "amdX.ts", "nls.ts", "monaco.d.ts",]
 }

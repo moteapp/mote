@@ -44,17 +44,6 @@ export namespace CoreNavigationCommands {
 			if (!args.position) {
 				return;
 			}
-			viewModel.model.pushStackElement();
-			const cursorStateChanged = viewModel.setCursorStates(
-				args.source,
-				CursorChangeReason.Explicit,
-				[
-					CursorMoveCommands.moveTo(viewModel, viewModel.getPrimaryCursorState(), this._inSelectionMode, args.position, args.viewPosition)
-				]
-			);
-			if (cursorStateChanged && args.revealType !== NavigationCommandRevealType.None) {
-				viewModel.revealAllCursors(args.source, true, true);
-			}
 		}
 	}
 }
