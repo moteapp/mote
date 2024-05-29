@@ -1,4 +1,4 @@
-//import zhCNBundle from 'extensions/languages/zh-cn.json';
+import * as zhCNBundle from '@mote/base/languages/zh-cn.json';
 
 let isPseudo = (typeof document !== 'undefined' && document.location && document.location.hash.indexOf('pseudo=true') >= 0);
 const DEFAULT_TAG = 'i-default';
@@ -43,7 +43,7 @@ class NLS implements IConsumerAPI {
     constructor(
         private readonly format: Formatter
     ) {
-        //this.bundles.set(this.locale, zhCNBundle);
+        this.bundles.set(this.locale, zhCNBundle);
     }
 
 	public register(locale: string, data: Record<string, string>): void {
@@ -111,6 +111,8 @@ function _format(message: string, args: (string | number | boolean | undefined |
 
 const NLSConsumer = new NLS(_format);
 
+//#region Exports
+
 /**
  * Marks a string to be localized. Returns the localized string.
  *
@@ -147,6 +149,43 @@ export function localize(data: ILocalizeInfo | string, message: string, ...args:
 }
 
 /**
+ * Marks a string to be localized. Returns an {@linkcode ILocalizedString}
+ * which contains the localized string and the original string.
+ *
+ * @param info The {@linkcode ILocalizeInfo} which describes the id and comments associated with the localized string.
+ * @param message The string to localize
+ * @param args The arguments to the string
+ *
+ * @note `message` can contain `{n}` notation where it is replaced by the nth value in `...args`
+ * @example `localize2({ key: 'sayHello', comment: ['Welcomes user'] }, 'hello {0}', name)`
+ *
+ * @returns ILocalizedString which contains the localized string and the original string.
+ */
+export function localize2(info: ILocalizeInfo, message: string, ...args: (string | number | boolean | undefined | null)[]): ILocalizedString;
+
+/**
+ * Marks a string to be localized. Returns an {@linkcode ILocalizedString}
+ * which contains the localized string and the original string.
+ *
+ * @param key The key to use for localizing the string
+ * @param message The string to localize
+ * @param args The arguments to the string
+ *
+ * @note `message` can contain `{n}` notation where it is replaced by the nth value in `...args`
+ * @example `localize('sayHello', 'hello {0}', name)`
+ *
+ * @returns ILocalizedString which contains the localized string and the original string.
+ */
+export function localize2(key: string, message: string, ...args: (string | number | boolean | undefined | null)[]): ILocalizedString;
+
+/**
+ * @skipMangle
+ */
+export function localize2(data: ILocalizeInfo | string, message: string, ...args: (string | number | boolean | undefined | null)[]): ILocalizedString {
+	return NLSConsumer.localize2(data as any, message, ...args);
+}
+
+/**
  *
  * @param stringFromLocalizeCall You must pass in a string that was returned from a `nls.localize()` call
  * in order to ensure the loader plugin has been initialized before this function is called.
@@ -169,3 +208,5 @@ export function create(key: string, data: Record<string, string> ): IConsumerAPI
 	NLSConsumer.register(key, data);
 	return NLSConsumer;
 }
+
+//#endregion

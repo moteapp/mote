@@ -1,3 +1,6 @@
+import * as zhCNBundle from 'extensions/languages/zh-cn.json';
+import * as nls from '@mote/base/common/nls';
+nls.create('zh-cn', zhCNBundle);
 
 import { mainWindow } from 'mote/base/browser/window';
 import { ColorScheme, IWorkbenchConstructionOptions, IWorkspace, IWorkspaceProvider } from 'mote/workbench/browser/web.api';

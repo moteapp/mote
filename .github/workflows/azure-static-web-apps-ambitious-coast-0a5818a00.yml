@@ -22,11 +22,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-      - name: Setup Yarn
-        run: corepack enable && yarn set version stable && yarn install
+      - name: Install dependencies
+        run: npm install
       - name: Build App
         id: buildapp
-        run: yarn workspace mote-web install && yarn workspace mote-web build
+        run: bpm run build:web
       - name: Deploy App
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1

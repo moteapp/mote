@@ -1,6 +1,6 @@
-import * as nls from 'vs/nls';
+import * as nls from '@mote/base/common/nls';
 import { ViewPane } from 'mote/workbench/browser/parts/views/viewPane';
-import { ILocalizedString } from 'vs/nls';
+import { ILocalizedString } from '@mote/base/common/nls';
 import { Root, createRoot } from 'react-dom/client';
 import { Explorer } from 'mote/app/components/explorer/explorer';
 import * as React from 'react';
