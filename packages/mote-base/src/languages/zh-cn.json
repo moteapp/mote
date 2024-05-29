@@ -1,0 +1,42 @@
+{
+    "label.dfl": "搜索",
+
+    "search": "搜索",
+
+    "customizeLayoutQuickPickTitle": "自定义布局",
+    "menuBar": "菜单栏",
+    "toggleVisibility": "切换可见性",
+    "sideBar": "主侧边栏",
+    "secondarySideBar": "次侧边栏",
+    "statusBar": "状态栏",
+    "activityBar": "活动栏",
+    "sideBarPosition": "主侧边栏位置",
+    "leftSideBar": "居左",
+    "rightSideBar": "居右",
+    "panelAlignment": "面板布局",
+    "leftPanel": "居左",
+    "rightPanel": "居右",
+    "centerPanel": "居中",
+    "justifyPanel": "两侧对齐",
+    "layoutModes": "布局模式",
+    "fullscreen": "全屏",
+    "zenMode": "专注模式",
+    "centeredLayout": "居中",
+
+    "watermark.showCommands": "显示所有命令",
+    "watermark.openFile": "打开文件",
+    "watermark.openRecent": "打开最近的文件",
+
+    "pinnedFilesView": "置顶",
+    "privateSpaceView": "私人空间",
+    "notebookTitle.placeholder": "无标题",
+    "newUntitledPage": "新建页面",
+    
+    "gettingStarted.setup.title": "开始使用Mote",
+    "gettingStarted.setupWeb.title": "在网页上设置Mote",
+
+    "keyboardLayout": "键盘布局: {0}",
+    "autoDetect": "自动检测",
+    "configureKeyboardLayout": "配置键盘布局",
+    "layoutPicks": "键盘布局  ({0})"
+}
