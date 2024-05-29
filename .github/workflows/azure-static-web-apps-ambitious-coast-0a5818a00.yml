@@ -26,7 +26,7 @@ jobs:
         run: npm install
       - name: Build App
         id: buildapp
-        run: bpm run build:web
+        run: npm run build:web
       - name: Deploy App
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
