@@ -130,11 +130,11 @@ export const NativeMoteEditor = (props: INativeMoteEditorProps) => {
     }, [webviewRef.current]);
 
     const handleMessage = (e: WebViewMessageEvent) => {
-        console.log('Message from webview:', e.nativeEvent.data);
+        console.log('Message from webview:', e);
     }
 
     const handleError = useCallback((event: WebViewErrorEvent) => {
-        console.error('Error from webview:', event.nativeEvent);
+        console.error('Error from webview:', event);
     }, []);
 
     return (

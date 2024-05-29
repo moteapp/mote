@@ -204,7 +204,7 @@ const config: IWorkbenchConstructionOptions & { folderUri?: UriComponents; works
     developmentOptions: {
         logLevel: LogLevel.Debug,
     }
-};
+} as any;
 
 // Create workbench
 create(mainWindow.document.body, {
