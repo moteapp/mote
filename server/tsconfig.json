@@ -1,0 +1,25 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+  
+
+    "paths": {
+      "mote/*": ["./src/*"]
+    },
+    "outDir": "../dist/mote-server",
+  },
+  "include": ["src", "dist/index.js", "dist/index.js"]
+}

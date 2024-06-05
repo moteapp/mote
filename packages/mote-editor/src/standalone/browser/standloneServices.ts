@@ -1,5 +1,5 @@
 import { getSingletonServiceDescriptors } from "vs/platform/instantiation/common/extensions";
-import { IInstantiationService, ServiceIdentifier } from "vs/platform/instantiation/common/instantiation";
+import { IInstantiationService, ServiceIdentifier, createDecorator } from "vs/platform/instantiation/common/instantiation";
 import { ServiceCollection } from "vs/platform/instantiation/common/serviceCollection";
 import { InstantiationService } from 'vs/platform/instantiation/common/instantiationService';
 import { DisposableStore, IDisposable } from "vs/base/common/lifecycle";
@@ -7,6 +7,10 @@ import { SyncDescriptor } from "vs/platform/instantiation/common/descriptors";
 import { Emitter } from "vs/base/common/event";
 import { RecordService } from "@mote/editor/common/services/recordService";
 import { IRecordService } from "@mote/editor/common/services/record";
+
+export interface IEditorOverrideServices {
+	[index: string]: any;
+}
 
 /**
  * We don't want to eagerly instantiate services because embedders get a one time chance
@@ -46,11 +50,33 @@ export module StandaloneServices {
 
     let initialized = false;
 	const onDidInitialize = new Emitter<void>();
-    export function initialize(): IInstantiationService {
+    export function initialize(overrides: IEditorOverrideServices): IInstantiationService {
 		if (initialized) {
 			return instantiationService;
 		}
 		initialized = true;
+
+		// Add singletons that were registered after this module loaded
+		for (const [id, descriptor] of getSingletonServiceDescriptors()) {
+			if (!serviceCollection.get(id)) {
+				serviceCollection.set(id, descriptor);
+			}
+		}
+
+		// Initialize the service collection with the overrides, but only if the
+		// service was not instantiated in the meantime.
+		for (const serviceId in overrides) {
+			if (overrides.hasOwnProperty(serviceId)) {
+				const serviceIdentifier = createDecorator(serviceId);
+				const r = serviceCollection.get(serviceIdentifier);
+				if (r instanceof SyncDescriptor) {
+					serviceCollection.set(serviceIdentifier, overrides[serviceId]);
+				}
+			}
+		}
+
+		onDidInitialize.fire();
+		
         return instantiationService;
     }
     

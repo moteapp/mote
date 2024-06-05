@@ -95,6 +95,9 @@ export const TextEditable = (props: TextBasedProps) => {
     //#region Handlers
 
     const handleMutation = (mutation: IMutation) => {
+        if (!canEdit()) {
+            return false;
+        }
         viewController.type(mutation.newValue, props.model);
         setTitle(mutation.newValue);
     }
@@ -103,6 +106,9 @@ export const TextEditable = (props: TextBasedProps) => {
     }
 
     const handleSelect = (selection: EditorSelection) => {
+        if (!canEdit()) {
+            return false;
+        }
         if (selection.startLineNumber === selection.endLineNumber
             && selection.startColumn === selection.endColumn
             && selection.startLineNumber === props.lineNumber
@@ -137,6 +143,7 @@ export const TextEditable = (props: TextBasedProps) => {
         return (
             <ContentEditableWrapper
                 ref={contentEdiableRef}
+                id={props.model.id}
                 tagName={props.tag ?? 'div'}
                 placeholder={props.placeholder}
                 lineNumber={props.lineNumber}
@@ -151,6 +158,7 @@ export const TextEditable = (props: TextBasedProps) => {
 
     return (
         <Editable
+            id={props.model.id}
             onArrowUp={moveUp}
             onArrowDown={moveDown}
             onArrowLeft={moveLeft}

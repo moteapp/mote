@@ -1,0 +1,19 @@
+.page-layout {
+    --content-width: minmax(auto,708px);
+    --margin-width: minmax(96px,1fr);
+    --header-height: minmax(96px, 165px);
+    display: grid;
+    grid-template-columns: [full-start] var(--margin-left-width,var(--margin-width)) [content-start] var(--content-width) [content-end] var(--margin-right-width,var(--margin-width)) [full-end];
+    width: 100%;
+    height: 100%;
+    grid-template-rows: 0px var(--header-height) auto;
+}
+.layout-full {
+    grid-column: full;
+}
+
+.layout-content {
+    gap: inherit;
+    min-width: 0;
+    grid-column: content;
+}

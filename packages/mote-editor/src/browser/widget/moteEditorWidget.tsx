@@ -44,7 +44,7 @@ export const MoteEditorWidget = (props: MoteEditorWidgetProps) => {
 
     const handleEvent = (e: KeyboardEvent, key: string) => {
         Lodash.findLast(KeyboardShortcutsRegistry.getStack(), (entry) => {
-            if (entry.shortcuts) {
+            if (entry.shortcuts && entry.listener) {
                 const handler = entry.shortcuts[key];
                 if (handler) {
                     return handler(e);

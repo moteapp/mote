@@ -2,6 +2,7 @@ import { Draggable } from "./draggable";
 import { Operational } from "./operational";
 
 export interface EditableProps {
+    id: string;
     onArrowUp?: () => boolean;
     onArrowDown?: () => boolean;
     onEnter?: () => boolean;
@@ -21,6 +22,7 @@ export const Editable = (props: EditableProps) => {
 
     return (
         <Operational 
+            id={props.id}
             onArrowDown={props.onArrowDown}
             onArrowUp={props.onArrowUp}
             onArrowLeft={props.onArrowLeft}

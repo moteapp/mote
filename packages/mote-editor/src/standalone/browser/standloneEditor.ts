@@ -1,13 +1,13 @@
 import { IStandaloneEditorConstructionOptions, IStandaloneMoteEditor, StandaloneEditor } from "./standloneMoteEditor";
-import { StandaloneServices } from "./standloneServices";
+import { IEditorOverrideServices, StandaloneServices } from "./standloneServices";
 
 /**
  * Create a new editor under `domElement`.
  * `domElement` should be empty (not contain other dom nodes).
  * The editor will read the size of `domElement`.
  */
-export function create(domElement: HTMLElement, options?: IStandaloneEditorConstructionOptions): IStandaloneMoteEditor {
-	const instantiationService = StandaloneServices.initialize();
+export function create(domElement: HTMLElement, options?: IStandaloneEditorConstructionOptions, override?: IEditorOverrideServices): IStandaloneMoteEditor {
+	const instantiationService = StandaloneServices.initialize(override || {});
 	return instantiationService.createInstance(StandaloneEditor, domElement, options);
 }
 

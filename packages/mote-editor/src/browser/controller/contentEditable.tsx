@@ -8,6 +8,7 @@ import { createRange } from "../element";
 
 export interface EditableProps {
     ref?: any;
+    id?: string;
     lineNumber: number;
     tagName?: string;
     placeholder?: string;
@@ -177,7 +178,8 @@ export class ContentEditable extends React.Component<EditableProps> {
             style: style,
             onInput: this.handleInput,
             onKeyDown: this.props.onKeyDown,
-            onClick: this.handleClick
+            onClick: this.handleClick,
+            'data-block-id': this.props.id
         });
     }
 }

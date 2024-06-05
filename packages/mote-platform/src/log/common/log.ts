@@ -3,18 +3,17 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import * as nls from 'vs/nls';
-import { toErrorMessage } from 'vs/base/common/errorMessage';
-import { Emitter, Event } from 'vs/base/common/event';
-import { hash } from 'vs/base/common/hash';
-import { Disposable, IDisposable } from 'vs/base/common/lifecycle';
-import { ResourceMap } from 'vs/base/common/map';
-import { isWindows } from 'vs/base/common/platform';
-import { joinPath } from 'vs/base/common/resources';
-import { Mutable, isNumber, isString } from 'vs/base/common/types';
-import { URI } from 'vs/base/common/uri';
-import { RawContextKey } from 'vs/platform/contextkey/common/contextkey';
-import { createDecorator } from 'vs/platform/instantiation/common/instantiation';
+import { toErrorMessage } from '@mote/base/common/errorMessage';
+import { Emitter, Event } from '@mote/base/common/event';
+import { hash } from '@mote/base/common/hash';
+import { Disposable, IDisposable } from '@mote/base/common/lifecycle';
+import { ResourceMap } from '@mote/base/common/map';
+import { isWindows } from '@mote/base/common/platform';
+import { joinPath } from '@mote/base/common/resources';
+import { Mutable, isNumber, isString } from '@mote/base/common/types';
+import { URI } from '@mote/base/common/uri';
+import { RawContextKey } from '@mote/platform/contextkey/common/contextkey';
+import { createDecorator } from '@mote/platform/instantiation/common/instantiation';
 
 export const ILogService = createDecorator<ILogService>('logService');
 export const ILoggerService = createDecorator<ILoggerService>('loggerService');

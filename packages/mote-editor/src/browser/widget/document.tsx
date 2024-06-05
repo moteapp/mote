@@ -2,7 +2,7 @@ import { TextEditable } from "@mote/editor/browser/controller/textbased";
 import { ViewController } from "@mote/editor/browser/view/viewController";
 import { BlockModel } from "@mote/editor/common/model/blockModel";
 import { useEffect, useReducer } from "react";
-import { localize } from "vs/nls";
+import { localize } from "@mote/base/common/nls";
 
 export interface IDocumentProps {
     model: BlockModel;

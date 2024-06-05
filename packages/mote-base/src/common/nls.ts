@@ -1,4 +1,4 @@
-import * as zhCNBundle from '@mote/base/languages/zh-cn.json';
+import * as zhCNBundle from '@mote/base/languages/zh-cn.json' with { type: "json" };
 
 let isPseudo = (typeof document !== 'undefined' && document.location && document.location.hash.indexOf('pseudo=true') >= 0);
 const DEFAULT_TAG = 'i-default';

@@ -1,0 +1,59 @@
+{
+  "name": "@mote/server",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./dist/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ../dist/mote-server/index.js",
+    "dev": "NODE_ENV=development nodemon ../dist/mote-server/index.js",
+    "build": "tsc --project tsconfig.json && tsc-alias",
+    "copy-package": "cp package.json ../dist/mote-server/package.json && cp -r public ../dist/mote-server/public"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/router": "^12.0.1",
+    "@mote/base": "file:../packages/mote-base",
+    "@mote/platform": "file:../packages/mote-platform",
+    "class-validator": "^0.14.1",
+    "dotenv": "^16.4.5",
+    "formidable": "^3.5.1",
+    "http-errors": "^2.0.0",
+    "koa": "^2.15.3",
+    "koa-body": "^6.0.1",
+    "koa-helmet": "^7.0.2",
+    "koa-logger": "^3.2.1",
+    "koa-mount": "^4.0.0",
+    "koa-router": "^12.0.1",
+    "koa-send": "^5.0.1",
+    "koa-useragent": "^4.1.0",
+    "stoppable": "^1.1.0",
+    "throng": "^5.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.15.0",
+    "@types/koa__router": "^12.0.4",
+    "@types/koa-logger": "^3.1.5",
+    "@types/koa-mount": "^4.0.5",
+    "@types/koa-router": "^7.4.8",
+    "@types/koa-send": "^4.1.6",
+    "@types/stoppable": "^1.1.3",
+    "@types/throng": "^5.0.7",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.3",
+    "tsc-alias": "^1.8.10"
+  }
+}

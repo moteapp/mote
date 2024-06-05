@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Disposable } from 'vs/base/common/lifecycle';
-import { Event } from 'vs/base/common/event';
+import { Disposable } from '@mote/base/common/lifecycle';
+import { Event } from '@mote/base/common/event';
 import { ILogger, ILogService, LogLevel, MultiplexLogger } from '@mote/platform/log/common/log';
 
 export class LogService extends Disposable implements ILogService {

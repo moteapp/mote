@@ -1,6 +1,7 @@
 import { KeyboardStackEntry } from "./keyboardStack"
 
 export interface IOperationalProps {
+    id: string;
     children: React.ReactNode;
     onArrowUp?: () => boolean;
     onArrowDown?: () => boolean;
@@ -22,7 +23,7 @@ export const Operational = (props: IOperationalProps) => {
     }
 
     return (
-        <KeyboardStackEntry shortcuts={shortcuts}>
+        <KeyboardStackEntry id={props.id} shortcuts={shortcuts}>
             {props.children}
         </KeyboardStackEntry>
     )

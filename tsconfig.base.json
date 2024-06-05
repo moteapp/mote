@@ -9,9 +9,13 @@
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "noFallthroughCasesInSwitch": true,
+        "useUnknownInCatchVariables": false,
+        "allowUnreachableCode": false,
     },
     "references": [
         { "path": "./packages/mote-editor/tsconfig.json" },
-        { "path": "./packages/mote-base/tsconfig.json" }
+        { "path": "./packages/mote-base/tsconfig.json" },
+        { "path": "./packages/vs/tsconfig.json" },
+        { "path": "./server/tsconfig.json" }
     ]
 }

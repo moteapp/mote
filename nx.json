@@ -32,6 +32,17 @@
     },
     "start:web": {
       "dependsOn": ["^build:editor"]
+    },
+    "copy:server": {
+      "dependsOn": ["^copy:server"]
+    },
+    "build:server": {
+      "dependsOn": ["^build:platform", "^build:server", "^copy:server"],
+      "outputs": ["{projectRoot}/../dist/mote-server"],
+      "cache": true
+    },
+    "start:server": {
+      "dependsOn": ["^build:server"]
     }
   },
   "defaultBase": "master",

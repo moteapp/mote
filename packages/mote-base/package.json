@@ -2,8 +2,10 @@
   "name": "@mote/base",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "exports": {
-    "./*": "./dist/*"
+    "./*.json": "./dist/*.json",
+    "./*": "./dist/*.js"
   },
   "typesVersions": {
     "*": {
@@ -13,7 +15,8 @@
     }
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.json",
+    "copyjs": "mkdir dist/browser/dompurify && cp ./src/browser/dompurify/dompurify.js dist/browser/dompurify/dompurify.js"
   },
   "author": "",
   "license": "ISC",
