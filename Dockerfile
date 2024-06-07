@@ -15,6 +15,8 @@ RUN npm install
 # Build the app
 FROM appbase as appbuilder
 
+COPY app-resources.json ./
+
 RUN mkdir dist
 RUN npm run build:online
 RUN npm run build:server

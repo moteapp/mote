@@ -7,7 +7,8 @@
             "apiVersion": "apps/v1",
             "kind": "Deployment",
             "metadata": {
-                "name": "mote-app"
+                "name": "mote-app",
+                "namespace": "mote-app"
             },
             "spec": {
                 "replicas": 1,
@@ -66,7 +67,8 @@
             "apiVersion": "v1",
             "kind": "Service",
             "metadata": {
-                "name": "mote-app"
+                "name": "mote-app",
+                "namespace": "mote-app"
             },
             "spec": {
                 "selector": {
