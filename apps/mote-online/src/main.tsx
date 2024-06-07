@@ -8,8 +8,11 @@ import { router } from 'mote/pages/router';
 import { DefaultTheme, ThemeProvider } from "styled-components"
 import { defaultColors, defaultLightTheme } from "mote/app/styles/theme"
 import { HelmetProvider } from "react-helmet-async"
+import { initI18n } from "mote/utils/i18n"
+import { TooltipStyles } from "mote/base/components/tooltip"
 
-const container = document.getElementById("root")
+initI18n("zh_CN");
+const container = document.getElementById("root");
 
 if (container) {
   const root = createRoot(container)
@@ -19,7 +22,10 @@ if (container) {
       <HelmetProvider>
         <Provider store={store}>
           <ThemeProvider theme={defaultLightTheme}>
-            <RouterProvider router={router} />
+            <>
+                <TooltipStyles />
+                <RouterProvider router={router} />
+            </>
           </ThemeProvider>
         </Provider>
       </HelmetProvider>

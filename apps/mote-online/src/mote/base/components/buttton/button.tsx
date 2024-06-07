@@ -5,7 +5,7 @@ import { darken, lighten, transparentize } from 'polished';
 import * as platform from '@mote/base/common/platform';
 import { ActionButton, IActionButtonProps } from './actionButton';
 import { s } from 'mote/app/styles/theme';
-import { ReactNode, forwardRef } from 'react';
+import { ElementType, ForwardedRef, ReactNode, forwardRef } from 'react';
 
 export const BackButton = () => {
     const theme = useTheme();
@@ -138,24 +138,29 @@ const RealButton = styled(ActionButton)<RealProps>`
   `};
 `;
 
-export interface IButtonProps extends IActionButtonProps {
+export interface IButtonProps<T> extends IActionButtonProps {
     value?: any;
     icon?: ReactNode;
     disclosure?: boolean;
     type?: string;
     neutral?: boolean;
     fullwidth?: boolean;
+
+    as?: T;
+    to?: string;
 }
 
-export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
-    function _Button(props: IButtonProps, ref) {
-        const { children, value, icon, disclosure, fullwidth, ...rest } = props;
+export const Button = forwardRef(
+    function _Button<T extends ElementType = 'button'>(
+        props: IButtonProps<T>, ref: ForwardedRef<HTMLButtonElement>
+    ) {
+        const { children, value, icon, disclosure, fullwidth, type, ...rest } = props;
 
         const hasText = !!children || value !== undefined;
         const hasIcon = icon !== undefined;
 
         return (
-            <RealButton {...props} ref={ref} 
+            <RealButton {...rest} ref={ref} 
                 $fullwidth={fullwidth}
             >
                 <Inner hasIcon={hasIcon} hasText={hasText} disclosure={disclosure}>

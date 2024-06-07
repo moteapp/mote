@@ -1,4 +1,6 @@
 import { s } from "mote/app/styles/theme";
+import { Action } from "mote/base/components/actions";
+import { NewDocumentButton } from "mote/base/components/document/newDocument";
 import { PaginatedDocuments } from "mote/base/components/document/paginatedDocuments";
 import Heading from "mote/base/components/heading";
 import { Page } from "mote/base/components/page"
@@ -15,6 +17,11 @@ export const HomePage = () => {
     return (
         <Page 
             title={t("Home")}
+            actions={
+                <Action>
+                    <NewDocumentButton />
+                </Action>
+            }
         >
             <Heading>{t("Home")}</Heading>
             <Documents>

@@ -18,8 +18,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ../dist/mote-server/index.js",
     "dev": "NODE_ENV=development nodemon ../dist/mote-server/index.js",
-    "build": "tsc --project tsconfig.json && tsc-alias",
-    "copy-package": "cp package.json ../dist/mote-server/package.json && cp -r public ../dist/mote-server/public"
+    "build": "tsc --project tsconfig.json && tsc-alias && npm run copy-package",
+    "copy-package": "cp package.json ../dist/mote-server/package.json && cp -r public ../dist/mote-server"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +28,7 @@
     "@mote/base": "file:../packages/mote-base",
     "@mote/platform": "file:../packages/mote-platform",
     "class-validator": "^0.14.1",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "formidable": "^3.5.1",
     "http-errors": "^2.0.0",

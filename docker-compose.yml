@@ -1,0 +1,20 @@
+version: "3"
+services:
+  app:
+    build: .
+    container_name: 'mote-app'
+    restart: always
+    ports:
+      - 80:80
+    healthcheck:
+      test: ["CMD", "wget", "-O", "/dev/null", "-q", "http://mote-app:80/_health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend_services
+    command: "npm run start:server"
+    image: moteapp.azurecr.io/mote/mote-app:latest
+networks:
+  backend_services:
+    driver: bridge

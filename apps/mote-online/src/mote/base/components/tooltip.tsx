@@ -58,7 +58,7 @@ const Shortcut = styled.kbd`
   border-radius: 3px;
 `;
 
-export const TooltipStyles = createGlobalStyle`
+export const TooltipStyles = createGlobalStyle<{}>`
  .tippy-box[data-animation=fade][data-state=hidden]{
     opacity:0
   }

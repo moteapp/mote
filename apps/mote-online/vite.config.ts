@@ -21,6 +21,7 @@ export default defineConfig({
   },
   build: {
     outDir: "../../dist/mote-online",
+    manifest: true,
     emptyOutDir: true,
     sourcemap: true,
     rollupOptions: {

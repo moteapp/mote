@@ -73,7 +73,28 @@ export const languageOptions = [
       label: "Tiếng Việt (Vietnamese)",
       value: "vi_VN",
     },
-  ];
+];
   
-  export const supportedLanguages: string[] = languageOptions.map((i) => i.value);
+export const supportedLanguages: string[] = languageOptions.map((i) => i.value);
+
+/**
+ * Converts a locale string from Unicode CLDR format to BCP47 format.
+ *
+ * @param locale The locale string to convert
+ * @returns The converted locale string
+ */
+export function unicodeCLDRtoBCP47(locale: string) {
+    return locale.replace("_", "-").replace("root", "und");
+}
+
+
+/**
+ * Converts a locale string from BCP47 format to Unicode CLDR format.
+ *
+ * @param locale The locale string to convert
+ * @returns The converted locale string
+ */
+export function unicodeBCP47toCLDR(locale: string) {
+    return locale.replace("-", "_").replace("und", "root");
+}
   

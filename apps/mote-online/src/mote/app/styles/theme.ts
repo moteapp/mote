@@ -66,4 +66,6 @@ export const defaultLightTheme = {
     inputBorder: colors.slateLight,
     inputBorderFocused: colors.slate,
     divider: colors.slateLight,
+    tooltipBackground: colors.almostBlack,
+    tooltipText: colors.white,
 }

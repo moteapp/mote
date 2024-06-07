@@ -21,3 +21,9 @@ export function ValidationError(message = "Validation failed") {
 		id: "validation_error",
 	});
 }
+
+export function NotFoundError(message = "Resource not found") {
+    return httpErrors(404, message, {
+        id: "not_found",
+    });
+}

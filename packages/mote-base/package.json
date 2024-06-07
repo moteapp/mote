@@ -15,8 +15,8 @@
     }
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json",
-    "copyjs": "mkdir dist/browser/dompurify && cp ./src/browser/dompurify/dompurify.js dist/browser/dompurify/dompurify.js"
+    "build": "tsc --project tsconfig.json && npm run copyjs",
+    "copyjs": "cp -rf ./src/browser/dompurify dist/browser/"
   },
   "author": "",
   "license": "ISC",

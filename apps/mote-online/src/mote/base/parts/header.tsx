@@ -4,14 +4,33 @@ import styled from "styled-components";
 import Flex from "../components/flex";
 import { s } from 'mote/app/styles/theme';
 import { depths } from "mote/app/styles/styles";
+import { ReactNode } from "react";
+import { useIsMobile } from "mote/app/hooks/useIsMobile";
 
-export const Header = () => {
+export interface IHeaderProps {
+    left?: ReactNode;
+    actions?: ReactNode;
+    hasSidebar?: boolean;
+}
+
+export const Header = ({ left, actions, hasSidebar }: IHeaderProps) => {
+    const isMobile = useIsMobile();
+    const hasMobileSidebar = hasSidebar && isMobile;
+
     return (
         <Wrapper
             align="center"
             shrink={false}
         >
+            {left || hasMobileSidebar ? (
+                <Breadcrumbs>
+                    {left}
+                </Breadcrumbs>
+            ) : null}
 
+            <Actions align="center" justify="flex-end">
+                {actions}
+            </Actions>
         </Wrapper>
     )
 }
@@ -22,6 +41,17 @@ const Breadcrumbs = styled("div")`
     align-items: center;
     padding-right: 8px;
     display: flex;
+`;
+
+const Actions = styled(Flex)`
+  flex-grow: 1;
+  flex-basis: 0;
+  min-width: auto;
+  padding-left: 8px;
+
+  ${breakpoint("tablet")`
+    position: unset;
+  `};
 `;
 
 interface WrapperProps {

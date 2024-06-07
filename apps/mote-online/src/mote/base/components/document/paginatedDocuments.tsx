@@ -1,7 +1,9 @@
+import { PaginatedList } from "../list/paginatedList"
+
 export const PaginatedDocuments = () => {
     return (
-        <div>
-            <h1>Documents</h1>
-        </div>
+        <PaginatedList >
+            
+        </PaginatedList>
     )
 }

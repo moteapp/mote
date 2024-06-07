@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { environment } from 'mote/common/enviroment.js';
 import { Context, Next } from 'koa';
+import { readManifestFile } from 'mote/utils/manifest.js';
 
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
 const __dirname = path.dirname(__filename); // get the name of the directory
@@ -42,7 +43,7 @@ export const renderApp = async (
     const page = await readIndexFile();
 
     const scriptTags = environment.isProduction 
-        ? `<script type="module" nonce="${ctx.state.cspNonce}" src="/static/"></script>`
+        ? `<script type="module" nonce="${ctx.state.cspNonce}" src="/static/${readManifestFile()[entry]["file"]}"></script>`
         : `<script type="module" nonce="${ctx.state.cspNonce}">
             import RefreshRuntime from "${viteHost}/static/@react-refresh"
             RefreshRuntime.injectIntoGlobalHook(window)
