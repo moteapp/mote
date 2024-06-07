@@ -11,7 +11,7 @@ env:
     CLUSTER_RESOURCE_GROUP: MoteForWeb
     CONTAINER_NAME: mote/mote-app
     DEPLOYMENT_MANIFEST_PATH: |
-        ./app-resources.json
+        ./k8s.manifest.yml
 jobs:
     buildImage:
         permissions:
