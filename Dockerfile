@@ -27,6 +27,3 @@ ARG APP_VERSION=0.1.0
 
 # Set the environment variable for the app version number
 ENV APP_VERSION=$APP_VERSION
-
-# Start the app
-CMD [ "npm", "run", "start:server" ]
