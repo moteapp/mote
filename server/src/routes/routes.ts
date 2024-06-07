@@ -5,6 +5,7 @@ import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { userAgent, UserAgentContext } from 'koa-useragent';
+import compress from 'koa-compress';
 import { renderApp } from './app.js';
 import { ConsoleLogger } from '@mote/platform/log/common/log';
 import { supportedLanguages } from '@mote/base/common/i18n/i18n';
@@ -77,6 +78,8 @@ if (environment.isProduction) {
         }
     });
 }
+
+router.use(compress());
 
 router.get("/locales/:lng.json", async (ctx) => {
     const { lng } = ctx.params;
