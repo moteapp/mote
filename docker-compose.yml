@@ -14,7 +14,6 @@ services:
     networks:
       - backend_services
     command: "npm run start:server"
-    image: moteapp.azurecr.io/mote/mote-app:latest
 networks:
   backend_services:
     driver: bridge
