@@ -35,21 +35,21 @@ spec:
             cpu: "75m"
         startupProbe:
           httpGet:
-            path: /
+            path: /_health
             port: 80
           initialDelaySeconds: 3
           periodSeconds: 3
           failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /
+            path: /_health
             port: 80
           initialDelaySeconds: 3
           periodSeconds: 3
           failureThreshold: 3
         livenessProbe:
           httpGet:
-            path: /
+            path: /_health
             port: 80
           initialDelaySeconds: 3
           periodSeconds: 3

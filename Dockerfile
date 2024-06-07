@@ -29,4 +29,4 @@ ARG APP_VERSION=0.1.0
 ENV APP_VERSION=$APP_VERSION
 
 # Start the app
-CMD [ "npm", "run", "start:server" ]
+CMD [ "sh", "-c", "npm run start:server" ]
