@@ -66,7 +66,7 @@ async function start(id: number, disconnect: () => void) {
         );
     });
 
-    server.listen(80);
+    server.listen(80, '0.0.0.0');
 
     Shutdown.add(`server-${id}`, ShutdownOrder.last, async () => {
         new Promise((resolve, reject) => {
