@@ -1,3 +1,4 @@
+import { darken } from 'polished';
 import { DefaultTheme} from 'styled-components';
 
 /**
@@ -54,6 +55,14 @@ export const defaultColors = {
     ...colors
 }
 
+const spacing = {
+    sidebarWidth: 260,
+    sidebarRightWidth: 300,
+    sidebarCollapsedWidth: 16,
+    sidebarMinWidth: 200,
+    sidebarMaxWidth: 600,
+};
+
 export const defaultLightTheme = {
     ...defaultColors,
     background: colors.white,
@@ -68,4 +77,10 @@ export const defaultLightTheme = {
     divider: colors.slateLight,
     tooltipBackground: colors.almostBlack,
     tooltipText: colors.white,
+    sidebarBackground: colors.warmGrey,
+    sidebarActiveBackground: "#d7e0ea",
+    sidebarControlHoverBackground: "rgb(138 164 193 / 20%)",
+    sidebarDraftBorder: darken("0.25", colors.warmGrey),
+    sidebarText: "rgb(78, 92, 110)",
+    ...spacing,
 }

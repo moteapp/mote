@@ -12,11 +12,10 @@ export const AuthenticatedLayout = ({
     
 }: IAuthenticatedLayoutProps) => {
 
+
     const sidebar = (
         <Fade>
-            <Routes>
-                <Route element={<SidebarPart />} />
-            </Routes>
+            <SidebarPart />
         </Fade>
     );
 

@@ -27,11 +27,11 @@ spec:
           value: production
         resources:
           requests:
-            cpu: "10m"
+            cpu: "50m"
             memory: "256Mi"
           limits:
             memory: "1Gi"
-            cpu: "75m"
+            cpu: "200m"
         startupProbe:
           httpGet:
             path: /_health

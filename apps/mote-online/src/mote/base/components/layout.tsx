@@ -3,6 +3,8 @@ import styled, { DefaultTheme } from "styled-components";
 import Flex from "./flex";
 import { s } from "mote/app/styles/theme";
 import { breakpoint } from "mote/app/styles/breakpoint";
+import { MenuProvider } from "@ariakit/react";
+import { SkipNavContent } from "./skipNav";
 
 export interface ILayoutProps {
     title?: string;
@@ -19,10 +21,16 @@ export const Layout = forwardRef(function _Layout(
     return (
         <Container column auto ref={ref}>
             <Container auto>
-                {sidebar}
+                <MenuProvider>
+                    {sidebar}
+                </MenuProvider>
+                <SkipNavContent />
                 <Content 
                     auto
                     justify="center"
+                    style={{
+                        marginLeft: 260
+                    }}
                 >
                     {children}
                 </Content>

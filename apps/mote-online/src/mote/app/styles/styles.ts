@@ -25,3 +25,35 @@ const isTouchDevice = () => {
  * using `&:hover {...}`.
  */
 export const hover = isTouchDevice() ? "active" : "hover";
+
+/**
+ * Mixin to hide scrollbars.
+ *
+ * @returns string of CSS
+ */
+export const hideScrollbars = () => `
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+/**
+ * Mixin on any component with relative positioning to add additional hidden clickable/hoverable area
+ *
+ * @param pixels
+ * @returns
+ */
+export const extraArea = (pixels: number): string => `
+  &::before {
+    position: absolute;
+    content: "";
+    top: -${pixels}px;
+    right: -${pixels}px;
+    left: -${pixels}px;
+    bottom: -${pixels}px;
+  }
+`;
+

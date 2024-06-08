@@ -36,9 +36,21 @@ export const renderApp = async (
     ctx: Context,
     next: Next,
     options: {
-
+        title?: string;
+        description?: string;
+        canonical?: string;
+        shortcutIcon?: string;
+        rootShareId?: string;
     } = {}
 ) => {
+
+    const { 
+        title, 
+        description, 
+        canonical, 
+        shortcutIcon = "/images/mote-192.png", 
+        rootShareId 
+    } = options;
 
     const page = await readIndexFile();
 
@@ -55,6 +67,7 @@ export const renderApp = async (
         <script type="module" nonce="${ctx.state.cspNonce}" src="${viteHost}/static/${entry}"></script>
     `;
     ctx.body = page.toString()
-        .replace(/\{script-tags\}/g, scriptTags);
-
+        .replace(/\{script-tags\}/g, scriptTags)
+        .replace(/\{shortcut-icon\}/g, shortcutIcon)
+        .replace(/\{csp-nonce\}/g, ctx.state.cspNonce);
 }

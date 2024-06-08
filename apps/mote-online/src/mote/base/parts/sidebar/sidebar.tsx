@@ -1,18 +1,21 @@
 import { breakpoint } from "mote/app/styles/breakpoint";
 import { depths } from "mote/app/styles/styles";
 import Flex from "mote/base/components/flex";
-import { ForwardedRef, forwardRef, useState } from "react";
+import { Children, ForwardedRef, ReactNode, forwardRef, useState } from "react";
 import styled, { css, useTheme } from "styled-components";
 import { s } from "mote/app/styles/theme";
 import { ToggleButton } from "./toggleSidebarButton";
+import { AccountMenu } from "./accountMenu";
+import { SidebarButton } from "./sidebarButton";
+import { Avatar } from "mote/base/components/avatar";
 
 export interface ISidebarProps {
-
+    children?: ReactNode;
 }
 
 export const Sidebar = forwardRef(function _Sidebar(
     {
-        
+        children
     }: ISidebarProps,
     ref: ForwardedRef<HTMLDivElement>
 ){
@@ -24,20 +27,43 @@ export const Sidebar = forwardRef(function _Sidebar(
     const maxWidth = theme.sidebarMaxWidth;
     const minWidth = theme.sidebarMinWidth + 16; // padding
 
-    const width = 300;
+    const width = 260;
     const isSmallerThanMinimum = width < minWidth;
+
+    const user = {
+        name: 'Evan',
+        color: '#FF5C80',
+        initial: 'E'
+    }
 
     return (
         <>
             <Container 
                 ref={ref}
+                style={{ width }}
                 $isAnimating={isAnimating}
                 $isHovering={isHovering}
                 $isSmallerThanMinimum={isSmallerThanMinimum}
                 $mobileSidebarVisible={false}
                 $collapsed={false}
             >
-
+                {children}
+                <AccountMenu>
+                    <SidebarButton 
+                        title="Evan"
+                        position="bottom"
+                        image={
+                            <Avatar
+                              alt={user.name}
+                              model={user}
+                              size={24}
+                              showBorder={false}
+                              style={{ marginLeft: 4 }}
+                            />
+                        }
+                    >
+                    </SidebarButton>
+                </AccountMenu>
             </Container>
         </>
     )
