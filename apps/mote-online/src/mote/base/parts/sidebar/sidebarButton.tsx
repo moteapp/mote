@@ -8,7 +8,7 @@ import { Text } from "mote/base/components/text";
 export interface ISidebarButtonProps {
     title?: ReactNode;
     image?: ReactNode;
-    position: "top" | "bottom";
+    position?: "top" | "bottom";
 }
 
 export const SidebarButton = forwardRef(function _SidebarButton(

@@ -5,7 +5,7 @@ type JustifyValues = CSSProperties["justifyContent"];
 
 type AlignValues = CSSProperties["alignItems"];
 
-const Flex = styled.div<{
+export const Flex = styled.div<{
   auto?: boolean;
   column?: boolean;
   align?: AlignValues;
@@ -33,6 +33,22 @@ const Flex = styled.div<{
   gap: ${({ gap }) => (gap ? `${gap}px` : "initial")};
   min-height: 0;
   min-width: 0;
+`;
+
+export const Section = styled(Flex)`
+  position: relative;
+  flex-direction: column;
+  margin: 0 8px 12px;
+  min-width: ${(props) => props.theme.sidebarMinWidth}px;
+  flex-shrink: 0;
+
+  &:first-child {
+    margin-top: 20px;
+  }
+
+  &:empty {
+    display: none;
+  }
 `;
 
 export default Flex;

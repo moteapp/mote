@@ -5,6 +5,7 @@ export interface ISVGIconStyles {
 	width?: string;
 	height?: string;
     name: IconName;
+    size?: number;
     style?: React.CSSProperties;
 }
 

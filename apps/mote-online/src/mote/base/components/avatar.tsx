@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Flex from "./flex";
+import { s } from "mote/app/styles/theme";
 
 export enum AvatarSize {
     Small = 16,
@@ -93,4 +94,10 @@ const Initials = styled(Flex)<{
     flex-shrink: 0;
     font-size: ${(props) => props.size / 2}px;
     font-weight: 500;
+`;
+
+export const TeamLogo = styled(Avatar)`
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px ${s("divider")};
+    border: 0;
 `;
