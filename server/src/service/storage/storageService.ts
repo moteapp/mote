@@ -1,9 +1,10 @@
 import * as MysqlClient from 'mysql2';
-import { FindOptions, IStorageService } from './storage.js';
+import { FindOptions, IRetriveOptions, IStorageService } from './storage.js';
 import { IEntity, IEntityWithNamespace, isEntityProperty, listEntityProperties } from '@mote/client/model/entity';
 import { QueryBuilder } from './queryBuilder.js';
 import { InstantiationType, registerSingleton} from '@mote/platform/instantiation/common/extensions';
 import { environment } from 'mote/common/enviroment.js';
+import { ResultSetHeader } from 'mysql2';
 
 const host = environment.MYSQL_HOST;
 const user = environment.MYSQL_USER;
@@ -86,10 +87,22 @@ class MySqlStorageService implements IStorageService {
 		return result
 	}
 
-    async retrieve<T extends IEntity>(id: number, namespace: string) {
+    async retrieve<T extends IEntity>(id: number, namespace: string, options?: IRetriveOptions<T>) {
         const results = await this.find<T>({id}, namespace);
         if (results.length === 1) {
-            return results[0];
+            let result = results[0];
+            if (options?.mapper) {
+                const newItem = {} as T;
+                Object.keys(result).forEach((key) => {
+                    const property = key as keyof T;
+                    newItem[options.mapper![key] as keyof T || property] = result[property];
+                });
+                result = newItem;
+            }
+            if (options?.transform) {
+                result = options.transform(result);
+            }
+            return result;
         }
         return null;
     }
@@ -114,7 +127,8 @@ class MySqlStorageService implements IStorageService {
             }
         });
         const [ sql, args ] = query.toInsertSql();
-        await this.execute(sql, args);
+        const result = await this.execute(sql, args) as any as ResultSetHeader;
+        return result.insertId;
     }
 }
 

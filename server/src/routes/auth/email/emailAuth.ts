@@ -5,6 +5,7 @@ import { APIContext } from 'mote/context/context.js';
 import { instantiationService } from 'mote/service/service.all.js';
 import { IUserService } from 'mote/service/user/user.js';
 import { getUserForEmailSigninToken } from 'mote/utils/jwt.js';
+import { signIn } from 'mote/utils/authentication.js';
 
 export const emailAuthRouter = new Router();
 
@@ -27,9 +28,9 @@ emailAuthRouter.post(
             return;
         }
 
+        // respond with success regardless of whether an email was sent
         ctx.body = {
             success: true,
-            redirect: '/home'
         };
         return;
 });
@@ -41,9 +42,13 @@ emailAuthRouter.get(
         const {token} = ctx.input.query;
 
         const user = await getUserForEmailSigninToken(token);
-        ctx.body = {
-            success: true,
-        };
-        return;
+
+        // set cookies on response and redirect to team subdomain
+        await signIn(ctx, "email", {
+            user,
+            team: {} as any,
+            isNewTeam: false,
+            isNewUser: false,
+        });
     }
 )

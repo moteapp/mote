@@ -1,7 +1,8 @@
 import { IUserModel } from "@mote/client/model/model";
 import { Next } from "koa";
-import { AuthenticationError } from "mote/common/errors";
-import { AppContext, AuthenticationType } from "mote/context/context";
+import { AuthenticationError } from "mote/common/errors.js";
+import { AppContext, AuthenticationType } from "mote/context/context.js";
+import { getUserForJWT } from "mote/utils/jwt.js";
 
 export type AuthenticationOptions = {
     /** An admin user role is required to access the route. */
@@ -31,6 +32,8 @@ async function authMiddleware(ctx: AppContext, next: Next) {
                 `Bad Authorization header format. Format is "Authorization: Bearer <token>"`
             );
         }
+    } else {
+        token = ctx.cookies.get("accessToken");
     }
 
     try {
@@ -40,6 +43,15 @@ async function authMiddleware(ctx: AppContext, next: Next) {
 
         let user: IUserModel | null;
         let type: AuthenticationType;
+
+        type = AuthenticationType.APP;
+        user = await getUserForJWT(String(token));
+
+        ctx.state.auth = {
+            user,
+            token: String(token),
+            type,
+        };
 
     } catch (error) {
         throw error;

@@ -10,27 +10,30 @@ import { defaultColors, defaultLightTheme } from "mote/app/styles/theme"
 import { HelmetProvider } from "react-helmet-async"
 import { initI18n } from "mote/utils/i18n"
 import { TooltipStyles } from "mote/base/components/tooltip"
+import { fetchAuthInfo } from "mote/app/slices/user/userAPI"
 
 initI18n("zh_CN");
 const container = document.getElementById("root");
 
-if (container) {
-  const root = createRoot(container)
+fetchAuthInfo();
 
-  root.render(
-    <React.StrictMode>
-      <HelmetProvider>
-        <Provider store={store}>
-          <ThemeProvider theme={defaultLightTheme}>
-            <>
-                <TooltipStyles />
-                <RouterProvider router={router} />
-            </>
-          </ThemeProvider>
-        </Provider>
-      </HelmetProvider>
-    </React.StrictMode>,
-  )
+if (container) {
+    const root = createRoot(container)
+
+    root.render(
+      <React.StrictMode>
+        <HelmetProvider>
+          <Provider store={store}>
+            <ThemeProvider theme={defaultLightTheme}>
+              <>
+                  <TooltipStyles />
+                  <RouterProvider router={router} />
+              </>
+            </ThemeProvider>
+          </Provider>
+        </HelmetProvider>
+      </React.StrictMode>,
+    )
 } else {
   throw new Error(
     "Root element with ID 'root' was not found in the document. Ensure there is a corresponding HTML element with the ID 'root' in your HTML file.",

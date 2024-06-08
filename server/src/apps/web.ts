@@ -5,8 +5,9 @@ import crypto from 'crypto';
 import { koaRoute } from 'mote/routes/routes.js';
 import koahelmet from 'koa-helmet';
 import { environment } from 'mote/common/enviroment.js';
-import { authApp } from 'mote/routes/auth/auth.js';
+import { authApp } from 'mote/routes/auth/authRoute.js';
 import { ConsoleLogger } from '@mote/platform/log/common/log';
+import { apiApp } from 'mote/routes/api/apiRoute.js';
 
 const { contentSecurityPolicy, dnsPrefetchControl, referrerPolicy } = koahelmet;
 
@@ -37,6 +38,7 @@ const logger = new ConsoleLogger();
 export function initializeWeb(app: Koa = new Koa(), server?: Server) {
 
     app.use(mount("/auth", authApp));
+    app.use(mount("/api", apiApp));
 
     app.use((ctx, next) => {
         ctx.state.cspNonce = crypto.randomBytes(16).toString("hex");

@@ -1,4 +1,4 @@
-import { IsBoolean, IsByteLength, IsIn } from 'class-validator';
+import { IsBoolean, IsByteLength, IsIn, IsNotEmpty, IsUrl } from 'class-validator';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -51,6 +51,29 @@ class Environment {
     public MYSQL_PASSWORD = process.env.MYSQL_PASSWORD || '';
 
     public MYSQL_DATABASE = process.env.MYSQL_DATABASE || '';
+
+    /**
+     * The fully qualified, external facing domain name of the server.
+     */
+    @IsNotEmpty()
+    @IsUrl({
+        protocols: ["http", "https"],
+        require_protocol: true,
+        require_tld: false,
+    })
+    public URL = process.env.URL || "";
+
+    /**
+     * Returns true if the current installation is the cloud hosted version at
+     * getoutline.com
+     */
+    public get isCloudHosted() {
+        return [
+        "https://www.mote.dev",
+        "https://app.mote.dev",
+        "https://app.mote.dev:3000",
+        ].includes(this.URL);
+    }
 
     /**
      * Convert a string to a boolean. Supports the following:

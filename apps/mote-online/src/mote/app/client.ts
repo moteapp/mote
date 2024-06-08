@@ -172,7 +172,7 @@ class Client {
     
         get = <T = any>(
             path: string,
-            data: any | undefined,
+            data?: any | undefined,
             options?: FetchOptions
         ) => this.fetch<T>(path, "GET", data, options);
         

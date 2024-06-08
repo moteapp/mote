@@ -13,7 +13,7 @@ export const BackButton = () => {
     const { t } = useTranslation();
     return (
         <Link href={'/'}>
-            <SVGIcon name='chevronRight' width='24px' /> {t("Back to home")}
+            <SVGIcon name='back' size={24} /> {t("Back to home")}
         </Link>
     )
 }

@@ -11,6 +11,11 @@ export interface FindOptions<T> {
 	transform?: (item: T) => T;
 }
 
+export interface IRetriveOptions<T> {
+	mapper?: Record<string, string>;
+	transform?: (item: T) => T;
+}
+
 export interface SaveOptions<T> {
 
 }
@@ -26,9 +31,9 @@ export interface IStorageService {
 
 	find<T extends IEntity>(query: Record<string, any>, namespace: string, options?: FindOptions<T>): Promise<T[]>;
 
-	create<T extends IEntityWithNamespace>(item: Partial<T> & Pick<T, 'namespace'> & Omit<T, 'id'>): Promise<void>;
+	create<T extends IEntityWithNamespace>(item: Partial<T> & Pick<T, 'namespace'> & Omit<T, 'id'>): Promise<number>;
 
 	update<T extends IEntityWithNamespace>(item: Partial<T> & Pick<T, 'namespace'>): Promise<Omit<T, 'namespace'>>;
 
-	retrieve<T extends IEntity>(id: number, namespace: string): Promise<T|null>;
+	retrieve<T extends IEntity>(id: number, namespace: string, options?: IRetriveOptions<T>): Promise<T|null>;
 }

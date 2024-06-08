@@ -14,3 +14,14 @@ export interface ITeamModel extends IEntity {
     subdomain: string;
     domain: string;
 }
+
+export interface ISpaceModel extends IEntity {
+    name: string;
+    domain: string;
+    subdomain: string;
+}
+
+export interface ISpaceMemberModel extends IEntity {
+    userId: number;
+    spaceId: number;
+}

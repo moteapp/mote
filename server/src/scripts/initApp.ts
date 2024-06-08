@@ -1,25 +1,31 @@
+import { IUserModel } from "@mote/client/model/model.js";
 import { instantiationService } from "../service/service.all.js";
-import { ITeamService } from "../service/team/team.js";
+import { ISpaceService } from "../service/space/space.js";
 import { IUserService } from "../service/user/user.js";
 
 const email = process.argv[2];
 
 export default async function main(exit = false) {
     await instantiationService.invokeFunction(async (accessor) => {
-        const teamService = accessor.get(ITeamService);
+        const spaceService = accessor.get(ISpaceService);
         const userService = accessor.get(IUserService);
 
-        const teamCount = await teamService.count({ 1: 1 });
+        const userCount = await userService.count({ email });
 
-        if (teamCount === 0) {
-            const team = await teamService.create({
-                name: 'Wiki'
-            });
-            
-            await userService.create({
+        if (userCount === 0) {
+            const userId = await userService.create({
                 email,
                 username: email.split("@")[0],
             });
+            
+            const spaceId = await spaceService.create({
+                name: 'Wiki'
+            });
+
+            await spaceService.addMember(
+                spaceId,
+                userId,
+            );
         }
 
         const users = await userService.find({ email });

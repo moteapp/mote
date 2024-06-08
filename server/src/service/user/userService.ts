@@ -37,6 +37,8 @@ const transform = (item: IUserModel) => {
 class UserService implements IUserService {
     _serviceBrand: undefined;
 
+    private namespace = 'user';
+
     constructor(
         @IStorageService private storageService: IStorageService
     ) {
@@ -56,7 +58,7 @@ class UserService implements IUserService {
         return users[0] || null;
     }
 
-    create(item: Partial<IUserModel> & Omit<IUserModel, "id">): Promise<void> {
+    create(item: Partial<IUserModel> & Omit<IUserModel, "id">): Promise<number> {
         // Generate a random jwt secret
         const jwtSecret = crypto.randomBytes(64).toString("hex");
         // encrypt the jwt secret
@@ -72,8 +74,9 @@ class UserService implements IUserService {
     update(item: Partial<IUserModel>): Promise<IUserModel> {
         throw new Error("Method not implemented.");
     }
-    retrieve(id: number): Promise<IUserModel | null> {
-        throw new Error("Method not implemented.");
+
+    async retrieve(id: number): Promise<IUserModel | null> {
+        return await this.storageService.retrieve<IUserModel>(id, this.namespace, { mapper: userMapper, transform });
     }
 
     getEmailSigninToken(user: IUserModel): string {

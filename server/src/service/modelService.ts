@@ -7,7 +7,7 @@ export interface IModelService<T extends IEntity> {
 
     find(query: Record<string, any>): Promise<T[]>;
 
-    create(item: Partial<Omit<T, 'id'>>): Promise<void>;
+    create(item: Partial<Omit<T, 'id'>>): Promise<number>;
 
     update(item: Partial<T>): Promise<T>;
 

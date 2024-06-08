@@ -1,16 +1,19 @@
-import type { PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import { createAppSlice } from "mote/app/createAppSlice"
 import type { AppThunk } from "mote/app/store"
 import { IUserProfile } from './userAPI';
 import * as userAPI from './userAPI';
+import { ISpaceModel } from '@mote/client/model/model';
 
 interface LoggedUserSliceState {
     profile: IUserProfile;
+    spaces: ISpaceModel[];
     status: "logged";
 }
 
 interface InitialUserSliceState {
     profile: null;
+    spaces: ISpaceModel[];
     status: "idle" | "loading" | "failed" ;
 }
 
@@ -18,6 +21,7 @@ export type UserSliceState = LoggedUserSliceState | InitialUserSliceState;
 
 const initialState: UserSliceState = {
     profile: null,
+    spaces: [],
     status: "idle",
 }
 
@@ -49,17 +53,31 @@ export const userSlice = createAppSlice({
         ),
     
     }),
+    extraReducers: (builder) => {
+        builder.addCase(fetchAuthInfo.fulfilled, (state, action) => {
+            state.status = "logged";
+            state.profile = action.payload.user;
+            state.spaces = action.payload.spaces;
+        });
+    },
     // You can define your selectors here. These selectors receive the slice
     // state as their first argument.
     selectors: {
         selectUser: user => user.profile,
         selectUserStatus: user => user.status,
     },
-})
+});
+
+const fetchAuthInfo = createAsyncThunk(
+    'user/fetchAuthInfo',
+    async () => {
+        const response = await userAPI.fetchAuthInfo()
+        return response.data
+    }
+)
 
 // Action creators are generated for each case reducer function.
-export const { login } =
-userSlice.actions
+export const { login } = userSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
 export const { selectUser, selectUserStatus } = userSlice.selectors
