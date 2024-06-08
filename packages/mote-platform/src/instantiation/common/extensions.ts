@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { SyncDescriptor } from './descriptors';
-import { BrandedService, ServiceIdentifier } from './instantiation';
+import { SyncDescriptor } from '@mote/platform/instantiation/common/descriptors';
+import { BrandedService, ServiceIdentifier } from '@mote/platform/instantiation/common/instantiation';
 
 const _registry: [ServiceIdentifier<any>, SyncDescriptor<any>][] = [];
 

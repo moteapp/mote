@@ -27,6 +27,7 @@
     "build:base": "nx build @mote/base",
     "build:editor": "nx build @mote/editor",
     "build:platform": "nx build @mote/platform",
+    "build:client": "nx build @mote/client",
     "build:server": "nx build @mote/server",
     "dev:server": "nx dev @mote/server",
     "start:server": "nx start @mote/server",

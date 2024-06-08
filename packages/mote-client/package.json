@@ -1,0 +1,27 @@
+{
+  "name": "@mote/client",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "exports": {
+    "./*.json": "./dist/*.json",
+    "./*": "./dist/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/trusted-types": "^1.0.6",
+    "typescript": "^5.4.5"
+  }
+}

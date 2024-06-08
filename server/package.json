@@ -26,12 +26,14 @@
   "dependencies": {
     "@koa/router": "^12.0.1",
     "@mote/base": "file:../packages/mote-base",
+    "@mote/client": "file:../packages/mote-client",
     "@mote/platform": "file:../packages/mote-platform",
     "class-validator": "^0.14.1",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "formidable": "^3.5.1",
     "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
     "koa": "^2.15.3",
     "koa-body": "^6.0.1",
     "koa-compress": "^5.1.1",
@@ -41,11 +43,13 @@
     "koa-router": "^12.0.1",
     "koa-send": "^5.0.1",
     "koa-useragent": "^4.1.0",
+    "mysql2": "^3.10.0",
     "stoppable": "^1.1.0",
     "throng": "^5.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/koa": "^2.15.0",
     "@types/koa__router": "^12.0.4",
     "@types/koa-compress": "^4.0.6",

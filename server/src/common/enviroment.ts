@@ -1,4 +1,4 @@
-import { IsBoolean, IsIn } from 'class-validator';
+import { IsBoolean, IsByteLength, IsIn } from 'class-validator';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -36,6 +36,21 @@ class Environment {
     public get isProduction() {
         return this.ENVIRONMENT === "production";
     }
+
+    /**
+     * The secret key is used for encrypting data. Do not change this value once
+     * set or your users will be unable to login.
+     */
+    @IsByteLength(32, 64)
+    public SECRET_KEY = process.env.SECRET_KEY ?? "secret";
+
+    public MYSQL_HOST = process.env.MYSQL_HOST || '';
+
+    public MYSQL_USER = process.env.MYSQL_USER || '';
+
+    public MYSQL_PASSWORD = process.env.MYSQL_PASSWORD || '';
+
+    public MYSQL_DATABASE = process.env.MYSQL_DATABASE || '';
 
     /**
      * Convert a string to a boolean. Supports the following:

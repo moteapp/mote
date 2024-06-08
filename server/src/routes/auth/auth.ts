@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import Router from '@koa/router';
 import bodyParser from 'koa-body';
-import { emailAuthRouter } from './email/emaiAuth.js';
+import { emailAuthRouter } from './email/emailAuth.js';
 import { AppContext, AppState } from 'mote/context/context.js';
 
 const { koaBody } = bodyParser as any;

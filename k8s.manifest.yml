@@ -72,11 +72,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mote-frontdoor
-  namespace: app-routing-system
+  namespace: mote-app
+  annotations:
+    kubernetes.azure.com/tls-cert-keyvault-uri: https://motesecret.vault.azure.net/certificates/mote-root-ca
 spec:
   ingressClassName: webapprouting.kubernetes.azure.com
   rules:
-  - http:
+  - host: mote.dev
+    http:
       paths:
       - backend:
           service:
@@ -85,3 +88,7 @@ spec:
               number: 80
         path: /
         pathType: Prefix
+  tls:
+  - hosts:
+    - mote.dev
+    secretName: keyvault-mote-frontdoor

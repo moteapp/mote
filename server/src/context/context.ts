@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { DefaultContext, ParameterizedContext } from 'koa';
 import formidable from 'formidable';
-import { IUserModel } from './model';
 import { IRouterParamContext } from 'koa-router';
+import { IUserModel } from '@mote/client/model/model';
 
 export type Pagination = {
     limit: number;

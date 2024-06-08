@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    "noFallthroughCasesInSwitch": false,
+
+    /* Build */
+    "declaration": true,
+    "paths": {
+      "@mote/client/*": ["./src/*"],
+    },
+    "outDir": "./dist",
+
+    "types": [
+      "node",
+      "trusted-types",
+    ]
+  },
+  "include": ["src", "./typings",]
+}

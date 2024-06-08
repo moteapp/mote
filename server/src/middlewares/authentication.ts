@@ -1,7 +1,7 @@
+import { IUserModel } from "@mote/client/model/model";
 import { Next } from "koa";
 import { AuthenticationError } from "mote/common/errors";
 import { AppContext, AuthenticationType } from "mote/context/context";
-import { IUserModel } from "mote/context/model";
 
 export type AuthenticationOptions = {
     /** An admin user role is required to access the route. */
