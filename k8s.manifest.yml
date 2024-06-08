@@ -22,6 +22,7 @@ spec:
         image: moteapp.azurecr.io/mote/mote-app:latest
         ports:
         - containerPort: 80
+          name: mote-app
         env:
         - name: NODE_ENV
           value: production
@@ -66,5 +67,21 @@ spec:
     app: mote-app
   ports:
     - port: 80
-    - port: 443
-  type: LoadBalancer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mote-frontdoor
+  namespace: app-routing-system
+spec:
+  ingressClassName: webapprouting.kubernetes.azure.com
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: mote-app
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
