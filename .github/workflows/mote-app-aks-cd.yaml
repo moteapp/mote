@@ -19,8 +19,8 @@ jobs:
             id-token: write
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - uses: azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
+            - uses: actions/checkout@v4
+            - uses: azure/login@v2
               name: Azure login
               with:
                 client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -37,8 +37,8 @@ jobs:
         needs:
             - buildImage
         steps:
-            - uses: actions/checkout@v3
-            - uses: azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2
+            - uses: actions/checkout@v4
+            - uses: azure/login@v2
               name: Azure login
               with:
                 client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -48,14 +48,14 @@ jobs:
               name: Set up kubelogin for non-interactive login
               with:
                 kubelogin-version: v0.0.25
-            - uses: azure/aks-set-context@v3
+            - uses: azure/aks-set-context@v4
               name: Get K8s context
               with:
                 admin: "false"
                 cluster-name: ${{ env.CLUSTER_NAME }}
                 resource-group: ${{ env.CLUSTER_RESOURCE_GROUP }}
                 use-kubelogin: "true"
-            - uses: Azure/k8s-deploy@v4
+            - uses: Azure/k8s-deploy@v5
               name: Deploys application
               with:
                 action: deploy
