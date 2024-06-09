@@ -7,8 +7,8 @@ name: mote-app-cd
 env:
     ACR_RESOURCE_GROUP: MoteForWeb
     AZURE_CONTAINER_REGISTRY: moteapp
-    CLUSTER_NAME: mote-cluster
-    CLUSTER_RESOURCE_GROUP: MoteForWeb
+    CLUSTER_NAME: MoteAKSCluster
+    CLUSTER_RESOURCE_GROUP: MoteService
     CONTAINER_NAME: mote/mote-app
     DEPLOYMENT_MANIFEST_PATH: |
         ./k8s.manifest.yml

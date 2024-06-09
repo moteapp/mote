@@ -26,6 +26,31 @@ spec:
         env:
         - name: NODE_ENV
           value: production
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: mysql-config
+              key: host
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mysql-config
+              key: database
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-config
+              key: username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-config
+              key: password
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: mote-secret
+              key: secret_key
         resources:
           requests:
             cpu: "50m"
