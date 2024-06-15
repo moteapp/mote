@@ -4,18 +4,31 @@ import styled from "styled-components";
 import Flex from "../components/flex";
 import { s } from 'mote/app/styles/theme';
 import { depths } from "mote/app/styles/styles";
-import { ReactNode } from "react";
+import { ReactNode, useCallback, useState } from "react";
 import { useIsMobile } from "mote/app/hooks/useIsMobile";
+import Fade from "../components/fade/fade";
 
 export interface IHeaderProps {
     left?: ReactNode;
+    title?: ReactNode;
     actions?: ReactNode;
     hasSidebar?: boolean;
 }
 
-export const Header = ({ left, actions, hasSidebar }: IHeaderProps) => {
+export const Header = ({ 
+    left, title, actions, hasSidebar 
+}: IHeaderProps) => {
     const isMobile = useIsMobile();
     const hasMobileSidebar = hasSidebar && isMobile;
+
+    const [isScrolled, setScrolled] = useState(false);
+
+    const handleClickTitle = useCallback(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+    }, []);
 
     return (
         <Wrapper
@@ -28,12 +41,44 @@ export const Header = ({ left, actions, hasSidebar }: IHeaderProps) => {
                 </Breadcrumbs>
             ) : null}
 
+            {isScrolled ? (
+                <Title onClick={handleClickTitle}>
+                    <Fade>{title}</Fade>
+                </Title>
+                ) : (
+                <div />
+            )}
             <Actions align="center" justify="flex-end">
                 {actions}
             </Actions>
         </Wrapper>
     )
 }
+
+const Title = styled("div")`
+  display: none;
+  font-size: 16px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: var(--pointer);
+  min-width: 0;
+
+  ${breakpoint("tablet")`
+    padding-left: 0;
+    display: block;
+  `};
+
+  svg {
+    vertical-align: bottom;
+  }
+
+  @media (display-mode: standalone) {
+    overflow: hidden;
+    flex-grow: 0 !important;
+  }
+`;
 
 const Breadcrumbs = styled("div")`
     flex-grow: 1;

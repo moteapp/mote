@@ -1,4 +1,4 @@
-import { darken } from 'polished';
+import { darken, transparentize } from 'polished';
 import { DefaultTheme} from 'styled-components';
 
 /**
@@ -51,7 +51,23 @@ export const colors = {
 };
 
 export const defaultColors = {
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, Inter, 'Segoe UI', Roboto, Oxygen, sans-serif",
+    fontFamilyMono:
+      "'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace",
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 600,
     accentText: colors.white,
+    commentMarkBackground: transparentize(0.5, "#2BC2FF"),
+    noticeInfoBackground: colors.brand.blue,
+    noticeInfoText: colors.almostBlack,
+    noticeTipBackground: "#F5BE31",
+    noticeTipText: colors.almostBlack,
+    noticeWarningBackground: "#d73a49",
+    noticeWarningText: colors.almostBlack,
+    noticeSuccessBackground: colors.brand.green,
+    noticeSuccessText: colors.almostBlack,
     ...colors
 }
 
@@ -69,6 +85,7 @@ export const defaultLightTheme = {
     secondaryBackground: colors.warmGrey,
     link: colors.accent,
     cursor: colors.almostBlack,
+    placeholder: "#a2b2c3",
     text: colors.almostBlack,
     textSecondary: colors.slateDark,
     textTertiary: colors.slate,
@@ -82,5 +99,10 @@ export const defaultLightTheme = {
     sidebarControlHoverBackground: "rgb(138 164 193 / 20%)",
     sidebarDraftBorder: darken("0.25", colors.warmGrey),
     sidebarText: "rgb(78, 92, 110)",
+    ...spacing,
+}
+
+export const defaultDarkTheme = {
+    ...defaultColors,
     ...spacing,
 }

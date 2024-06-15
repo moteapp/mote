@@ -3,6 +3,7 @@ import { Placeholder } from "../placeholder/placeholder";
 
 export interface IPaginatedListProps<T> {
     className?: string;
+    empty?: React.ReactNode;
 }
 
 export function PaginatedList<T>({

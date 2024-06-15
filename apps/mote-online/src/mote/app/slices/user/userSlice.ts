@@ -51,33 +51,37 @@ export const userSlice = createAppSlice({
                 },
             },
         ),
-    
+        fetchAuthInfo: create.asyncThunk(
+            async () => {
+                const response = await userAPI.fetchAuthInfo()
+                return response.data
+            },
+            {
+                pending: state => {
+                    state.status = "loading"
+                },
+                fulfilled: (state, action) => {
+                    state.status = "logged";
+                    state.profile = action.payload.user;
+                    state.spaces = action.payload.spaces;
+                },
+                rejected: state => {
+                    state.status = "failed"
+                },
+            },
+        )
     }),
-    extraReducers: (builder) => {
-        builder.addCase(fetchAuthInfo.fulfilled, (state, action) => {
-            state.status = "logged";
-            state.profile = action.payload.user;
-            state.spaces = action.payload.spaces;
-        });
-    },
     // You can define your selectors here. These selectors receive the slice
     // state as their first argument.
     selectors: {
         selectUser: user => user.profile,
-        selectUserStatus: user => user.status,
+        selectAuthStatus: user => user.status,
+        selectCurrentSpace: user => user.spaces[0],
     },
 });
 
-const fetchAuthInfo = createAsyncThunk(
-    'user/fetchAuthInfo',
-    async () => {
-        const response = await userAPI.fetchAuthInfo()
-        return response.data
-    }
-)
-
 // Action creators are generated for each case reducer function.
-export const { login } = userSlice.actions;
+export const { login, fetchAuthInfo } = userSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
-export const { selectUser, selectUserStatus } = userSlice.selectors
+export const { selectUser, selectAuthStatus } = userSlice.selectors

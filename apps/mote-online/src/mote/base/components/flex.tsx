@@ -51,4 +51,8 @@ export const Section = styled(Flex)`
   }
 `;
 
+export const Container = styled(Flex)`
+  position: relative;
+`;
+
 export default Flex;

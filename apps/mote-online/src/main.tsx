@@ -10,12 +10,12 @@ import { defaultColors, defaultLightTheme } from "mote/app/styles/theme"
 import { HelmetProvider } from "react-helmet-async"
 import { initI18n } from "mote/utils/i18n"
 import { TooltipStyles } from "mote/base/components/tooltip"
-import { fetchAuthInfo } from "mote/app/slices/user/userAPI"
+import { fetchAuthInfo } from "mote/app/slices/user/userSlice"
 
 initI18n("zh_CN");
-const container = document.getElementById("root");
+store.dispatch(fetchAuthInfo());
 
-fetchAuthInfo();
+const container = document.getElementById("root");
 
 if (container) {
     const root = createRoot(container)

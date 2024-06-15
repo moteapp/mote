@@ -1,7 +1,7 @@
 import { s } from "mote/app/styles/theme";
 import { Action } from "mote/base/components/actions";
 import { NewDocumentButton } from "mote/base/components/document/newDocument";
-import { PaginatedDocuments } from "mote/base/components/document/paginatedDocuments";
+import { PaginatedDocumentList } from "mote/base/components/document/paginatedDocumentList";
 import Heading from "mote/base/components/heading";
 import { Page } from "mote/base/components/page"
 import { Tab } from "mote/base/components/tab/tab";
@@ -34,8 +34,8 @@ export const HomePage = () => {
                     </Tab>
                 </Tabs>
                 <Routes>
-                    <Route path="/recent" element={ <PaginatedDocuments />} />
-                    <Route path="/created" element={ <PaginatedDocuments />} />
+                    <Route path="/recent" element={ <PaginatedDocumentList />} />
+                    <Route path="/created" element={ <PaginatedDocumentList />} />
                 </Routes>
             </Documents>
         </Page>
