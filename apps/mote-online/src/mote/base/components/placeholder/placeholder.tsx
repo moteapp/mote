@@ -21,7 +21,7 @@ export const Placeholder = ({
     return (
         <Fade>
             {Array.from({ length: count || 2 }).map((_, index) => (
-                <Item key={index} className={className} column auto>
+                <Item key={index} className={className} $column $auto>
                     <TextPlaceholder {...header} header delay={0.2 * index} />
                     <TextPlaceholder {...body} delay={0.2 * index} />
                 </Item>

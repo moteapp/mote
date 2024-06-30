@@ -25,20 +25,20 @@ export const Document = ({
         <Background
           id="full-width-container"
           key={revision ? revision.id : document.id}
-          column
-          auto
+          $column
+          $auto
         >
             <PageTitle
                 title={document.title}
             />
-            <Container justify="center" column auto>
+            <Container justify="center" $column $auto>
                 <DocumentHeader document={document}/>
                 <MaxWidth 
-                    column
-                    auto
+                    $column
+                    $auto
                 >
                     <Suspense fallback={<DocumentPlaceholder />} >
-                        <Flex auto={!readOnly} reverse>
+                        <Flex $auto={!readOnly} reverse>
                             <DocumentEditor />
                         </Flex>
                     </Suspense>

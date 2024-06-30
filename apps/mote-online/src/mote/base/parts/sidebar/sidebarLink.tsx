@@ -1,6 +1,6 @@
 import { breakpoint } from "mote/app/styles/breakpoint";
 import { s } from "mote/app/styles/theme";
-import { forwardRef, useMemo } from "react";
+import { ReactNode, forwardRef, useMemo } from "react";
 import styled, { css, useTheme } from "styled-components";
 import { SidebarNavLink } from "./sidebarNavLink";
 import { NudeButton } from "mote/base/components/buttton/budeButton";
@@ -8,17 +8,19 @@ import { EventBoundary } from "mote/base/components/eventBoundary";
 import { StyledDisclosure } from "./disclosure";
 
 export interface ISidebarLinkProps {
-    to: string;
+    to?: string;
     icon?: React.ReactNode;
     exact?: boolean;
-    label?: string;
+    label?: ReactNode;
+    onClick?: React.MouseEventHandler<HTMLElement>;
 }
 
 export const SidebarLink = forwardRef(function _SidebarLink({
     to,
     icon,
     exact,
-    label
+    label,
+    onClick
 }: ISidebarLinkProps, ref: any){
 
     const theme = useTheme();
@@ -32,8 +34,10 @@ export const SidebarLink = forwardRef(function _SidebarLink({
     return (
         <>
             <Link 
-                to={to}
+                to={to!}
+                as={to ? undefined : "div"}
                 activeStyle={activeStyle}
+                onClick={onClick}
             >
                 <Content>
                     {icon && <IconWrapper>{icon}</IconWrapper>}

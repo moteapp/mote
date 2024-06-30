@@ -18,8 +18,8 @@
   "dependencies": {
     "@ariakit/react": "^0.4.7",
     "@mote/base": "file:../packages/mote-base",
-    "@mote/editor": "file:../packages/mote-editor",
     "@mote/client": "file:../packages/mote-client",
+    "@mote/editor": "file:../packages/mote-editor",
     "@reduxjs/toolkit": "^2.0.1",
     "@tippyjs/react": "^4.2.6",
     "history": "^5.3.0",
@@ -38,6 +38,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",
+    "react-hook-form": "^7.52.0",
     "react-i18next": "^14.1.2",
     "react-merge-refs": "^2.1.1",
     "react-redux": "^9.1.0",

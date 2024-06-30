@@ -10,6 +10,7 @@ import { color } from "framer-motion";
 import { Section } from "mote/base/components/flex";
 import { SidebarLink } from "./sidebarLink";
 import { SVGIcon } from "mote/base/components/icon/svgIcon";
+import { Collections } from "./collections/collections";
 
 export const SidebarPart = () => {
     const { t } = useTranslation();
@@ -45,6 +46,9 @@ export const SidebarPart = () => {
                         exact={false}
                         label={t("Home")}
                     />
+                </Section>
+                <Section $auto>
+                    <Collections />
                 </Section>
             </Scrollable>
         </Sidebar>

@@ -25,3 +25,10 @@ export interface ISpaceMemberModel extends IEntity {
     userId: number;
     spaceId: number;
 }
+
+export interface ICollectionModel extends IEntity {
+    name: string;
+    description: string;
+    spaceId: number;
+    createBy: number;
+}

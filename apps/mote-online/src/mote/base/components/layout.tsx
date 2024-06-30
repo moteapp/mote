@@ -19,14 +19,14 @@ export const Layout = forwardRef(function _Layout(
     const { title, sidebar, sidebarRight, children } = props;
 
     return (
-        <Container column auto ref={ref}>
-            <Container auto>
+        <Container $column $auto ref={ref}>
+            <Container $auto>
                 <MenuProvider>
                     {sidebar}
                 </MenuProvider>
                 <SkipNavContent />
                 <Content 
-                    auto
+                    $auto
                     justify="center"
                     style={{
                         marginLeft: 260

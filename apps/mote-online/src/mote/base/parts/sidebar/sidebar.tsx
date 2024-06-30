@@ -40,7 +40,7 @@ export const Sidebar = forwardRef(function _Sidebar(
         <>
             <Container 
                 ref={ref}
-                column
+                $column
                 style={{ width }}
                 $isAnimating={isAnimating}
                 $isHovering={isHovering}

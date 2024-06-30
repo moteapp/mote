@@ -6,18 +6,18 @@ type JustifyValues = CSSProperties["justifyContent"];
 type AlignValues = CSSProperties["alignItems"];
 
 export const Flex = styled.div<{
-  auto?: boolean;
-  column?: boolean;
-  align?: AlignValues;
+  $auto?: boolean;
+  $column?: boolean;
+  $align?: AlignValues;
   justify?: JustifyValues;
   wrap?: boolean;
   shrink?: boolean;
   reverse?: boolean;
-  gap?: number;
+  $gap?: number;
 }>`
   display: flex;
-  flex: ${({ auto }) => (auto ? "1 1 auto" : "initial")};
-  flex-direction: ${({ column, reverse }) =>
+  flex: ${({ $auto: auto }) => (auto ? "1 1 auto" : "initial")};
+  flex-direction: ${({ $column: column, reverse }) =>
     reverse
       ? column
         ? "column-reverse"
@@ -25,12 +25,12 @@ export const Flex = styled.div<{
       : column
       ? "column"
       : "row"};
-  align-items: ${({ align }) => align};
+  align-items: ${({ $align: align }) => align};
   justify-content: ${({ justify }) => justify};
   flex-wrap: ${({ wrap }) => (wrap ? "wrap" : "initial")};
   flex-shrink: ${({ shrink }) =>
     shrink === true ? 1 : shrink === false ? 0 : "initial"};
-  gap: ${({ gap }) => (gap ? `${gap}px` : "initial")};
+  gap: ${({ $gap: gap }) => (gap ? `${gap}px` : "initial")};
   min-height: 0;
   min-width: 0;
 `;

@@ -4,6 +4,7 @@ import bodyParser from 'koa-body';
 import { AppContext, AppState } from 'mote/context/context.js';
 import { authAPIRouter } from './auth/authAPI.js';
 import { NotFoundError } from 'mote/common/errors.js';
+import { collectionsAPIRouter } from './collections/collectionsAPI.js';
 
 const { koaBody } = bodyParser as any;
 
@@ -12,6 +13,7 @@ const apiRouter = new Router();
 
 // routes
 apiRouter.use("/", authAPIRouter.routes());
+apiRouter.use("/", collectionsAPIRouter.routes());
 
 apiRouter.get("(.*)", (ctx) => {
     ctx.throw(NotFoundError("Endpoint not found"));

@@ -5,6 +5,7 @@ import { getSingletonServiceDescriptors } from '@mote/platform/instantiation/com
 import './storage/storageService.js';
 import './user/userService.js';
 import './space/spaceService.js';
+import './collection/collectionService.js';
 
 const serviceCollection = new ServiceCollection();
 

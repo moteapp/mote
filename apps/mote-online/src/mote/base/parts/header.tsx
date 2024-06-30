@@ -32,7 +32,7 @@ export const Header = ({
 
     return (
         <Wrapper
-            align="center"
+            $align="center"
             shrink={false}
         >
             {left || hasMobileSidebar ? (
@@ -48,7 +48,7 @@ export const Header = ({
                 ) : (
                 <div />
             )}
-            <Actions align="center" justify="flex-end">
+            <Actions $align="center" justify="flex-end">
                 {actions}
             </Actions>
         </Wrapper>

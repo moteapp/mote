@@ -17,7 +17,7 @@ export const DocumentEditor = forwardRef(function _DocumentEditor(
     const { t } = useTranslation();
 
     return (
-        <Flex auto column>
+        <Flex $auto $column>
             <DocumentTitle
                 title=""
                 placeholder={t("Untitled")}

@@ -5,6 +5,10 @@ export interface IAuthInfo {
     spaces: ISpaceModel[];
 }
 
+export interface ICollectionData {
+    
+}
+
 export class MoteResponse<T extends any> {
 
     constructor(

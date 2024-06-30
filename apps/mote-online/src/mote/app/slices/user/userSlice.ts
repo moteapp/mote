@@ -84,4 +84,4 @@ export const userSlice = createAppSlice({
 export const { login, fetchAuthInfo } = userSlice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
-export const { selectUser, selectAuthStatus } = userSlice.selectors
+export const { selectUser, selectAuthStatus, selectCurrentSpace } = userSlice.selectors

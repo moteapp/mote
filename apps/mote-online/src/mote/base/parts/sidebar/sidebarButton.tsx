@@ -29,7 +29,7 @@ export const SidebarButton = forwardRef(function _SidebarButton(
                 role="button"
                 ref={ref}
             >
-                <Content gap={8} align="center">
+                <Content $gap={8} $align="center">
                     {image}
                     {title && <Title>{title}</Title>}
                 </Content>

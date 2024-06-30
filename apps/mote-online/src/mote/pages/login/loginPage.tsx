@@ -40,7 +40,7 @@ export const LoginPage = () => {
             <Background>
                 <BackButton />
 
-                <Centered align="center" justify="center" column auto>
+                <Centered $align="center" justify="center" $column $auto>
                     <Heading centered>{t("Check your email")}</Heading>
                     <Note>
                         <Trans
@@ -62,7 +62,7 @@ export const LoginPage = () => {
         <Background>
             <BackButton />
 
-            <Centered align="center" justify="center" gap={12} column auto>
+            <Centered $align="center" justify="center" $gap={12} $column $auto>
                 <Logo>
                     <img height={48} src="/images/mote-512.png" alt="logo" />
                 </Logo>

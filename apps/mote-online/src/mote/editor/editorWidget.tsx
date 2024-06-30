@@ -12,6 +12,8 @@ import {
     MarkSpec,
     Node as ProsemirrorNode,
 } from 'prosemirror-model';
+import { baseKeymap } from 'prosemirror-commands';
+import { keymap } from 'prosemirror-keymap';
 import { PlaceholderPlugin } from './contrib/placeholder/placeholder';
 import { heading } from './contrib/heading/heading';
 import { paragraph } from './contrib/paragraph/paragraph';
@@ -70,6 +72,10 @@ export class EditorWidget extends PureComponent<IEditorWidgetProps, State> {
         return EditorState.create({
             schema: this.schema,
             doc,
+            plugins: [
+                keymap(baseKeymap),
+                PlaceholderPlugin(this.props.placeholder)
+            ]
         });
     }
 
@@ -92,9 +98,13 @@ export class EditorWidget extends PureComponent<IEditorWidgetProps, State> {
             throw new Error("createView called before ref available");
         }
 
+        if (this.elementRef.current.children.length > 0) {
+            return this.view;
+        }
+
         const view = new EditorView(this.elementRef.current, {
             state: this.createState(this.props.value),
-            plugins: [PlaceholderPlugin(this.props.placeholder)]
+            //plugins: [PlaceholderPlugin(this.props.placeholder)]
         });
 
         this.view = view;
@@ -103,6 +113,7 @@ export class EditorWidget extends PureComponent<IEditorWidgetProps, State> {
     }
 
     componentDidMount(): void {
+        console.log('componentDidMount');
         this.initialize();
     }
 
@@ -115,9 +126,9 @@ export class EditorWidget extends PureComponent<IEditorWidgetProps, State> {
                 <EditorContext.Provider value={this}>
                     <Flex
                         ref={this.wrapperRef}
-                        align="flex-start"
+                        $align="flex-start"
                         justify="center"
-                        column
+                        $column
                     >
                         <EditorContainerWrapper 
                             rtl={isRTL}

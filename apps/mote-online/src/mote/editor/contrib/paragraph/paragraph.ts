@@ -5,6 +5,7 @@ export class Paragraph {
     schema: NodeSpec = {
         group: "block",
         content: "inline*",
+        draggable: true,
         toDOM: () => ["p", 0],
     };
 }

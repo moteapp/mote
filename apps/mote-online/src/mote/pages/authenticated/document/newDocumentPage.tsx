@@ -23,7 +23,7 @@ export const NewDocumentPage = () => {
     });
 
     return ( 
-        <Flex column auto>
+        <Flex $column $auto>
             <CenteredContent>
                 <DocumentPlaceholder />
             </CenteredContent>

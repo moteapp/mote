@@ -22,7 +22,7 @@ export const DocumentPlaceholder = ({includeTitle, delay}: IDocumentPlaceholderP
         return (
             <DelayedMount delay={delay}>
                 <Fade>
-                    <Flex column auto>
+                    <Flex $column $auto>
                         {content}
                     </Flex>
                 </Fade>
@@ -34,7 +34,7 @@ export const DocumentPlaceholder = ({includeTitle, delay}: IDocumentPlaceholderP
         <DelayedMount >
             <Wrapper>
                 <Fade>
-                    <Flex column auto>
+                    <Flex $column $auto>
                         <TextPlaceholder height={34} maxWidth={70} />
                         <TextPlaceholder delay={0.2} maxWidth={40} />
                         <br />

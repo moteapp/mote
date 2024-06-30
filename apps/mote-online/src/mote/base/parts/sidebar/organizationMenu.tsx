@@ -38,7 +38,7 @@ export const OrganizationMenu = ({
                 {children}
             </MenuButton>
             <ContextMenu >
-                <Template actions={actions}/>
+                <Template actions={[]}/>
             </ContextMenu>
         </>
     )

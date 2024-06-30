@@ -23,7 +23,7 @@
     "build:web": "nx build mote-web",
     "start:online": "nx dev mote-online",
     "build:online": "nx build mote-online",
-    "watch:online": "nx watch --projects=@mote/platform,@mote/editor --includeDependentProjects -- nx run \\$NX_PROJECT_NAME:build",
+    "watch:online": "nx watch --projects=@mote/platform,@mote/editor,@mote/client --includeDependentProjects -- nx run \\$NX_PROJECT_NAME:build",
     "build:base": "nx build @mote/base",
     "build:editor": "nx build @mote/editor",
     "build:platform": "nx build @mote/platform",
