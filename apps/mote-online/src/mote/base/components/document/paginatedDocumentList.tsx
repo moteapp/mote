@@ -10,7 +10,7 @@ export const PaginatedDocumentList = ({
     empty
 }:IPaginatedDocumentListProps) => {
     return (
-        <PaginatedList >
+        <PaginatedList items={[]}>
             
         </PaginatedList>
     )
