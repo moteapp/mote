@@ -1,5 +1,14 @@
 {
+    "plugins": [
+        "es",
+        "prettier",
+        "@typescript-eslint",
+        "eslint-plugin-import",
+        "eslint-plugin-node",
+        "eslint-plugin-react"
+    ],
     "rules": {
+        "import/no-unresolved": "off",
         "prettier/prettier": [
             "error",
             {
