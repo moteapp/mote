@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        // Lint
+        "useUnknownInCatchVariables": false,
+        "skipLibCheck":true,
+
+        // Build options
+        "declaration": true,
+        "target": "ES2021",
+    }
+}

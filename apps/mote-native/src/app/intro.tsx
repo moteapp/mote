@@ -72,7 +72,6 @@ export default function IntroScreen() {
                 onPress={() => {
                     // Navigate after signing in. You may want to tweak this to ensure sign-in is
                     // successful before navigating.
-                    console.log('navigating to root');
                     router.push('/sign-in');
                 }}
             />

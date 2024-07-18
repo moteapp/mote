@@ -28,9 +28,9 @@ export function useSession() {
 }
 
 export function SessionProvider(props: React.PropsWithChildren) {
-    // const [[isLoading, session], setSession] = useStorageState('session');
-    const [session, setSession] = React.useState<string | null>(null);
-    const isLoading = false;
+    const [[isLoading, session], setSession] = useStorageState('session');
+    // const [session, setSession] = React.useState<string | null>(null);
+    // const isLoading = false;
 
     return (
         <AuthContext.Provider
