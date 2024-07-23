@@ -1,26 +1,47 @@
 {
   "expo": {
-    "name": "mote-native",
+    "name": "Mote",
     "slug": "mote-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/mote-192.png",
-    "scheme": "myapp",
+    "icon": "./assets/images/mote-1024.png",
+    "scheme": "mote",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/mote-1024.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "dev.mote.app"
+      "bundleIdentifier": "dev.mote.app",
+      "associatedDomains": [
+        "applinks:app.mote.dev"
+      ]
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "*.mote.dev",
+              "pathPrefix": "/auth"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
+      "package": "dev.mote.app"
     },
     "web": {
       "bundler": "metro",
