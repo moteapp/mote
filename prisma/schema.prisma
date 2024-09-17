@@ -1,0 +1,101 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authenticationProviders AuthenticationProvider[]
+
+  spaces UserSpace[]
+
+  collections Collection[]
+
+  blocks Block[]
+}
+
+model AuthenticationProvider {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  providerId String
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String @db.Uuid
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Space {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  domain    String?
+  subdomain String? 
+  defaultCollectionId String? @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users UserSpace[]
+
+  collections Collection[]
+}
+
+enum SpaceMembership {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model UserSpace {
+  @@id([userId, spaceId])
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.Uuid
+
+  space     Space    @relation(fields: [spaceId], references: [id])
+  spaceId   String   @db.Uuid
+
+  role      SpaceMembership
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Collection {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+
+  space     Space    @relation(fields: [spaceId], references: [id])
+  spaceId   String   @db.Uuid
+
+  createdBy User     @relation(fields: [createdById], references: [id])
+  createdById String @db.Uuid
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  blocks Block[]
+}
+
+model Block {
+  id        String   @id @default(uuid()) @db.Uuid
+  rootId    String   @db.Uuid
+
+  collection Collection? @relation(fields: [collectionId], references: [id])
+  collectionId String? @db.Uuid
+
+  createdBy User        @relation(fields: [createdById], references: [id])
+  createdById String @db.Uuid
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

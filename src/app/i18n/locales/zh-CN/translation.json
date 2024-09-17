@@ -1,0 +1,9 @@
+{
+    "Home": "主页",
+    "Recently viewed": "最近浏览",
+    "Recently updated": "最近更新",
+    "Created by me": "我创建的",
+    "Login to {{ authProviderName }}": "登录到 {{ authProviderName }}",
+    "Continue with Email": "使用邮件登录",
+    "Sign In": "登录"
+}
