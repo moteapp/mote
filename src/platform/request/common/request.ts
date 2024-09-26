@@ -1,4 +1,6 @@
-type AuthProvider = {
+import { IOperation } from "mote/platform/editor/common/editor";
+
+export type AuthProvider = {
     id: string;
     name: string;
     authUrl: string;
@@ -9,6 +11,19 @@ export type AuthConfig = {
     logo?: string;
     providers: AuthProvider[];
 };
+
+export type TransactionData = {
+    id: string;
+    userId: string;
+    operations: IOperation[];
+    timestamp: number;
+};
+
+export type ApplyTransationsRequest = {
+    traceId: string;
+    transactions: TransactionData[];
+};
+
 
 export class ApiClient {
     public async get<T>(url: string): Promise<T> {

@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "SpaceMembership" AS ENUM ('OWNER', 'ADMIN', 'MEMBER');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" UUID NOT NULL,
@@ -38,7 +41,7 @@ CREATE TABLE "Space" (
 CREATE TABLE "UserSpace" (
     "userId" UUID NOT NULL,
     "spaceId" UUID NOT NULL,
-    "role" TEXT NOT NULL,
+    "role" "SpaceMembership" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -92,3 +95,4 @@ ALTER TABLE "Block" ADD CONSTRAINT "Block_collectionId_fkey" FOREIGN KEY ("colle
 
 -- AddForeignKey
 ALTER TABLE "Block" ADD CONSTRAINT "Block_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+

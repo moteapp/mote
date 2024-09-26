@@ -1,7 +1,7 @@
 'use client';
-import { fetchAuthConfig } from 'mote/app/store/features/auth/authSlice';
 import { PropsWithChildren, useRef } from 'react';
 import { Provider } from 'react-redux';
+import { fetchAuthConfig } from 'mote/app/store/features/auth/authSlice';
 import { makeStore, AppStore } from './store/store';
 
 export default function StoreProvider({ children }: PropsWithChildren) {

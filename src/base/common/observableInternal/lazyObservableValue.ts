@@ -3,9 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { EqualityComparer } from './commonFacade/deps.js';
-import { BaseObservable, IObserver, ISettableObservable, ITransaction, TransactionImpl } from './base.js';
-import { DebugNameData } from './debugName.js';
+import { EqualityComparer } from './commonFacade/deps';
+import { BaseObservable, IObserver, ISettableObservable, ITransaction, TransactionImpl } from './base';
+import { DebugNameData } from './debugName';
 
 /**
  * Holds off updating observers until the value is actually read.

@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AuthConfig } from 'mote/common/client';
-import { client } from 'mote/common/client/client';
 import { createAppSlice } from 'mote/app/store/createAppSlice';
+import { client, AuthConfig } from 'mote/platform/request/common/request';
 
 type AuthCredential = {
     token: string;
