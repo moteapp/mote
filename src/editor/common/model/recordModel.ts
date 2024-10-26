@@ -1,11 +1,13 @@
-import { Emitter } from "mote/base/common/event";
+'use client';
+import get from 'lodash/get';
+import { Event, Emitter } from "mote/base/common/event";
 import { Disposable } from "mote/base/common/lifecycle";
-import { Pointer, Role } from "../blockCommon";
+import { BlockRole, IBlockAndRole, IBlockProvider, IBlockStore, Pointer } from "../blockCommon";
 import { IModel } from "../model";
 
 interface IInstanceState<T> {
     value: T;
-    role?: Role;
+    role?: BlockRole;
 }
 
 export class RecordModel<T = any>
@@ -33,7 +35,7 @@ export class RecordModel<T = any>
         childModel = new RecordModel<T>(
             pointer,
             [...parent.path, ...path],
-            parent.blockProvider
+            parent.blockStore
         );
         parent.addChildModel(childModel);
         return childModel;
@@ -50,23 +52,27 @@ export class RecordModel<T = any>
     constructor(
         public pointer: Pointer,
         public readonly path: string[],
+        public blockStore: IBlockStore,
     ) {
         super();
 
-
-        this.onBlockChange();
+        const onBlockChange = Event.filter(
+            blockStore.onDidChange, 
+            (e) => e.block.id === pointer.id
+        );
+        this._register(onBlockChange((e) => this.handleBlockChange(e)));
+        this.handleBlockChange();
     }
 
-    private onBlockChange() {
-        const record = this.blockProvider.provideBlock(this.pointer);
+    private handleBlockChange = (record?: IBlockAndRole) => {
+        record = record ?? this.blockStore.get(this.pointer.id);
         const role = record?.role;
         let value: T;
         if (this.path && this.path.length) {
-            value = Lodash.get(record?.block, this.path);
+            value = get(record?.block, this.path);
         } else {
             value = record?.block as T;
         }
-
         this.instanceState = { value, role };
     }
 

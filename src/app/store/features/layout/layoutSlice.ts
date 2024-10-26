@@ -1,5 +1,5 @@
-import { createAppSlice } from 'mote/app/store/createAppSlice';
 import { match, P } from 'ts-pattern';
+import { createAppSlice } from 'mote/app/store/createAppSlice';
 
 const LayoutStateKeys = {
     SIDEBAR_HIDDEN: 'sideBar.hidden',

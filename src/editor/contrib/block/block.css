@@ -1,0 +1,7 @@
+.textTitle {
+    padding: 6px 0px 0px 0px !important;
+    font-size: var(--font-size-title);
+    line-height: var(--line-height-title);
+    letter-spacing: var(--letter-spacing-title);
+    font-weight: var(--font-weight-title);
+}

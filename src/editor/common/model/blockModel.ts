@@ -1,23 +1,49 @@
+'use client';
+import { match } from "ts-pattern";
 import { IBaseBlock } from "mote/base/parts/storage/common/schema";
-import { Pointer, BlockType, ITextBlock, TextStyle, ILayoutBlock, IPageBlock, LayoutStyle } from "../blockCommon";
+import { Pointer, BlockType, ITextBlock, TextStyle, ILayoutBlock, IPageBlock, LayoutStyle, IBlockProvider, IBlockStore, isTextBlock, IBlock, isLayoutBlock, ISegment, IBlockChild } from "../blockCommon";
 import { RecordModel } from "./recordModel";
 
-export class BlockModel extends RecordModel<IBaseBlock> {
+
+export class BlockModel extends RecordModel<IBlock> {
 
     static createChildBlockModel(
+        root: BlockModel | undefined,
         parent: RecordModel<string[]>,
-        pointer: Pointer
+        pointer: Pointer,
+        blockStore: IBlockStore,
     ): BlockModel {
         let childModel = parent.getChildModel(pointer, []) as BlockModel;
         if (childModel) {
             return childModel;
         }
-        childModel = new BlockModel(pointer, []);
+        childModel = new BlockModel(pointer, blockStore);
         parent.addChildModel(childModel);
+        childModel.setParent(parent);
+        childModel.setRootModel(root);
         return childModel;
     }
 
+    constructor(
+        public pointer: Pointer,
+        public blockStore: IBlockStore,
+    ) {
+        super(pointer, [], blockStore);
+    }
+
     //#region Properties
+
+    get rootId() {
+        return this.value.rootId;
+    }
+
+    get spaceId() {
+        return this.value.spaceId;
+    }
+
+    get collectionId() {
+        return this.value.collectionId;
+    }
 
     get parentId() {
         return this.value.parentId;
@@ -31,12 +57,37 @@ export class BlockModel extends RecordModel<IBaseBlock> {
         return this.value.children;
     }
 
+    get className() {
+        const classNames: string[] = [];
+        const defaultClass = `block-${this.type}`;
+        match(this.value)
+        .when(isTextBlock, (value) => {
+            classNames.push(`text${TextStyle[value.content.style] || 'Paragraph'}`)
+        })
+        .when(isLayoutBlock, (block) => {
+            classNames.push(`layout${LayoutStyle[block.content.style]}`)
+        })
+        .run();
+
+        classNames.push(defaultClass);
+        return classNames.join(' ');
+    }
+
+    getText(): string {
+        if (this.isText()) {
+            return this.value.content.value
+                .map((segment) => segment[0])
+                .join('');
+        }
+        return '';
+    }
+
     //#endregion
 
     //#region Type Guards
 
     isText(): this is { value: ITextBlock } {
-        return this.type === BlockType.Text;
+        return isTextBlock(this.value);
     }
 
     isTextCode(): boolean {
@@ -146,17 +197,40 @@ export class BlockModel extends RecordModel<IBaseBlock> {
 
     //#endregion
 
-    getChildrenModel(): RecordModel<{id: string}[]> {
-        return this.getPropertyModel('children') as RecordModel<{id: string}[]>;
+    private rootModel: BlockModel | undefined;
+    setRootModel(rootModel: BlockModel | undefined) {
+        this.rootModel = rootModel;
     }
 
-    getChildrenModels() {
+    getRootModel(): BlockModel | undefined {
+        return this.rootModel;
+    }
+
+    getChildrenModel(): RecordModel<string[]> {
+        return this.getPropertyModel('children');
+    }
+
+    getChildrenModels(): BlockModel[] {
         const parent = this.getChildrenModel();
+        if (!this.value) {
+            return [];
+        }
         const children = this.value.children || [];
         return children.map((child) => {
-            const pointer = { id: child.id, table: this.pointer.table };
-            return BlockModel.createChildBlockModel(parent, pointer);
+            const pointer = { id: child, table: this.pointer.table };
+            return BlockModel.createChildBlockModel(this.getRootModel(), parent, pointer, this.blockStore);
         });
+    }
+
+    getTextValueModel() {
+        if (this.isText()) {
+            return RecordModel.createChildModel<ISegment[]>(
+                this,
+                this.pointer,
+                ['content', 'value'],
+            );
+        }
+        throw new Error('Block is not a text block');
     }
     
     getLayoutHeaderModel() {

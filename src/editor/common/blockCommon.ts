@@ -1,15 +1,7 @@
 import { match } from 'ts-pattern';
+import { Event } from "mote/base/common/event";
+import { generateUuid } from 'mote/base/common/uuid';
 import { IBaseBlock } from "mote/base/parts/storage/common/schema";
-
-/**
- * The common properties of a block component.
- */
-export type IBlockComponentProps = {
-    id?: string;
-    rootId: string;
-    block?: IBlock;
-    className?: string;
-}
 
 export enum Role {
     Editor = 0,
@@ -160,9 +152,13 @@ export function isLayoutRow(block: IBlock): boolean {
 
 //#endregion
 
-export function findLayoutHeader(block: IBlock): ILayoutBlock | undefined {
-    const children = block.children as IBlock[];
-    return children.find(isLayoutHeader);
+/**
+ * Get the text value of a text block.
+ * @param block ITextBlock
+ * @returns 
+ */
+export function generateTextFromSegements(segments: ISegment[]): string {
+    return segments.map(([text]) => text).join('');
 }
 
 export function getBlockClassName(block: IBlock): string {
@@ -185,4 +181,62 @@ export interface IBlockProvider {
     provideBlock(id: string): IBlockAndRole | undefined;
 }
 
-export type BlockMap = { [key: string]: IBlockAndRole };
+export interface IBlockStore {
+    onDidChange: Event<IBlockAndRole>;
+    get(id: string): IBlockAndRole | undefined;
+    set(id: string, block: IBlockAndRole): void;
+    remove(id: string): void;
+}
+
+export type IBlockChild = Pick<IBaseBlock, 'id'|'type'|'content'>
+
+export type BlockMap = Record<string, IBlockAndRole>;
+
+export type IBaseNewBlockOptions = {
+    id?: string;
+    rootId?: string;
+    parent?: IBlock;
+    userId: string;
+}
+
+export type INewTextBlockOptions = IBaseNewBlockOptions &{
+    style?: TextStyle;
+}
+
+export function newTextBlock(options: INewTextBlockOptions): ITextBlock {
+    const baseBlock = newBlock({
+        ...options,
+        type: BlockType.Text,
+    });
+    const style = options.style || TextStyle.Paragraph;
+    return {...baseBlock, content: { value: [], style}} as ITextBlock;
+}
+
+export type INewBlockOptions = IBaseNewBlockOptions & {
+    type: BlockType;
+}
+
+export function newBlock(options: INewBlockOptions) {
+    const id = options.id || generateUuid();
+    const rootId = options.rootId || id;
+    const type = options.type;
+    const parentId = options.parent?.id || null;
+    const collectionId = options.parent?.collectionId || null;
+    const spaceId = options.parent?.spaceId || null;
+
+    return {
+        id,
+        rootId,
+        parentId,
+        collectionId,
+        spaceId,
+        type,
+        content: {},
+        children: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        lastViewedAt: new Date(),
+        version: 1,
+        createdById: options.userId,
+    };
+}

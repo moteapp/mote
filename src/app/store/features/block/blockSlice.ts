@@ -9,7 +9,8 @@ const initialState: BlockMap = {};
 
 export type NewPagePayload = {
     spaceId: string;
-    collectionId: string;
+    rootId?: string;
+    collectionId: string | null;
     userId: string;
     parentId?: string;
 };
@@ -24,9 +25,7 @@ export const blockSlice = createAppSlice({
                 provideBlock: (id: string) => state[id],
             };
             const tx = Transaction.create(action.payload.userId);
-            const blocks = EditorCommands.newPage({...action.payload, provider, parent, tx});
             tx.commit();
-            return {...state, ...blocks};
         },
     },
     selectors: {
@@ -35,6 +34,7 @@ export const blockSlice = createAppSlice({
     },
 });
 
+export const { newPage } = blockSlice.actions;
 export const { selectBlock, selectAllBlocks } = blockSlice.selectors;
 
 export const selectBlocksRecentlyViewed = createSelector([selectAllBlocks], (blocks) =>

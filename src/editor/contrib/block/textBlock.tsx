@@ -1,24 +1,60 @@
-import { useEffect, useRef } from "react";
-import { clearNode } from "mote/base/browser/dom";
-import { FastDomNode } from "mote/base/browser/fastDomNode";
-import { ViewController } from "mote/editor/browser/view/viewController";
+'use client';
+import React, { ReactNode, useEffect, } from "react";
+import { IBlockComponentProps } from "mote/editor/browser/blockComponent";
 import { ContentEditableInput } from "mote/editor/browser/controller/contentEditableInput";
+import { ViewController } from "mote/editor/browser/view/viewController";
+import { ITextBlock } from "mote/editor/common/blockCommon";
+import { BlockModel } from "mote/editor/common/model/blockModel";
 
 
-export function TextBlock() {
-    const nodeRef = useRef<HTMLDivElement>(null);
+export type TextBlockProps = Omit<IBlockComponentProps, 'block'> & {
+    blockModel: BlockModel;
+    viewController: ViewController;
+};
 
-    useEffect(() => {
-        if (nodeRef.current) {
-            clearNode(nodeRef.current);
-            const input = new ContentEditableInput(new ViewController());
-            nodeRef.current.appendChild(input.getDomNode().domNode);
+export class TextBlock extends React.PureComponent<TextBlockProps> {
+    refEditable = React.createRef<ContentEditableInput>();
+
+    getValue(): string {
+        return '';
+    }
+
+    onKeyUp = (e: React.KeyboardEvent<HTMLDivElement>, value: string) => {
+        console.log('onKeyUp', e.key);
+        this.setText(value);
+    }
+
+    onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        console.log('onKeyDown', e.key);
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            this.props.viewController.lineBreakInsert(this.props.blockModel);
         }
-    }, [nodeRef]);
+    }
 
-    return (
-        <div className="flex" ref={nodeRef}>
-            <div className="markers"></div>
-        </div>
-    );
+    setText = (value: string) => {
+        //const textValue = getTextBlockTextValue(block);
+        this.props.viewController.type(value, this.props.blockModel.getTextValueModel());
+    };
+
+    setValue = (value: string) => {
+        this.refEditable.current?.setValue(value);
+    }
+
+    componentDidMount(): void {
+        this.setValue(this.props.blockModel.getText());
+    }
+
+    render(): ReactNode {
+        return (
+            <div className="flex">
+                <div className="markers"></div>
+                <ContentEditableInput
+                    ref={this.refEditable}
+                    onKeyUp={this.onKeyUp}
+                    onKeyDown={this.onKeyDown}
+                />
+            </div>
+        );
+    }
 }

@@ -1,6 +1,8 @@
-'use client';
-import { selectBlock } from "mote/app/store/features/block/blockSlice";
-import { useAppSelector } from "mote/app/store/hooks";
+import { useEffect, useState } from "react";
+import { BlockModel } from "../common/model/blockModel";
+import { BlockStore } from "../common/model/blockStore";
+import { ViewController } from "./view/viewController";
+import { Document } from "./viewParts/document";
 import { PageHeader } from "./viewParts/pageHeader";
 
 export type EditorViewProps = {
@@ -9,11 +11,17 @@ export type EditorViewProps = {
 };
 
 export function EditorView({rootId, userId}: EditorViewProps) {
-    const blockAndRole = useAppSelector((state) => selectBlock(state, rootId));
+    const viewController = new ViewController(userId, BlockStore.Default);
+    const [blockModel, setBlockModel] = useState<BlockModel | null>(null);
 
-    if (!blockAndRole) {
-        return null;
-    }
+    useEffect(() => {
+        // Make sure block model is created on the client side since we need access the local storage
+        // Todo: we should move this to the server side by fetching the block model from the server
+        const pointer = {id: rootId, table: 'block'};
+        const blockModel = new BlockModel(pointer, BlockStore.Default);
+        blockModel.setRootModel(blockModel);
+        setBlockModel(blockModel);
+    }, []);
     return (
         <div
             id="editorWrapper"
@@ -21,10 +29,20 @@ export function EditorView({rootId, userId}: EditorViewProps) {
         >
             <div id={`editor-${rootId}`} className="editor">
                 <div className="blocks">
-                    <PageHeader
-                        rootId={rootId}
-                        block={blockAndRole.block}
-                    />
+                    {blockModel && (
+                        <>
+                        <PageHeader
+                            rootId={rootId}
+                            blockModel={blockModel}
+                            viewController={viewController}
+                        />
+                        <Document
+                            rootId={rootId}
+                            blockModel={blockModel}
+                            viewController={viewController}
+                        />
+                        </>
+                    )}
                 </div>
             </div>
         </div>

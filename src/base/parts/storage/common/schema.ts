@@ -16,15 +16,6 @@ const space = Prisma.validator<Prisma.SpaceDefaultArgs>()({});
 export type ISpace = Prisma.SpaceGetPayload<typeof space>;
 
 const block = Prisma.validator<Prisma.BlockDefaultArgs>()({});
-const blockWithRelations = Prisma.validator<Prisma.BlockDefaultArgs>()({ include: {
-    children: {
-        select: {
-            id: true,
-            type: true,
-            content: true,
-        }
-    },
-    parent: true,
-} });
+const blockWithRelations = Prisma.validator<Prisma.BlockDefaultArgs>()({});
 
 export type IBaseBlock = Prisma.BlockGetPayload<typeof blockWithRelations>;

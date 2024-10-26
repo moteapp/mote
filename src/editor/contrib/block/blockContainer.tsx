@@ -1,21 +1,22 @@
+import './block.css';
 import { ReactNode } from "react";
-import { selectBlock } from "mote/app/store/features/block/blockSlice";
-import { useAppSelector } from "mote/app/store/hooks";
-import { getBlockClassName, IBlockComponentProps, isLayoutBlock, isTextBlock } from "mote/editor/common/blockCommon";
+import { match } from 'ts-pattern';
+import { IBlockComponentProps } from "mote/editor/browser/blockComponent";
+import { isLayoutBlock, isTextBlock, ITextBlock } from "mote/editor/common/blockCommon";
 import { DropType, SelectType } from "mote/editor/common/editorCommon";
+import { BlockModel } from "mote/editor/common/model/blockModel";
 import { DragTarget } from "../dnd/dropTarget";
 import { ListChildren } from "../list/listChildren";
 import { SelectionTarget } from "../selection/selectionTarget";
 import { TextBlock } from "./textBlock";
 
-export type BlockContainerProps = IBlockComponentProps & {
-    id: string;
+export type BlockContainerProps = Omit<IBlockComponentProps, 'block'> & {
+    blockModel: BlockModel;
 };
 
-export function BlockContainer({rootId, id}: BlockContainerProps) {
-    const { block, role } = useAppSelector((state) => selectBlock(state, id));
-
-    const clxName = ['block', getBlockClassName(block)];
+export function BlockContainer({rootId, blockModel, ...restProps}: BlockContainerProps) {
+    const id = blockModel.id;
+    const clxName = ['block', blockModel.className];
 
     let canSelect = true;
     const canDrop = true;
@@ -23,12 +24,15 @@ export function BlockContainer({rootId, id}: BlockContainerProps) {
     let object: ReactNode;
     let blockComponent: ReactNode;
 
-    if (isTextBlock(block)) {
-        blockComponent = <TextBlock />;
-    } else if (isLayoutBlock(block)) {
+    match(blockModel.value)
+    .when(isTextBlock, (block) => {
+        blockComponent = <TextBlock rootId={rootId} blockModel={blockModel} {...restProps}/>;
+    })
+    .when(isLayoutBlock, (block) => {
         canSelect = false;
         renderChildren = true;
-    }
+    })
+    .run();
 
     if (canDrop) {
         object = (
@@ -64,7 +68,7 @@ export function BlockContainer({rootId, id}: BlockContainerProps) {
             </div>
             <div className="wrapContent">
                 {object}
-                {renderChildren && <ListChildren rootId={rootId} block={block} />}
+                {renderChildren && <ListChildren rootId={rootId} blockModel={blockModel} {...restProps} />}
             </div>
         </div>
     );

@@ -93,9 +93,8 @@ model Block {
   id     String @id @default(uuid()) @db.Uuid
   rootId String @db.Uuid
 
-  parent   Block?  @relation("BlockParent", fields: [parentId], references: [id])
   parentId String? @db.Uuid
-  children Block[] @relation("BlockParent")
+  children String[]
 
   collection   Collection? @relation(fields: [collectionId], references: [id])
   collectionId String?     @db.Uuid
