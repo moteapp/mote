@@ -1,7 +1,8 @@
 'use client';
 import { match } from "ts-pattern";
 import { IBaseBlock } from "mote/base/parts/storage/common/schema";
-import { Pointer, BlockType, ITextBlock, TextStyle, ILayoutBlock, IPageBlock, LayoutStyle, IBlockProvider, IBlockStore, isTextBlock, IBlock, isLayoutBlock, ISegment, IBlockChild } from "../blockCommon";
+import { IRecordService, Pointer } from "mote/platform/record/common/record";
+import { BlockType, ITextBlock, TextStyle, ILayoutBlock, IPageBlock, LayoutStyle, IBlockProvider, IBlockStore, isTextBlock, IBlock, isLayoutBlock, ISegment, IBlockChild } from "../blockCommon";
 import { RecordModel } from "./recordModel";
 
 
@@ -11,13 +12,13 @@ export class BlockModel extends RecordModel<IBlock> {
         root: BlockModel | undefined,
         parent: RecordModel<string[]>,
         pointer: Pointer,
-        blockStore: IBlockStore,
+        recordService: IRecordService,
     ): BlockModel {
         let childModel = parent.getChildModel(pointer, []) as BlockModel;
         if (childModel) {
             return childModel;
         }
-        childModel = new BlockModel(pointer, blockStore);
+        childModel = new BlockModel(pointer, recordService);
         parent.addChildModel(childModel);
         childModel.setParent(parent);
         childModel.setRootModel(root);
@@ -26,9 +27,9 @@ export class BlockModel extends RecordModel<IBlock> {
 
     constructor(
         public pointer: Pointer,
-        public blockStore: IBlockStore,
+        recordService: IRecordService,
     ) {
-        super(pointer, [], blockStore);
+        super(pointer, [], recordService);
     }
 
     //#region Properties
@@ -218,7 +219,7 @@ export class BlockModel extends RecordModel<IBlock> {
         const children = this.value.children || [];
         return children.map((child) => {
             const pointer = { id: child, table: this.pointer.table };
-            return BlockModel.createChildBlockModel(this.getRootModel(), parent, pointer, this.blockStore);
+            return BlockModel.createChildBlockModel(this.getRootModel(), parent, pointer, this.recordService);
         });
     }
 

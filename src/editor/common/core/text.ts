@@ -21,13 +21,13 @@ export class TextUtils {
                 const txtBefore = txt.slice(0, index);
                 const txtAfter = txt.slice(index);
                 if (txtBefore.length > 0) {
-                    newRecord.push([txtBefore, annotations]);
+                    newRecord.push(annotations ? [txtBefore, annotations] : [txtBefore]);
                 }
                 for (const seg of segments) {
                     newRecord.push(seg);
                 }
                 if (txtAfter.length > 0) {
-                    newRecord.push([txtAfter, annotations]);
+                    newRecord.push(annotations ? [txtAfter, annotations] : [txtAfter]);
                 }
                 merged = true;
             } else {
@@ -65,7 +65,7 @@ export class TextUtils {
                 const endOffset = end - segmentStart;
                 const content = Array.from(txt).filter((_, idx) => idx < startOffset || idx > endOffset - 1).join('');
                 if (content.length > 0) {
-                    newRecord.push([content, annotations]);
+                    newRecord.push(annotations ? [content, annotations] : [content]);
                 }
             }
             offset = segmentEnd;
@@ -109,10 +109,10 @@ export class TextUtils {
                 const txtBefore = txt.slice(0, startOffset);
                 const txtAfter = txt.slice(startOffset);
                 if (txtBefore.length > 0) {
-                    before.push([txtBefore, annotations]);
+                    before.push(annotations ? [txtBefore, annotations] : [txtBefore]);
                 }
                 if (txtAfter.length > 0) {
-                    after.push([txtAfter, annotations]);
+                    after.push(annotations ? [txtAfter, annotations] : [txtAfter]);
                 }
             }
             offset = segmentEnd;

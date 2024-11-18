@@ -4,6 +4,7 @@ import { ITextSelection } from 'mote/editor/common/core/selection';
 import { CursorController } from 'mote/editor/common/cursor/cursor';
 import { BlockModel } from 'mote/editor/common/model/blockModel';
 import { RecordModel } from 'mote/editor/common/model/recordModel';
+import { ITransactionService } from 'mote/platform/record/common/transaction';
 
 export class ViewController {
 
@@ -12,9 +13,9 @@ export class ViewController {
 
     public constructor(
         private readonly userId: string,
-        private readonly store: IBlockStore,
+        @ITransactionService private readonly transactionService: ITransactionService,
     ) {
-        this.cursor = new CursorController(userId, store);
+        this.cursor = new CursorController(userId, transactionService);
     }
 
     public emitKeyDown(e: IKeyboardEvent): void {

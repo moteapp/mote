@@ -1,0 +1,1 @@
+export const NEW_UNTITLED_PAGE_COMMAND_ID = 'workbench.action.pages.newUntitledPage';

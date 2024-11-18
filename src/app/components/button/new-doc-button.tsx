@@ -7,12 +7,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "mote/app/components/ui/tooltip"
-import { newPage } from "mote/app/store/features/block/blockSlice";
-import { useAppDispatch } from "mote/app/store/hooks";
+
 import { generateUuid } from "mote/base/common/uuid";
-import { EditorCommands } from "mote/editor/browser/coreCommands";
-import { BlockStore } from "mote/editor/common/model/blockStore";
-import { Transaction } from "mote/platform/editor/common/transaction";
+import { ICommandService } from "mote/platform/commands/common/commands";
+import { NEW_UNTITLED_PAGE_COMMAND_ID } from "mote/workbench/contrib/pages/browser/pageConstants";
+import { instantiationService } from "mote/workbench/workbench.client.main";
 
 export function NewDoc() {
     const router = useRouter();
@@ -21,9 +20,9 @@ export function NewDoc() {
         const userId = 'user';
         const collectionId = null;
         const rootId = generateUuid();
-        const store = BlockStore.Default;
-        Transaction.createAndCommit(userId, store, (tx) => {
-            EditorCommands.newPage({rootId, spaceId, userId, collectionId, store, tx});
+        instantiationService.invokeFunction((accessor) => {
+            const commandService = accessor.get(ICommandService);
+            commandService.executeCommand(NEW_UNTITLED_PAGE_COMMAND_ID, {rootId, spaceId, userId, collectionId});
             router.push(`/doc/${rootId}`);
         });
     };

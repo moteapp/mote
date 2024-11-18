@@ -8,12 +8,6 @@ export enum Role {
     Reader,
 }
 
-export type Pointer = {
-    table: string;
-    id: string;
-    spaceId?: string;
-};
-
 export enum BlockType {
     Empty = '',
     Page = 'page',
@@ -70,7 +64,7 @@ export type IAnnotation = [string];
  * - It represents the text "Hello, world!" with a bold annotation and a link annotation.
  * - The link annotation points to "www.hello.com".
  */
-export type ISegment = [string, IAnnotation[]];
+export type ISegment = [string] | [string, IAnnotation[]];
 
 export type TextContent = {
     value: ISegment[];

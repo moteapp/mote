@@ -46,6 +46,10 @@ export class ContentEditableInput extends React.PureComponent<ContentEditableInp
         keyboard.setComposition(false);
     }
 
+    onSelect = (e: React.SyntheticEvent) => {
+        console.log('onSelect', e.target);
+    }
+
     setValue = (value: string) => {
         if (this.refEditable.current) {
             this.refEditable.current.innerHTML = value;
@@ -59,6 +63,7 @@ export class ContentEditableInput extends React.PureComponent<ContentEditableInp
                     className="editable" 
                     contentEditable="true"
                     ref={this.refEditable}
+                    onSelect={this.onSelect}
                     onKeyUp={this.onKeyUp}
                     onKeyDown={this.onKeyDown}
                     onCompositionStart={this.onCompositionStart}

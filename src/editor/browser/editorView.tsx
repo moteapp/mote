@@ -1,9 +1,15 @@
+'use client';
 import { useEffect, useState } from "react";
+import { LocalStorageDatabaseProvider } from "mote/platform/record/browser/localStorageDatabaseProvider";
+import { TransactionService } from "mote/platform/record/browser/transactionService";
+import { RecordService } from "mote/platform/record/common/recordService";
 import { BlockModel } from "../common/model/blockModel";
-import { BlockStore } from "../common/model/blockStore";
 import { ViewController } from "./view/viewController";
 import { Document } from "./viewParts/document";
 import { PageHeader } from "./viewParts/pageHeader";
+import { instantiationService } from "mote/workbench/workbench.client.main";
+import { IRecordService } from "mote/platform/record/common/record";
+import { ITransactionService } from "mote/platform/record/common/transaction";
 
 export type EditorViewProps = {
     rootId: string;
@@ -11,16 +17,22 @@ export type EditorViewProps = {
 };
 
 export function EditorView({rootId, userId}: EditorViewProps) {
-    const viewController = new ViewController(userId, BlockStore.Default);
+   
+    const viewController = instantiationService.createInstance(ViewController, userId);
+
     const [blockModel, setBlockModel] = useState<BlockModel | null>(null);
 
     useEffect(() => {
-        // Make sure block model is created on the client side since we need access the local storage
-        // Todo: we should move this to the server side by fetching the block model from the server
-        const pointer = {id: rootId, table: 'block'};
-        const blockModel = new BlockModel(pointer, BlockStore.Default);
-        blockModel.setRootModel(blockModel);
-        setBlockModel(blockModel);
+        instantiationService.invokeFunction((accessor) => {
+            console.log('initialize editor view');
+            const recordService = accessor.get(IRecordService);
+            // Make sure block model is created on the client side since we need access the local storage
+            // Todo: we should move this to the server side by fetching the block model from the server
+            const pointer = {id: rootId, table: 'block'};
+            const blockModel = new BlockModel(pointer, recordService);
+            blockModel.setRootModel(blockModel);
+            setBlockModel(blockModel);
+        });
     }, []);
     return (
         <div

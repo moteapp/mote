@@ -3,15 +3,15 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { GlobalIdleValue } from '../../../base/common/async.js';
-import { Event } from '../../../base/common/event.js';
-import { illegalState } from '../../../base/common/errors.js';
-import { DisposableStore, dispose, IDisposable, isDisposable, toDisposable } from '../../../base/common/lifecycle.js';
-import { SyncDescriptor, SyncDescriptor0 } from './descriptors.js';
-import { Graph } from './graph.js';
-import { GetLeadingNonServiceArgs, IInstantiationService, ServiceIdentifier, ServicesAccessor, _util } from './instantiation.js';
-import { ServiceCollection } from './serviceCollection.js';
-import { LinkedList } from '../../../base/common/linkedList.js';
+import { GlobalIdleValue } from 'mote/base/common/async';
+import { illegalState } from 'mote/base/common/errors';
+import { Event } from 'mote/base/common/event';
+import { DisposableStore, dispose, IDisposable, isDisposable, toDisposable } from 'mote/base/common/lifecycle';
+import { LinkedList } from 'mote/base/common/linkedList';
+import { SyncDescriptor, SyncDescriptor0 } from './descriptors';
+import { Graph } from './graph';
+import { GetLeadingNonServiceArgs, IInstantiationService, ServiceIdentifier, ServicesAccessor, _util } from './instantiation';
+import { ServiceCollection } from './serviceCollection';
 
 // TRACING
 const _enableAllTracing = false

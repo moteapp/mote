@@ -9,12 +9,17 @@ import { DragTarget } from "../dnd/dropTarget";
 import { ListChildren } from "../list/listChildren";
 import { SelectionTarget } from "../selection/selectionTarget";
 import { TextBlock } from "./textBlock";
+import { useModelChanges } from 'mote/app/hooks/use-model';
 
 export type BlockContainerProps = Omit<IBlockComponentProps, 'block'> & {
     blockModel: BlockModel;
 };
 
 export function BlockContainer({rootId, blockModel, ...restProps}: BlockContainerProps) {
+    useModelChanges(blockModel);
+    if (!blockModel.value) {
+        return null;
+    }
     const id = blockModel.id;
     const clxName = ['block', blockModel.className];
 

@@ -2,12 +2,14 @@
 import get from 'lodash/get';
 import { Event, Emitter } from "mote/base/common/event";
 import { Disposable } from "mote/base/common/lifecycle";
-import { BlockRole, IBlockAndRole, IBlockProvider, IBlockStore, Pointer } from "../blockCommon";
+import { IRecordService, Pointer } from 'mote/platform/record/common/record';
+import { BlockRole, IBlock } from "../blockCommon";
 import { IModel } from "../model";
 
 interface IInstanceState<T> {
     value: T;
     role?: BlockRole;
+    ready: boolean;
 }
 
 export class RecordModel<T = any>
@@ -35,7 +37,7 @@ export class RecordModel<T = any>
         childModel = new RecordModel<T>(
             pointer,
             [...parent.path, ...path],
-            parent.blockStore
+            parent.recordService
         );
         parent.addChildModel(childModel);
         return childModel;
@@ -47,33 +49,33 @@ export class RecordModel<T = any>
 
     public readonly onDidChange = this._onDidChange.event;
 
-    private instanceState: IInstanceState<T> = {} as any;
+    private instanceState: IInstanceState<T> = { value: null, ready: false} as any;
 
     constructor(
         public pointer: Pointer,
         public readonly path: string[],
-        public blockStore: IBlockStore,
+        public readonly recordService: IRecordService,
     ) {
         super();
 
         const onBlockChange = Event.filter(
-            blockStore.onDidChange, 
-            (e) => e.block.id === pointer.id
+            recordService.onDidRecordChange, 
+            (e) => e.record.id === pointer.id
         );
-        this._register(onBlockChange((e) => this.handleBlockChange(e)));
+        this._register(onBlockChange((e) => this.handleBlockChange()));
         this.handleBlockChange();
     }
 
-    private handleBlockChange = (record?: IBlockAndRole) => {
-        record = record ?? this.blockStore.get(this.pointer.id);
-        const role = record?.role;
+    private handleBlockChange() {
+        const block = this.recordService.retriveRecord(this.pointer);
         let value: T;
         if (this.path && this.path.length) {
-            value = get(record?.block, this.path);
+            value = get(block, this.path);
         } else {
-            value = record?.block as T;
+            value = block as T;
         }
-        this.instanceState = { value, role };
+        this.instanceState = { value, ready: true };
+        this._onDidChange.fire(this.instanceState);
     }
 
     public get id() {
@@ -90,6 +92,28 @@ export class RecordModel<T = any>
 
     get value() {
         return this.state.value;
+    }
+
+    public async load() {
+        if (this.state.ready) {
+            return Promise.resolve();
+        }
+        await this.waitUtil(() => this.state.ready);
+    }
+
+    private waitUtil(predict: () => boolean): Promise<void> {
+        return new Promise((resolve) => {
+            if (predict()) {
+                resolve();
+            }
+            const listener = this.onDidChange((e) => {
+                if (predict()) {
+                    resolve();
+                    listener.dispose();
+                }
+            });
+        });
+
     }
 
     getPropertyModel<T extends keyof this['value']>(

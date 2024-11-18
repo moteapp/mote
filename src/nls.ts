@@ -88,6 +88,55 @@ function lookupMessage(index: number, fallback: string | null): string {
     return fallback!;
 }
 
+/**
+ * Marks a string to be localized. Returns an {@linkcode ILocalizedString}
+ * which contains the localized string and the original string.
+ *
+ * @param info The {@linkcode ILocalizeInfo} which describes the id and comments associated with the localized string.
+ * @param message The string to localize
+ * @param args The arguments to the string
+ *
+ * @note `message` can contain `{n}` notation where it is replaced by the nth value in `...args`
+ * @example `localize2({ key: 'sayHello', comment: ['Welcomes user'] }, 'hello {0}', name)`
+ *
+ * @returns ILocalizedString which contains the localized string and the original string.
+ */
+export function localize2(info: ILocalizeInfo, message: string, ...args: (string | number | boolean | undefined | null)[]): ILocalizedString;
+
+/**
+ * Marks a string to be localized. Returns an {@linkcode ILocalizedString}
+ * which contains the localized string and the original string.
+ *
+ * @param key The key to use for localizing the string
+ * @param message The string to localize
+ * @param args The arguments to the string
+ *
+ * @note `message` can contain `{n}` notation where it is replaced by the nth value in `...args`
+ * @example `localize('sayHello', 'hello {0}', name)`
+ *
+ * @returns ILocalizedString which contains the localized string and the original string.
+ */
+export function localize2(key: string, message: string, ...args: (string | number | boolean | undefined | null)[]): ILocalizedString;
+
+/**
+ * @skipMangle
+ */
+export function localize2(data: ILocalizeInfo | string /* | number when built */, originalMessage: string, ...args: (string | number | boolean | undefined | null)[]): ILocalizedString {
+	let message: string;
+	if (typeof data === 'number') {
+		message = lookupMessage(data, originalMessage);
+	} else {
+		message = originalMessage;
+	}
+
+	const value = _format(message, args);
+
+	return {
+		value,
+		original: originalMessage === message ? value : _format(originalMessage, args)
+	};
+}
+
 export interface INLSLanguagePackConfiguration {
 
 	/**

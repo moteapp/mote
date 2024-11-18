@@ -32,9 +32,10 @@ export class TextBlock extends React.PureComponent<TextBlockProps> {
         }
     }
 
-    setText = (value: string) => {
-        //const textValue = getTextBlockTextValue(block);
-        this.props.viewController.type(value, this.props.blockModel.getTextValueModel());
+    setText = async (value: string) => {
+        const textModel = this.props.blockModel.getTextValueModel();
+        await textModel.load();
+        this.props.viewController.type(value, textModel);
     };
 
     setValue = (value: string) => {
