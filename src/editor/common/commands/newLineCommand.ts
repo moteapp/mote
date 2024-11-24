@@ -1,8 +1,8 @@
-import { OperationType } from "mote/platform/record/common/record";
 import { IBlock, ISegment } from "../blockCommon";
 import { ICommand, ICursorStateComputerData, IEditOperationBuilder } from "../editorCommon";
 import { RecordModel } from "../model/recordModel";
 import { ITextSelection } from "../core/selection";
+import { OperationType } from "mote/platform/request/common/request";
 
 export class NewLineCommand implements ICommand {
     

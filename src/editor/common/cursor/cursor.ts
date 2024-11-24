@@ -1,4 +1,3 @@
-import { IOperation, OperationType } from "mote/platform/record/common/record";
 import { ITransactionService, Transaction } from "mote/platform/record/common/transaction";
 import { ISegment, ITextBlock } from "../blockCommon";
 import { ITextSelection } from "../core/selection";
@@ -8,6 +7,7 @@ import { BlockModel } from "../model/blockModel";
 import { RecordModel } from "../model/recordModel";
 import { EnterOperation } from "./cursorTypeEditOperations";
 import { TypeOperation } from "./cursorTypeOperations";
+import { IOperation, OperationType } from "mote/platform/request/common/request";
 
 export class CursorController {
 

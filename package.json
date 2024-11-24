@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrate": "dotenv -e .env.local -- npx prisma migrate resolve --applied 0_init"
+    "migrate": "dotenv -e .env.local -- npx prisma migrate dev --name add_fields"
   },
   "dependencies": {
     "@ariakit/react": "^0.4.11",

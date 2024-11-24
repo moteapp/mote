@@ -1,8 +1,9 @@
 'use client';
 import { Event, Emitter } from "mote/base/common/event";
 import { Disposable } from "mote/base/common/lifecycle";
-import { IDatabaseProvider, IOperation, IRecord, Pointer, RecordChangeEvent } from "../common/record";
-import { ApplyTransationsRequest, ITransactionService } from "../common/transaction";
+import { IDatabaseProvider, IRecord, Pointer, RecordChangeEvent } from "../common/record";
+import { ITransactionService } from "../common/transaction";
+import { ApplyTransationsRequest } from "mote/platform/request/common/request";
 
 
 export class LocalStorageDatabaseProvider extends Disposable implements IDatabaseProvider {
@@ -15,7 +16,7 @@ export class LocalStorageDatabaseProvider extends Disposable implements IDatabas
         transactionService: ITransactionService
     ) {
         super();
-        this._register(transactionService.onApplyTransaction((e) => this.applyTransaction(e)));
+        this._register(transactionService.onDidApplyTransaction((e) => this.applyTransaction(e)));
     }
 
     private applyTransaction(request: ApplyTransationsRequest) {
@@ -35,20 +36,19 @@ export class LocalStorageDatabaseProvider extends Disposable implements IDatabas
         });
     }
 
-    public get<T extends IRecord>(pointer: Pointer): T {
+    public get<T extends IRecord>(pointer: Pointer): T | null {
         let record = this.data[pointer.id];
         if (!record) {
             let value = localStorage.getItem(pointer.id)
             if (!value) {
-                //throw new Error('Record not found:'+pointer.id);
-                value = "{}";
+                return null;
             }
             record = JSON.parse(value) as T;
         }
         return record;
     }
 
-    public async getAsync<T extends IRecord>(pointer: Pointer): Promise<T> {
+    public async getAsync<T extends IRecord>(pointer: Pointer): Promise<T|null> {
         return Promise.resolve(this.get(pointer));
     }
 

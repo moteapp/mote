@@ -76,7 +76,6 @@ export class RecordService extends Disposable implements IRecordService {
     
     registerProvider(scheme: string, provider: IDatabaseProvider): IDisposable {
         const providerDisposables = new DisposableStore();
-    
         this.providers.set(scheme, provider);
 
         // Forward events from provider

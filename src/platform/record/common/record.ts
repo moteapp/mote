@@ -2,23 +2,6 @@ import { Event } from "mote/base/common/event";
 import { IDisposable } from "mote/base/common/lifecycle";
 import { createDecorator } from "mote/platform/instantiation/common/instantiation";
 
-export enum OperationType {
-    Update = 0,
-    Set,
-    ListBefore,
-    ListAfter,
-    ListRemove,
-}
-
-export interface IOperation {
-    id: string;
-    table: string;
-    path: string[];
-    type: OperationType;
-    args: any;
-    size?: number;
-}
-
 export interface IRecord extends Record<string, any> {
     id: string;
     createdAt: Date;
@@ -88,8 +71,8 @@ export interface IWatchOptions {}
 export interface IDatabaseProvider {
 	onDidChange: Event<RecordChangeEvent>;
     watch(resource: Pointer, opts: IWatchOptions): IDisposable;
-    get<T extends IRecord>(pointer: Pointer): T;
-    getAsync<T extends IRecord>(pointer: Pointer): Promise<T>;
+    get<T extends IRecord>(pointer: Pointer): T | null;
+    getAsync<T extends IRecord>(pointer: Pointer): Promise<T|null>;
     set<T extends IRecord>(pointer: Pointer, value: T): Promise<void>;
     delete(pointer: Pointer): Promise<void>;
 }

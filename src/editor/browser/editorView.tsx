@@ -1,15 +1,11 @@
 'use client';
 import { useEffect, useState } from "react";
-import { LocalStorageDatabaseProvider } from "mote/platform/record/browser/localStorageDatabaseProvider";
-import { TransactionService } from "mote/platform/record/browser/transactionService";
-import { RecordService } from "mote/platform/record/common/recordService";
 import { BlockModel } from "../common/model/blockModel";
 import { ViewController } from "./view/viewController";
 import { Document } from "./viewParts/document";
 import { PageHeader } from "./viewParts/pageHeader";
 import { instantiationService } from "mote/workbench/workbench.client.main";
 import { IRecordService } from "mote/platform/record/common/record";
-import { ITransactionService } from "mote/platform/record/common/transaction";
 
 export type EditorViewProps = {
     rootId: string;

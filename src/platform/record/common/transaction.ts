@@ -2,20 +2,8 @@ import { Event } from 'mote/base/common/event';
 import { generateUuid} from 'mote/base/common/uuid';
 import { createDecorator } from 'mote/platform/instantiation/common/instantiation';
 import { OperationExecutor } from 'mote/platform/record/common/operationExecutor';
-import { IOperation, IRecordService } from 'mote/platform/record/common/record';
-
-export type TransactionData = {
-    id: string;
-    userId: string;
-    operations: IOperation[];
-    timestamp: number;
-};
-
-export type ApplyTransationsRequest = {
-    traceId: string;
-    transactions: TransactionData[];
-};
-
+import { IRecordService } from 'mote/platform/record/common/record';
+import { ApplyTransationsRequest, IOperation, TransactionData } from 'mote/platform/request/common/request';
 
 export const ITransactionService = createDecorator<ITransactionService>('ITransactionService');
 
@@ -24,7 +12,7 @@ export interface ITransactionService {
 
     initialize(userId: string): Promise<void>;
 
-    onApplyTransaction: Event<ApplyTransationsRequest>;
+    onDidApplyTransaction: Event<ApplyTransationsRequest>;
     createAndCommit(userId: string, callback: (tx: Transaction) => Promise<void>): void;
     applyTransaction(tx: Transaction): void;
 }
@@ -60,7 +48,8 @@ export class Transaction {
     }
 
     private async applyOperation(operation: IOperation) {
-        await OperationExecutor.runOperation(operation, this.recordService);
+        const record = await OperationExecutor.runOperation(operation, this.recordService);
+        this.recordService.updateRecord(operation, record);
     }
 
     public commit() {

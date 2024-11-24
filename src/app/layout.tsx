@@ -2,7 +2,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import StoreProvider from "./storeProvider";
 import type { Metadata } from "next";
-import 'mote/workbench/workbench.client.main';
 import Initializer from "./init";
 
 const geistSans = localFont({

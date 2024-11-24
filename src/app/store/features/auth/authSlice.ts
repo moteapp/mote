@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createAppSlice } from 'mote/app/store/createAppSlice';
-import { client, AuthConfig } from 'mote/platform/request/common/request';
+import { AuthConfig } from 'mote/platform/request/common/request';
+import { requestService } from 'mote/platform/request/common/requestService';
 
 type AuthCredential = {
     token: string;
@@ -18,14 +19,14 @@ const initialState: AuthState = {
 };
 
 export const fetchAuthConfig = createAsyncThunk('auth/fetchByIdStatus', async () => {
-    const response = await client.getAuthConfig();
+    const response = await requestService.getAuthConfig();
     return response;
 });
 
 export const generateOneTimePassword = createAsyncThunk(
     'auth/generateOneTimePassword',
     async (email: string) => {
-        const response = await client.generateOneTimePassword(email);
+        const response = await requestService.generateOneTimePassword(email);
         return { email };
     }
 );
@@ -39,7 +40,7 @@ export const loginWithOneTimePassword = createAsyncThunk(
     'auth/loginWithOneTimePassword',
     async (payload: LoginWithOneTimePasswordPayload) => {
         const { email, code } = payload;
-        const { token } = await client.loginWithOneTimePassword(email, code);
+        const { token } = await requestService.loginWithOneTimePassword(email, code);
         return { token };
     }
 );

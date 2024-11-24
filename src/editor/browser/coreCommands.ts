@@ -1,9 +1,10 @@
 import { generateUuid } from "mote/base/common/uuid";
-import { IOperation, IRecordService, OperationType } from "mote/platform/record/common/record";
+import { IRecordService } from "mote/platform/record/common/record";
 import { BlockMap, BlockRole, BlockType, IBlock, IBlockAndRole, IBlockProvider, IBlockStore, ILayoutBlock, IPageBlock, ITextBlock, LayoutStyle, newTextBlock, TextStyle } from "../common/blockCommon";
 import { BlockModel } from "../common/model/blockModel";
 import { RecordModel } from "../common/model/recordModel";
 import { EditorCommand } from "./editorExtensions";
+import { IOperation, OperationType } from "mote/platform/request/common/request";
 
 export type NewPageOptions = {
     spaceId: string;
@@ -90,24 +91,29 @@ function newPageLayout(options: NewPageLayoutOptions): IOperation[] {
     operations.push(newAppendToParentOperation(parent, model));
 
     // Create a new text block as the page title
-    operations.push(...newPageTitle({...options, layoutModel: model}));
+    operations.push(...newPageTitle({
+        ...options, 
+        layoutModel: model,
+        layoutBlock: block
+    }));
 
     return operations;
 }
 
 type NewPageTitleOptions = NewPageOptions & {
     rootId: string;
-    layoutModel: BlockModel
+    layoutModel: BlockModel;
+    layoutBlock: ILayoutBlock;
 }
 
 function newPageTitle(options: NewPageTitleOptions) {
     const operations: IOperation[] = [];
 
-    const { layoutModel, userId } = options;
+    const { layoutModel, userId, layoutBlock } = options;
 
     const parent = layoutModel.getChildrenModel();
     const rootModel = layoutModel.getRootModel();
-    const block: ITextBlock = newTextBlock({userId, parent: layoutModel.value, style: TextStyle.Title});
+    const block: ITextBlock = newTextBlock({userId, parent: layoutBlock, style: TextStyle.Title});
     const model = BlockModel.createChildBlockModel(rootModel, parent, { id: block.id, table: 'block' }, layoutModel.recordService);
 
     operations.push(newSetOperation(model, block));

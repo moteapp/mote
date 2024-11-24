@@ -5,17 +5,19 @@ import { Disposable } from 'mote/base/common/lifecycle';
 import { generateUuid } from 'mote/base/common/uuid';
 import { InstantiationType, registerSingleton } from 'mote/platform/instantiation/common/extensions';
 import { IRecordService } from 'mote/platform/record/common/record';
-import { ApplyTransationsRequest, ITransactionService, Transaction, TransactionData } from '../common/transaction';
+import { ITransactionService, Transaction } from '../common/transaction';
+import { ApplyTransationsRequest, TransactionData } from 'mote/platform/request/common/request';
+import { requestService } from 'mote/platform/request/common/requestService';
 
 export class TransactionService extends Disposable implements ITransactionService {
     readonly _serviceBrand: undefined;
 
     public static TRANSACTION_STORE = 'transaction-store';
 
-    private readonly _onApplyTransaction = this._register(
+    private readonly _onDidApplyTransaction = this._register(
         new Emitter<ApplyTransationsRequest>()
     );
-    public readonly onApplyTransaction = this._onApplyTransaction.event;
+    public readonly onDidApplyTransaction = this._onDidApplyTransaction.event;
 
     private initialzed = false;
     private userId!: string;
@@ -99,7 +101,9 @@ export class TransactionService extends Disposable implements ITransactionServic
             traceId: generateUuid(),
             transactions,
         };
-        this._onApplyTransaction.fire(request);
+        await requestService.applyTransactions(request);
+        transactions.forEach((tx) => this.cleanTransaction(tx.id));
+        this._onDidApplyTransaction.fire(request);
     }
 
     private async getTransactions(userId: string): Promise<TransactionData[]> {

@@ -11,7 +11,7 @@ import { useEffect } from "react";
  * @returns 
  */
 export default function Initializer() {
-    const userId = 'user';
+    const userId = '43c5d10b-6bdf-459b-8544-5afc65a9947d';
     useEffect(() => {
         instantiationService.invokeFunction((accessor) => {
             console.log('[Initializer] start up');

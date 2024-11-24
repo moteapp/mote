@@ -16,13 +16,13 @@ import { instantiationService } from "mote/workbench/workbench.client.main";
 export function NewDoc() {
     const router = useRouter();
     const handleClick = () => {
-        const spaceId = 'space';
-        const userId = 'user';
+        const spaceId = '43c5d11b-6bdf-459b-8544-5afc65a9947d';
+        const userId = '43c5d10b-6bdf-459b-8544-5afc65a9947d';
         const collectionId = null;
         const rootId = generateUuid();
-        instantiationService.invokeFunction((accessor) => {
+        instantiationService.invokeFunction(async (accessor) => {
             const commandService = accessor.get(ICommandService);
-            commandService.executeCommand(NEW_UNTITLED_PAGE_COMMAND_ID, {rootId, spaceId, userId, collectionId});
+            await commandService.executeCommand(NEW_UNTITLED_PAGE_COMMAND_ID, {rootId, spaceId, userId, collectionId});
             router.push(`/doc/${rootId}`);
         });
     };

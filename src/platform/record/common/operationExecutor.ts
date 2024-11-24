@@ -1,6 +1,7 @@
 import filter from 'lodash/filter';
 import get from 'lodash/get';
-import { IOperation, IRecordService, OperationType } from "./record";
+import { IRecordService } from "./record";
+import { IOperation, OperationType } from 'mote/platform/request/common/request';
 
 export function calcVersion(operation: IOperation) {
     return operation.size ?? 1;
@@ -112,8 +113,6 @@ export class OperationExecutor {
         record = operation.path.length > 0 ? updateObjectByPath(record, operation.path, value) : value;
         record.version = version;
 
-        recordService.updateRecord(pointer, record);
-        console.log('runOperation', operation, record);
         return record;
     }
 
