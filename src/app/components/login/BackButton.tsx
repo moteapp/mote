@@ -1,9 +1,9 @@
-import { useClientTranslation } from 'mote/app/i18n/i18nForClient';
 import styled from 'styled-components';
+import { useClientTranslation } from 'mote/app/i18n/i18nForClient';
 
 export function BackButton() {
     const { t } = useClientTranslation();
-    return <Link href="/">{'<' + t('Back to home')}</Link>;
+    return <Link href="/">{'< ' + t('Back to home')}</Link>;
 }
 
 const Link = styled.a`

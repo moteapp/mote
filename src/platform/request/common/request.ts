@@ -36,6 +36,8 @@ export type ApplyTransationsResponse = {
 
 //#endregion
 
+//#region Auth
+
 export type AuthProvider = {
     id: string;
     name: string;
@@ -48,7 +50,17 @@ export type AuthConfig = {
     providers: AuthProvider[];
 };
 
+export type GenerateOneTimePasswordRequest = {
+    email: string;
+}
+
+export type LoginWithOneTimePasswordRequest = {
+    email?: string;
+    password: string;
+};
 
 export type LoginWithOneTimePasswordResponse = {
     token: string;
 };
+
+//#endregion
