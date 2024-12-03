@@ -1,5 +1,7 @@
 //#region ApplyTransationsRequest
 
+import { ISpace, IUser } from "mote/base/parts/storage/common/schema";
+
 export enum OperationType {
     Update = 0,
     Set,
@@ -61,6 +63,9 @@ export type LoginWithOneTimePasswordRequest = {
 
 export type LoginWithOneTimePasswordResponse = {
     token: string;
+    user: IUser;
+    space: ISpace;
+    provider: AuthProvider;
 };
 
 //#endregion

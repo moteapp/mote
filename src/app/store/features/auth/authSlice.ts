@@ -1,10 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createAppSlice } from 'mote/app/store/createAppSlice';
-import { AuthConfig } from 'mote/platform/request/common/request';
+import { ISpace, IUser } from 'mote/base/parts/storage/common/schema';
+import { AuthConfig, AuthProvider } from 'mote/platform/request/common/request';
 import { requestService } from 'mote/platform/request/common/requestService';
 
 type AuthCredential = {
     token: string;
+    provider: AuthProvider;
 };
 
 type AuthState = {
@@ -12,6 +14,8 @@ type AuthState = {
     isLogging: boolean;
     emailLinkSentTo?: string;
     credential?: AuthCredential;
+    user?: IUser;
+    space?: ISpace;
 };
 
 const initialState: AuthState = {
@@ -40,8 +44,7 @@ export const loginWithOneTimePassword = createAsyncThunk(
     'auth/loginWithOneTimePassword',
     async (payload: LoginWithOneTimePasswordPayload) => {
         const { email, code } = payload;
-        const { token } = await requestService.loginWithOneTimePassword(email, code);
-        return { token };
+        return requestService.loginWithOneTimePassword(email, code);
     }
 );
 
@@ -52,6 +55,11 @@ export const authSlice = createAppSlice({
         resetEmailLinkSendTo(state) {
             state.emailLinkSentTo = undefined;
         },
+        logout(state) {
+            state.credential = undefined;
+            state.user = undefined;
+            state.space = undefined;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchAuthConfig.fulfilled, (state, action) => {
@@ -68,7 +76,9 @@ export const authSlice = createAppSlice({
             state.isLogging = false;
         });
         builder.addCase(loginWithOneTimePassword.fulfilled, (state, { payload }) => {
-            state.credential = { token: payload.token };
+            state.credential = { token: payload.token, provider: payload.provider };
+            state.user = payload.user;
+            state.space = payload.space;
         });
     },
     selectors: {
@@ -76,14 +86,18 @@ export const authSlice = createAppSlice({
         selectIsLogging: (state: AuthState) => state.isLogging,
         selectEmailLinkSentTo: (state: AuthState) => state.emailLinkSentTo,
         selectCredential: (state: AuthState) => state.credential,
+        selectUser: (state: AuthState) => state.user,
+        selectSpace: (state: AuthState) => state.space,
     },
 });
 
-export const { resetEmailLinkSendTo } = authSlice.actions;
+export const { resetEmailLinkSendTo, logout } = authSlice.actions;
 
 export const {
     selectAuthConfig,
     selectIsLogging,
     selectEmailLinkSentTo,
     selectCredential,
+    selectUser,
+    selectSpace
 } = authSlice.selectors;

@@ -1,5 +1,16 @@
 import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import {
+    persistStore,
+    persistReducer,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER,
+  } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import { authSlice } from './features/auth/authSlice';
 import { blockSlice } from './features/block/blockSlice';
 import { layoutSlice } from './features/layout/layoutSlice';
@@ -10,21 +21,40 @@ import type { Action, ThunkAction } from '@reduxjs/toolkit';
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer = combineSlices(layoutSlice, authSlice, blockSlice);
 
+const persistConfig = {
+    key: 'root',
+    version: 1,
+    storage,
+}
+
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
+
+const persistedReducer = persistReducer(persistConfig, rootReducer) as any as typeof rootReducer;
 
 // The store setup is wrapped in `makeStore` to allow reuse
 // when setting up tests that need the same store config
 export const makeStore = (preloadedState?: Partial<RootState>) => {
+    const isServer = typeof window === 'undefined';
     const store = configureStore({
-        reducer: rootReducer,
+        reducer: isServer ? rootReducer : persistedReducer,
         // Adding the api middleware enables caching, invalidation, polling,
         // and other useful features of `rtk-query`.
         middleware: (getDefaultMiddleware) => {
-            return getDefaultMiddleware(); // .concat(quotesApiSlice.middleware);
+            return getDefaultMiddleware(
+                {
+                    serializableCheck: {
+                        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+                    },
+                }
+            ); // .concat(quotesApiSlice.middleware);
         },
         preloadedState,
     });
+    if (!isServer) {
+        // @ts-expect-error Description: This hack is used for SSR.
+        store.__persistor = persistStore(store);
+    }
     // configure listeners using the provided defaults
     // optional, but required for `refetchOnFocus`/`refetchOnReconnect` behaviors
     setupListeners(store.dispatch);

@@ -1,4 +1,5 @@
 {
+    "Search": "搜索",
     "Home": "主页",
     "Back to home": "回到首页",
     "Recently viewed": "最近浏览",
@@ -6,5 +7,6 @@
     "Created by me": "我创建的",
     "Login to {{ authProviderName }}": "登录到 {{ authProviderName }}",
     "Continue with Email": "使用邮件登录",
-    "Sign In": "登录"
+    "Sign In": "登录",
+    "Log out": "退出"
 }

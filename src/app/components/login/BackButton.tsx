@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useClientTranslation } from 'mote/app/i18n/i18nForClient';
+import { useClientTranslation } from 'mote/app/lib/i18nForClient';
 
 export function BackButton() {
     const { t } = useClientTranslation();

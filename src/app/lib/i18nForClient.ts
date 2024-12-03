@@ -1,5 +1,6 @@
-import { createInstance, i18n } from 'i18next';
+import i18next, { type i18n } from 'i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
+import { initReactI18next, useTranslation } from 'react-i18next';
 import { languages, unicodeCLDRtoBCP47 } from 'mote/base/common/i18n';
 
 export interface I18N {
@@ -8,27 +9,24 @@ export interface I18N {
     t: i18n['t'];
 }
 
-/**
- * Use i18n in server side, create new instance for each request.
- * @param defaultLanguage 
- * @returns 
- */
-export async function useI18n(defaultLanguage = 'zh_CN'): Promise<I18N> {
+export async function initI18n(defaultLanguage = 'en_US'): Promise<i18n> {
     const lng = unicodeCLDRtoBCP47(defaultLanguage);
 
-    const i18nInstance = createInstance();
-
-    await i18nInstance
+    await i18next
         .use(
             resourcesToBackend(
                 (language: string, namespace: string) =>
-                    import(`./locales/${language}/${namespace}.json`)
+                    import(`../../platform/i18n/common/locales/${language}/${namespace}.json`)
             )
         )
+        .use(initReactI18next)
         .init({
             compatibilityJSON: 'v3',
             interpolation: {
                 escapeValue: false,
+            },
+            react: {
+                useSuspense: false,
             },
             lng,
             fallbackLng: lng,
@@ -40,9 +38,11 @@ export async function useI18n(defaultLanguage = 'zh_CN'): Promise<I18N> {
             console.error('Failed to initialize i18n', err);
         });
 
-    return {
-        i18n: i18nInstance,
-        t: i18nInstance.t,
-        resources: i18nInstance.services.resourceStore?.data,
-    };
+    return i18next;
+}
+
+initI18n('zh_CN');
+
+export function useClientTranslation() {
+    return useTranslation();
 }

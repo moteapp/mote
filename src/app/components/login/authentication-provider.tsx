@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useClientTranslation } from "mote/app/i18n/i18nForClient";
+import { useClientTranslation } from "mote/app/lib/i18nForClient";
 import { generateOneTimePassword, selectIsLogging } from "mote/app/store/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "mote/app/store/hooks";
 import { InputLarge } from "../Input";

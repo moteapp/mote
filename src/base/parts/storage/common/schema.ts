@@ -1,5 +1,14 @@
 import { Prisma } from '@prisma/client';
 
+//#region User related types
+
+export enum UserRole {
+    Admin = 'admin',
+    Member = 'member',
+    Viewer = 'viewer',
+    Guest = 'guest',
+}
+
 const user = Prisma.validator<Prisma.UserDefaultArgs>()({});
 
 export type IUser = Prisma.UserGetPayload<typeof user>;
@@ -10,6 +19,8 @@ const authenticationProvider =
 export type IAuthenticationProvider = Prisma.AuthenticationProviderGetPayload<
     typeof authenticationProvider
 >;
+
+//#endregion
 
 const space = Prisma.validator<Prisma.SpaceDefaultArgs>()({});
 

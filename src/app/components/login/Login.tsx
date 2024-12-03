@@ -3,9 +3,10 @@ import { useRouter } from 'next/navigation';
 import { Fragment, useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import styled from 'styled-components';
+import Cookies from 'universal-cookie';
 import { Fade } from 'mote/app/components/Fade';
 import { Text } from 'mote/app/components/Text';
-import { useClientTranslation } from 'mote/app/i18n/i18nForClient';
+import { useClientTranslation } from 'mote/app/lib/i18nForClient';
 import { resetEmailLinkSendTo, selectAuthConfig, selectCredential, selectEmailLinkSentTo } from 'mote/app/store/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from 'mote/app/store/hooks';
 import { s } from 'mote/app/style/css';
@@ -26,6 +27,8 @@ export function Login() {
 
     useEffect(() => {
         if (credential && credential.token) {
+            const cookies = new Cookies(null, { path: '/' });
+            cookies.set('credential', credential.token, { path: '/' });
             router.push('/home');
         }
     }, [credential, router]);
@@ -48,7 +51,7 @@ export function Login() {
                         <Trans
                             defaults="A magic sign-in link has been sent to the email <em>{{ emailLinkSentTo }}</em> if an account exists."
                             values={{ emailLinkSentTo }}
-                            components={{ em: <em /> }}
+                            components={{ em: <em key={emailLinkSentTo}/> }}
                         />
                     </Note>
                     <br />
