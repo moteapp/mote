@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from "next/server";
 import { GenerateOneTimePasswordRequest, LoginWithOneTimePasswordResponse } from "mote/platform/request/common/request";
 import { RedisAdapter } from "mote/platform/storage/common/redis";
-import { accountProvisioner } from "mote/server/actions/accountProvisioner";
+import { accountProvisioner } from "mote/server/commands/accountProvisioner";
 import { generateJwtToken } from 'mote/server/common/jwt';
 import { MagicLinkEmail } from "mote/server/emails/template/magic-link-email";
 

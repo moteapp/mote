@@ -19,6 +19,9 @@ class Environment {
 
     public APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 
+    /**
+     * The url of the application. MUST have a prefix NEXT_PUBLIC_ to be exposed to the client.
+     */
     public URL = process.env.NEXT_PUBLIC_URL!;
 
     //#region Database

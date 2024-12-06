@@ -1,4 +1,7 @@
+import { ICollection } from "mote/base/parts/storage/common/schema";
+import { ICollectionCreateRequest } from "./collection";
 import { ApplyTransationsRequest, AuthConfig, LoginWithOneTimePasswordResponse } from "./request";
+import { environment } from "mote/platform/environment/common/environment";
 
 class RequestService {
     public async get<T>(url: string): Promise<T> {
@@ -15,7 +18,7 @@ class RequestService {
             },
             body: JSON.stringify(data),
         });
-        return response.json();
+        return response.ok && response.json();
     }
 
     public async put<T>(url: string, data: any): Promise<T> {
@@ -59,6 +62,10 @@ class RequestService {
 
     public async applyTransactions(request: ApplyTransationsRequest): Promise<void> {
         return this.post<void>('/api/applyTransactions', request);
+    }
+
+    public async createCollection(request: ICollectionCreateRequest): Promise<ICollection> {
+        return this.post<ICollection>('/api/collection', request);
     }
 }
 

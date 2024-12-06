@@ -25,14 +25,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Initializer />
-        <StoreProvider>{children}</StoreProvider>
-      </body>
-    </html>
-  );
+    console.log('[RootLayout] render');
+    return (
+        <html lang="en">
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+                <Initializer />
+                <StoreProvider>{children}</StoreProvider>
+            </body>
+        </html>
+    );
 }

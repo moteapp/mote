@@ -1,11 +1,9 @@
-"use client"
+"use server"
 
 import * as React from "react"
 import {
-  AudioWaveform,
   Blocks,
   Calendar,
-  Command,
   Home,
   Inbox,
   MessageCircleQuestion,
@@ -15,11 +13,10 @@ import {
   Trash2,
 } from "lucide-react"
 
-import { NavFavorites } from "mote/app/components/nav-favorites"
-import { NavMain } from "mote/app/components/nav-main"
-import { NavSecondary } from "mote/app/components/nav-secondary"
-import { NavWorkspaces } from "mote/app/components/nav-workspaces"
-import { TeamSwitcher } from "mote/app/components/team-switcher"
+import { NavFavorites } from "mote/app/components/nav-favorites";
+import { NavMain } from "mote/app/components/nav-main";
+import { NavSecondary } from "mote/app/components/nav-secondary";
+import { TeamSwitcher } from "mote/app/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -27,23 +24,25 @@ import {
   SidebarRail,
 } from "mote/app/components/ui/sidebar"
 import { CalendarIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons"
+import { NavCollections } from "./sidebar/nav-collections"
+import { IconName } from "./icon"
 
 // This is sample data.
 const data = {
   teams: [
     {
       name: "Acme Inc",
-      logo: Command,
+      logo: "Command" as IconName,
       plan: "Enterprise",
     },
     {
       name: "Acme Corp.",
-      logo: AudioWaveform,
+      logo: "AudioWaveform" as IconName,
       plan: "Startup",
     },
     {
       name: "Evil Corp.",
-      logo: Command,
+      logo: "Command" as IconName,
       plan: "Free",
     },
   ],
@@ -123,26 +122,6 @@ const data = {
       name: "Sustainable Gardening Tips & Plant Care",
       url: "#",
       emoji: "🌱",
-    },
-    {
-      name: "Language Learning Progress & Resources",
-      url: "#",
-      emoji: "🗣️",
-    },
-    {
-      name: "Home Renovation Ideas & Budget Tracker",
-      url: "#",
-      emoji: "🏠",
-    },
-    {
-      name: "Personal Finance & Investment Portfolio",
-      url: "#",
-      emoji: "💰",
-    },
-    {
-      name: "Movie & TV Show Watchlist with Reviews",
-      url: "#",
-      emoji: "🎬",
     },
     {
       name: "Daily Habit Tracker & Goal Setting",
@@ -259,7 +238,7 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
@@ -268,7 +247,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavFavorites favorites={data.favorites} />
-        <NavWorkspaces workspaces={data.workspaces} />
+        <NavCollections collections={data.workspaces} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarRail />

@@ -22,7 +22,7 @@ export async function spaceCreator({
     ip,
     userId,
 }: SpaceCreatorOptions) {
-    const space = prisma.space.create({
+    const space = await prisma.space.create({
         data: {
             name,
             domain,

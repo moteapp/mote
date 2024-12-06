@@ -1,4 +1,4 @@
-"use client"
+"use server";
 
 import { type LucideIcon } from "lucide-react"
 
@@ -9,8 +9,9 @@ import {
 } from "mote/app/components/ui/sidebar"
 import { useClientTranslation } from "../lib/i18nForClient"
 import Link from "next/link"
+import { useI18n } from "mote/platform/i18n/common/i18n";
 
-export function NavMain({
+export async function NavMain({
   items,
 }: {
   items: {
@@ -20,7 +21,7 @@ export function NavMain({
     isActive?: boolean
   }[]
 }) {
-    const { t } = useClientTranslation();
+    const { t } = await useI18n();
     return (
         <SidebarMenu>
         {items.map((item) => (

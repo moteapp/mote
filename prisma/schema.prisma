@@ -81,6 +81,9 @@ model Collection {
   space   Space  @relation(fields: [spaceId], references: [id])
   spaceId String @db.Uuid
 
+  permission String?
+  sharing Boolean
+
   createdBy   User   @relation(fields: [createdById], references: [id])
   createdById String @db.Uuid
 

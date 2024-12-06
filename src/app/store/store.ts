@@ -10,16 +10,35 @@ import {
     PURGE,
     REGISTER,
   } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import { authSlice } from './features/auth/authSlice';
 import { blockSlice } from './features/block/blockSlice';
 import { layoutSlice } from './features/layout/layoutSlice';
 // eslint-disable-next-line no-duplicate-imports
 import type { Action, ThunkAction } from '@reduxjs/toolkit';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer = combineSlices(layoutSlice, authSlice, blockSlice);
+
+const createNoopStorage = () => {
+    return {
+        getItem() {
+            return Promise.resolve(null);
+        },
+        setItem(_key: string, value: number) {
+            return Promise.resolve(value);
+        },
+        removeItem() {
+            return Promise.resolve();
+        },
+    };
+};
+
+const storage =
+  typeof window !== "undefined"
+    ? createWebStorage("local")
+    : createNoopStorage();
 
 const persistConfig = {
     key: 'root',
@@ -35,9 +54,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer) as any as ty
 // The store setup is wrapped in `makeStore` to allow reuse
 // when setting up tests that need the same store config
 export const makeStore = (preloadedState?: Partial<RootState>) => {
-    const isServer = typeof window === 'undefined';
     const store = configureStore({
-        reducer: isServer ? rootReducer : persistedReducer,
+        reducer: persistedReducer,
         // Adding the api middleware enables caching, invalidation, polling,
         // and other useful features of `rtk-query`.
         middleware: (getDefaultMiddleware) => {
@@ -51,10 +69,8 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
         },
         preloadedState,
     });
-    if (!isServer) {
-        // @ts-expect-error Description: This hack is used for SSR.
-        store.__persistor = persistStore(store);
-    }
+    // @ts-expect-error Description: This hack is used for SSR.
+    store.__persistor = persistStore(store);
     // configure listeners using the provided defaults
     // optional, but required for `refetchOnFocus`/`refetchOnReconnect` behaviors
     setupListeners(store.dispatch);
