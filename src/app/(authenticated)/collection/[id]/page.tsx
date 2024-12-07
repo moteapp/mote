@@ -3,7 +3,7 @@ import { NavActions } from "mote/app/components/nav-actions";
 import { Page } from "mote/app/components/page";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "mote/app/components/ui/breadcrumb";
 
-export default async function DocPage({ params }: { params: { id: string } }) {
+export default async function CollectionPage({ params }: { params: { id: string } }) {
     const PageLeft = () => (
         <Breadcrumb>
             <BreadcrumbList>

@@ -3,7 +3,7 @@
 import { ICollectionSchema } from "mote/platform/request/common/collection";
 import { redirect } from "next/navigation";
 import { verifyToken } from "mote/app/lib/dal";
-import { collectionCreator } from "mote/server/commands/collectionCreator";
+import { collectionCreator } from "mote/server/commands/collectionCommands";
 
 export async function createCollectionAction(values: ICollectionSchema) {
     const auth = await verifyToken();

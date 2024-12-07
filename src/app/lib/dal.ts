@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation';
 import { cache } from 'react';
 import { prisma } from 'mote/base/parts/storage/common/prisma';
 import { verifyJWT } from 'mote/server/common/jwt';
+import { collectionLister } from 'mote/server/commands/collectionCommands';
+import { Prisma } from '@prisma/client';
 
 // This is a Data Access Layer (DAL).
 // It used to centralize your data requests and authorization logic.
@@ -62,4 +64,36 @@ export const getUser = cache(async () => {
         console.log('Failed to fetch user')
         return null;
     }
+});
+
+export const getUserSpaces = cache(async () => {
+    console.log('[DAL] Fetching spaces from database');
+    const { userId } = await verifyToken();
+    
+    try {
+        const spaces = await prisma.userSpace.findMany({
+            where: { userId },
+        });
+        return spaces;
+    } catch (error) {
+        console.log('Failed to fetch spaces')
+        return null;
+    }
+});
+
+export const getCollections = cache(async (spaceId?: string) => {
+    console.log('[DAL] Fetching collections from database');
+
+    if (!spaceId) {
+        const spaces = await getUserSpaces();
+        console.log('[DAL] spaces for collections', spaces);
+        if (!spaces) {
+            return null;
+        }
+        spaceId = spaces[0].spaceId;
+    }
+
+    const collections = await collectionLister({ spaceId });
+    console.log('[DAL] collections', collections);
+    return collections;
 });

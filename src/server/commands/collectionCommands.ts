@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "mote/base/parts/storage/common/prisma";
 import { CollectionPermission } from "mote/base/parts/storage/common/schema";
 
@@ -36,4 +37,22 @@ export async function collectionCreator({
         }
     });
     return collection;
+}
+
+export type CollectionListerOptions = {
+    userId?: string;
+    spaceId: string;
+};
+
+export async function collectionLister({
+    userId,
+    spaceId,
+}: CollectionListerOptions) {
+    const where : Prisma.CollectionWhereInput = {};
+    if (userId) {
+        where.createdById = userId;
+    }
+    where.spaceId = spaceId;
+    const collections = await prisma.collection.findMany({where});
+    return collections;
 }

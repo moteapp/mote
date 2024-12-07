@@ -24,8 +24,9 @@ import {
   SidebarRail,
 } from "mote/app/components/ui/sidebar"
 import { CalendarIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons"
-import { NavCollections } from "./sidebar/nav-collections"
+import { NavCollections, NavCollectionsSkeleton } from "./sidebar/nav-collections"
 import { IconName } from "./icon"
+import { Suspense } from "react";
 
 // This is sample data.
 const data = {
@@ -247,7 +248,9 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
       </SidebarHeader>
       <SidebarContent>
         <NavFavorites favorites={data.favorites} />
-        <NavCollections collections={data.workspaces} />
+        <Suspense fallback={<NavCollectionsSkeleton />}>
+          <NavCollections />
+        </Suspense>
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarRail />
