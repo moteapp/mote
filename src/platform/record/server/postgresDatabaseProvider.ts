@@ -1,5 +1,5 @@
 import { match } from 'ts-pattern';
-import prisma from "mote/base/parts/storage/common/prisma";
+import { prisma } from "mote/base/parts/storage/common/prisma";
 import { IDatabaseProvider, IRecord, Pointer, RecordChangeEvent } from "../common/record";
 import { Prisma } from '@prisma/client';
 import { Event, Emitter } from 'mote/base/common/event';

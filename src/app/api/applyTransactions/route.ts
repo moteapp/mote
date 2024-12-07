@@ -1,4 +1,4 @@
-import prisma from "mote/base/parts/storage/common/prisma";
+import { prisma } from "mote/base/parts/storage/common/prisma";
 import { OperationExecutor } from "mote/platform/record/common/operationExecutor";
 import { IRecordService } from "mote/platform/record/common/record";
 import { ApplyTransationsRequest } from "mote/platform/request/common/request";
