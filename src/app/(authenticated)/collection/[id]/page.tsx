@@ -28,7 +28,7 @@ export default async function CollectionHomePage({
                     <br />
                     <Trans i18n={i18n.i18n}>Get started by creating a new one!</Trans>
                 </p>
-                <NewDoc />
+                <NewDoc collectionId={collectionId}/>
             </div>
         )
     }
