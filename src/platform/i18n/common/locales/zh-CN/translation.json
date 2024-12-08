@@ -4,6 +4,7 @@
     "Back to home": "回到首页",
     "Recently viewed": "最近浏览",
     "Recently updated": "最近更新",
+    "Recently published": "最近发布",
     "Created by me": "我创建的",
     "Login to {{ authProviderName }}": "登录到 {{ authProviderName }}",
     "Continue with Email": "使用邮件登录",
@@ -25,5 +26,9 @@
     "Saving": "保存中",
     "Save": "保存",
     "Creating": "创建中",
-    "Create": "创建"
+    "Create": "创建",
+    "Documents": "文档",
+    "<em>{{ collectionName }}</em> doesn’t contain any documents yet.": "<em>{{ collectionName }}</em> 尚未包含任何文档",
+    "Get started by creating a new one!": "从创建一个新文档集开始！",
+    "Create a document": "创建文档"
 }

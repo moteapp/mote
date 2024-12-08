@@ -3,6 +3,7 @@ import { PropsWithChildren, useRef } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { fetchAuthConfig } from 'mote/app/store/features/auth/authSlice';
+import Initializer from './init';
 import { makeStore, AppStore } from './store/store';
 
 export default function StoreProvider({ children }: PropsWithChildren) {
@@ -18,6 +19,7 @@ export default function StoreProvider({ children }: PropsWithChildren) {
     return (
         <Provider store={storeRef.current}>
             <PersistGate loading={<h1>Loading</h1>} persistor={(storeRef.current as any).__persistor}>
+                <Initializer />
                 {children}
             </PersistGate>
         </Provider>

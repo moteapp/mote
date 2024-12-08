@@ -4,9 +4,10 @@ export type HeadingProps = PropsWithChildren & {
     as?: string;
     centered?: boolean;
     style?: CSSProperties;
+    className?: string;
 };
 
-export function Heading({ as, centered, children, style }: HeadingProps) {
+export function Heading({ as, centered, children, style, className }: HeadingProps) {
     const tag = as || 'h1';
     const properties: CSSProperties = {
         display: 'flex',
@@ -23,5 +24,5 @@ export function Heading({ as, centered, children, style }: HeadingProps) {
 
     Object.assign(properties, style);
 
-    return createElement(tag, { style }, children);
+    return createElement(tag, { style, className }, children);
 }

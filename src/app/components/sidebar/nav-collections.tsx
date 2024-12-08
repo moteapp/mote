@@ -66,7 +66,7 @@ export async function NavCollections() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {collections.map((collection) => (
-                            <Collapsible key={collection.name}>
+                            <Collapsible key={collection.id}>
                                 <SidebarMenuItem>
                                 <SidebarMenuButton asChild>
                                     <Link href={`/collection/${collection.id}`}>

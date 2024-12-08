@@ -8,17 +8,22 @@ import {
   TooltipTrigger,
 } from "mote/app/components/ui/tooltip"
 
+import { useClientTranslation } from "mote/app/lib/i18nForClient";
+import { selectSpace, selectUser } from "mote/app/store/features/auth/authSlice";
+import { useAppSelector } from "mote/app/store/hooks";
 import { generateUuid } from "mote/base/common/uuid";
 import { ICommandService } from "mote/platform/commands/common/commands";
 import { NEW_UNTITLED_PAGE_COMMAND_ID } from "mote/workbench/contrib/pages/browser/pageConstants";
 import { instantiationService } from "mote/workbench/workbench.client.main";
 
-export function NewDoc() {
+export function NewDoc({collectionId}: {collectionId?: string}) {
     const router = useRouter();
+    const { t } = useClientTranslation();
+    const user = useAppSelector(selectUser)!;
+    const space = useAppSelector(selectSpace)!;
     const handleClick = () => {
-        const spaceId = '43c5d11b-6bdf-459b-8544-5afc65a9947d';
-        const userId = '43c5d10b-6bdf-459b-8544-5afc65a9947d';
-        const collectionId = null;
+        const spaceId = space.id;
+        const userId = user.id;
         const rootId = generateUuid();
         instantiationService.invokeFunction(async (accessor) => {
             const commandService = accessor.get(ICommandService);
@@ -31,7 +36,9 @@ export function NewDoc() {
         <TooltipProvider>
         <Tooltip>
             <TooltipTrigger asChild>
-                <Button variant="outline" onClick={handleClick}>New Doc</Button>
+                <Button variant="outline" onClick={handleClick}>
+                    {t('Create a document')}
+                </Button>
             </TooltipTrigger>
             <TooltipContent>
                 <p>Add a new document</p>

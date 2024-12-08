@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { cache } from 'react';
 import { prisma } from 'mote/base/parts/storage/common/prisma';
 import { collectionLister } from 'mote/server/commands/collectionCommands';
+import { documentLister, DocumentOrderBy } from 'mote/server/commands/documentCommands';
 import { verifyJWT } from 'mote/server/common/jwt';
 
 // This is a Data Access Layer (DAL).
@@ -95,4 +96,22 @@ export const getCollections = cache(async (spaceId?: string) => {
     const collections = await collectionLister({ spaceId });
     console.log('[DAL] collections', collections);
     return collections;
+});
+
+export const getCollection = cache(async (collectionId: string) => {
+    console.log('[DAL] Fetching collection from database');
+    const collection = await prisma.collection.findUnique({
+        where: { id: collectionId },
+    });
+    return collection;
+});
+
+export const getDocuments = cache(async (
+    collectionId: string,
+    orderBy?: DocumentOrderBy
+) => {
+    console.log('[DAL] Fetching documents from database');
+    const documents = await documentLister({ collectionId, orderBySorter: orderBy });
+    console.log('[DAL] documents', documents);
+    return documents;
 });

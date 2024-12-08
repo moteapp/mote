@@ -8,10 +8,14 @@ import { PropsWithChildren } from "react";
 import styled from "styled-components";
 import { s } from "../style/css";
 
-export function NavTabs({ children }: PropsWithChildren) {
+export type NavTabsProps = PropsWithChildren<{
+    className?: string;
+}>;
+
+export function NavTabs({ children, className }: NavTabsProps) {
     return (
         <LayoutGroup>
-            <Sticky>
+            <Sticky className={className}>
                 <Nav>{children}</Nav>
             </Sticky>
         </LayoutGroup>

@@ -102,7 +102,7 @@ export class OperationExecutor {
 
 	public static async runOperation(operation: IOperation, recordService: IRecordService) {
 		const pointer = { id: operation.id, table: operation.table };
-		let record = await recordService.retriveRecordAsync(pointer) || ({});
+		let record = await recordService.retriveRecordAsync(pointer) || (pointer as any);
 
         let value = operation.path.length > 0 ? get(record, operation.path): record;
         const prevVersion = record.version ?? 0;

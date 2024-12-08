@@ -45,9 +45,9 @@ export interface IRecordService {
 	 */
 	activateProvider(scheme: string): Promise<void>;
 
-    retriveRecord<T extends IRecord>(pointer: Pointer): T;
+    retriveRecord<T extends IRecord>(pointer: Pointer): T | null;
 
-    retriveRecordAsync<T extends IRecord>(pointer: Pointer): Promise<T>;
+    retriveRecordAsync<T extends IRecord>(pointer: Pointer): Promise<T|null>;
 
 	updateRecord<T extends IRecord>(pointer: Pointer, record: T): Promise<void>;
 }

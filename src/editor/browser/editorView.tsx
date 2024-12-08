@@ -1,5 +1,7 @@
 'use client';
 import { useEffect, useState } from "react";
+import { selectUser } from "mote/app/store/features/auth/authSlice";
+import { useAppSelector } from "mote/app/store/hooks";
 import { IRecordService } from "mote/platform/record/common/record";
 import { instantiationService } from "mote/workbench/workbench.client.main";
 import { BlockModel } from "../common/model/blockModel";
@@ -9,11 +11,10 @@ import { PageHeader } from "./viewParts/pageHeader";
 
 export type EditorViewProps = {
     rootId: string;
-    userId: string;
 };
 
-export function EditorView({rootId, userId}: EditorViewProps) {
-   
+export function EditorView({rootId}: EditorViewProps) {
+    const userId = useAppSelector(selectUser)!.id;
     const viewController = instantiationService.createInstance(ViewController, userId);
 
     const [blockModel, setBlockModel] = useState<BlockModel | null>(null);
@@ -33,10 +34,10 @@ export function EditorView({rootId, userId}: EditorViewProps) {
     return (
         <div
             id="editorWrapper"
-            className="editorWrapper"
+            className="editorWrapper h-full w-full"
         >
-            <div id={`editor-${rootId}`} className="editor">
-                <div className="blocks">
+            <div id={`editor-${rootId}`} className="editor h-full">
+                <div className="blocks h-full">
                     {blockModel && (
                         <>
                         <PageHeader
