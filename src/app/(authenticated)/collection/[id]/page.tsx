@@ -1,6 +1,6 @@
 'use server';
 import { NavActions } from "mote/app/components/nav-actions";
-import { Page } from "mote/app/components/page";
+import { PageLayout } from "mote/app/components/page-layout";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "mote/app/components/ui/breadcrumb";
 
 export default async function CollectionPage({ params }: { params: Promise<{ id: string }> }) {
@@ -18,12 +18,12 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
     );
 
     return (
-        <Page 
+        <PageLayout 
             left={<PageLeft />}
             actions={<NavActions />}
         >
             <div className="mx-auto h-24 w-full max-w-3xl rounded-xl bg-muted/50" />
             <div className="mx-auto h-full w-full max-w-3xl rounded-xl bg-muted/50" />
-        </Page>
+        </PageLayout>
     )
 }

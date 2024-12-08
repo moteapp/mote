@@ -9,7 +9,7 @@ export type PageProps = {
     actions?: React.ReactNode;
 }
 
-export function Page({
+export function PageLayout({
     children,
     left,
     actions

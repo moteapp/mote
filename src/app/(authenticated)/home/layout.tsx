@@ -1,6 +1,6 @@
 import { Heading } from "mote/app/components/heading";
 import { NavTab, NavTabs } from "mote/app/components/nav-tabs";
-import { Page } from "mote/app/components/page";
+import { PageLayout } from "mote/app/components/page-layout";
 import { useI18n } from "mote/platform/i18n/common/i18n";
 
 export default async function HomeLayout({
@@ -11,7 +11,7 @@ export default async function HomeLayout({
     const { t } = await useI18n();
     const home = t('Home');
     return (
-        <Page>
+        <PageLayout>
             <Heading>{home}</Heading>
             <NavTabs>
                 <NavTab to="/home">{t('Recently viewed')}</NavTab>
@@ -19,6 +19,6 @@ export default async function HomeLayout({
                 <NavTab to="/home/by-me">{t('Created by me')}</NavTab>
             </NavTabs>
             {children}
-        </Page>
+        </PageLayout>
     )
 }
