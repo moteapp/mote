@@ -1,12 +1,12 @@
 'use client';
-import { transparentize } from "polished";
+import { UrlObject } from "url";
 import { LayoutGroup, m } from 'framer-motion';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { transparentize } from "polished";
+import { PropsWithChildren } from "react";
 import styled from "styled-components";
 import { s } from "../style/css";
-import { PropsWithChildren } from "react";
-import { UrlObject } from "url";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
 
 export function NavTabs({ children }: PropsWithChildren) {
     return (

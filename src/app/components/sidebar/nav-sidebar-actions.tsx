@@ -1,9 +1,9 @@
 'use client';
-import { useClientTranslation } from "mote/app/lib/i18nForClient";
-import { Icon } from "../icon";
-import { SidebarGroupAction } from "mote/app/components/ui/sidebar";
 import { useEffect, useState } from "react";
+import { SidebarGroupAction } from "mote/app/components/ui/sidebar";
+import { useClientTranslation } from "mote/app/lib/i18nForClient";
 import { NewCollectionDialog } from "../collection/collection-dialog";
+import { Icon } from "../icons";
 
 export function NavCollectionAction() {
     const { t } = useClientTranslation();

@@ -7,8 +7,6 @@
 
 
 //#region --- workbench common
-
-import { ServiceCollection } from 'mote/platform/instantiation/common/serviceCollection';
 import './workbench.common.main';
 
 //#endregion
@@ -17,11 +15,13 @@ import './workbench.common.main';
 //#region --- workbench services
 import 'mote/platform/record/browser/transactionService';
 
+
 //#endregion
 
 // eslint-disable-next-line import/order
 import { getSingletonServiceDescriptors } from 'mote/platform/instantiation/common/extensions';
 import { InstantiationService } from 'mote/platform/instantiation/common/instantiationService';
+import { ServiceCollection } from 'mote/platform/instantiation/common/serviceCollection';
 
 const serviceCollection = new ServiceCollection();
 // All Contributed Services

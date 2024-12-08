@@ -1,6 +1,7 @@
 import './block.css';
 import { ReactNode } from "react";
 import { match } from 'ts-pattern';
+import { useModelChanges } from 'mote/app/hooks/use-model';
 import { IBlockComponentProps } from "mote/editor/browser/blockComponent";
 import { isLayoutBlock, isTextBlock, ITextBlock } from "mote/editor/common/blockCommon";
 import { DropType, SelectType } from "mote/editor/common/editorCommon";
@@ -9,7 +10,6 @@ import { DragTarget } from "../dnd/dropTarget";
 import { ListChildren } from "../list/listChildren";
 import { SelectionTarget } from "../selection/selectionTarget";
 import { TextBlock } from "./textBlock";
-import { useModelChanges } from 'mote/app/hooks/use-model';
 
 export type BlockContainerProps = Omit<IBlockComponentProps, 'block'> & {
     blockModel: BlockModel;

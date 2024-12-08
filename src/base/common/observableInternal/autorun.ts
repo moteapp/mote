@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { IChangeContext, IObservable, IObserver, IReader } from './base';
-import { DebugNameData, IDebugNameData } from './debugName';
 import { assertFn, DisposableStore, IDisposable, markAsDisposed, onBugIndicatingError, toDisposable, trackDisposable } from './commonFacade/deps';
+import { DebugNameData, IDebugNameData } from './debugName';
 import { getLogger } from './logging';
 
 /**

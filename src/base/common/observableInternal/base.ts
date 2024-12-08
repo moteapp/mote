@@ -3,11 +3,11 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { DebugNameData, DebugOwner, getFunctionName } from './debugName';
 import { DisposableStore, EqualityComparer, IDisposable, strictEquals } from './commonFacade/deps';
-import type { derivedOpts } from './derived';
+import { DebugNameData, DebugOwner, getFunctionName } from './debugName';
 import { getLogger } from './logging';
 import { keepObserved, recomputeInitiallyAndOnChange } from './utils';
+import type { derivedOpts } from './derived';
 
 /**
  * Represents an observable value.

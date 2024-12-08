@@ -1,11 +1,11 @@
+import { redirect } from "next/navigation";
+import { createCollectionAction } from "mote/app/actions/actions";
 import { useClientTranslation } from "mote/app/lib/i18nForClient";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { ICollectionSchema } from "mote/platform/request/common/collection";
+import { requestService } from "mote/platform/request/common/requestService";
 import { CollectionForm } from "../collection";
 import { Button } from "../ui/button";
-import { ICollectionSchema } from "mote/platform/request/common/collection";
-import { createCollectionAction } from "mote/app/actions/actions";
-import { requestService } from "mote/platform/request/common/requestService";
-import { redirect } from "next/navigation";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
 
 export type NewCollectionDialogProps = {
     open: boolean;

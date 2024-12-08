@@ -1,7 +1,6 @@
 import { ICollection } from "mote/base/parts/storage/common/schema";
 import { ICollectionCreateRequest } from "./collection";
 import { ApplyTransationsRequest, AuthConfig, LoginWithOneTimePasswordResponse } from "./request";
-import { environment } from "mote/platform/environment/common/environment";
 
 class RequestService {
     public async get<T>(url: string): Promise<T> {

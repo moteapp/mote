@@ -253,6 +253,7 @@ export function getAllMethodNames(obj: object): string[] {
 export function createProxyObject<T extends object>(methodNames: string[], invoke: (method: string, args: unknown[]) => unknown): T {
 	const createProxyMethod = (method: string): () => unknown => {
 		return function () {
+			// eslint-disable-next-line prefer-rest-params
 			const args = Array.prototype.slice.call(arguments, 0);
 			return invoke(method, args);
 		};

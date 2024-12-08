@@ -1,4 +1,6 @@
 'use server';
+import { ChevronRightIcon, DotsHorizontalIcon, PlusIcon } from "@radix-ui/react-icons"
+import Link from "next/link";
 import {
   Collapsible,
   CollapsibleContent,
@@ -18,11 +20,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "mote/app/components/ui/sidebar"
-import { ChevronRightIcon, DotsHorizontalIcon, PlusIcon } from "@radix-ui/react-icons"
+import { getCollections } from "mote/app/lib/dal";
 import { useI18n } from "mote/platform/i18n/common/i18n";
 import { NavCollectionAction } from "./nav-sidebar-actions";
-import { getCollections } from "mote/app/lib/dal";
-import Link from "next/link";
 
 export async function NavCollectionsSkeleton() {
     const { t } = await useI18n();

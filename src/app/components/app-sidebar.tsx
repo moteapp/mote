@@ -1,6 +1,6 @@
 "use server"
 
-import * as React from "react"
+import { CalendarIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons"
 import {
   Blocks,
   Calendar,
@@ -12,7 +12,9 @@ import {
   Sparkles,
   Trash2,
 } from "lucide-react"
+import * as React from "react"
 
+import { Suspense } from "react";
 import { NavFavorites } from "mote/app/components/nav-favorites";
 import { NavMain } from "mote/app/components/nav-main";
 import { NavSecondary } from "mote/app/components/nav-secondary";
@@ -23,10 +25,8 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "mote/app/components/ui/sidebar"
-import { CalendarIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons"
+import { IconName } from "./icons"
 import { NavCollections, NavCollectionsSkeleton } from "./sidebar/nav-collections"
-import { IconName } from "./icon"
-import { Suspense } from "react";
 
 // This is sample data.
 const data = {

@@ -2,8 +2,8 @@ import { VisuallyHidden } from '@ariakit/react/visually-hidden';
 import { ForwardedRef, forwardRef, useRef, useState } from 'react';
 import { mergeRefs } from 'react-merge-refs';
 import styled from 'styled-components';
-import { Flex } from './Flex';
 import { ellipsis, s } from '../style/css';
+import { Flex } from './Flex';
 
 export const LabelText = styled.div`
     font-weight: 500;

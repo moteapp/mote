@@ -1,5 +1,5 @@
-import { IModel } from 'mote/editor/common/model';
 import { useSyncExternalStore } from 'react';
+import { IModel } from 'mote/editor/common/model';
 
 export function useModelChanges<T>(model: IModel<T>) {
     return useSyncExternalStore(

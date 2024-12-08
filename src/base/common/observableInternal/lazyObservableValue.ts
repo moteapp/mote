@@ -3,8 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { EqualityComparer } from './commonFacade/deps';
 import { BaseObservable, IObserver, ISettableObservable, ITransaction, TransactionImpl } from './base';
+import { EqualityComparer } from './commonFacade/deps';
 import { DebugNameData } from './debugName';
 
 /**

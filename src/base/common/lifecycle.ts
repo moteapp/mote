@@ -5,9 +5,9 @@
 
 import { compareBy, numberComparator } from './arrays';
 import { groupBy } from './collections';
-import { SetMap } from './map';
 import { createSingleCallFunction } from './functional';
 import { Iterable } from './iterator';
+import { SetMap } from './map';
 
 // #region Disposable Tracking
 

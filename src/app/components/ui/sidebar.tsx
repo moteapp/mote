@@ -1,10 +1,10 @@
 "use client"
 
-import * as React from "react"
+import { ViewVerticalIcon } from "@radix-ui/react-icons"
 import { Slot } from "@radix-ui/react-slot"
-import { VariantProps, cva } from "class-variance-authority"
-import { useIsMobile } from "mote/app/hooks/use-mobile"
-import { cn } from "mote/app/lib/utils"
+import { type VariantProps, cva } from "class-variance-authority"
+import { PanelLeft } from "lucide-react"
+import * as React from "react"
 import { Button } from "mote/app/components/ui/button"
 import { Input } from "mote/app/components/ui/input"
 import { Separator } from "mote/app/components/ui/separator"
@@ -16,8 +16,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "mote/app/components/ui/tooltip"
-import { ViewVerticalIcon } from "@radix-ui/react-icons"
-import { PanelLeft } from "lucide-react"
+import { useIsMobile } from "mote/app/hooks/use-mobile"
+import { cn } from "mote/app/lib/utils"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

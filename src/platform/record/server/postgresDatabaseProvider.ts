@@ -1,8 +1,8 @@
+import { Prisma } from '@prisma/client';
 import { match } from 'ts-pattern';
+import { Event, Emitter } from 'mote/base/common/event';
 import { prisma } from "mote/base/parts/storage/common/prisma";
 import { IDatabaseProvider, IRecord, Pointer, RecordChangeEvent } from "../common/record";
-import { Prisma } from '@prisma/client';
-import { Event, Emitter } from 'mote/base/common/event';
 
 export class PostgresDatabaseProvider implements IDatabaseProvider {
 

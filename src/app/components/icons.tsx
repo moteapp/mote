@@ -1,8 +1,6 @@
-//import dynamic from 'next/dynamic'
-import { LucideProps, icons } from 'lucide-react';
-import { lazy, Suspense } from 'react';
+import { icons, type LucideProps } from 'lucide-react';
 
-export interface IconProps extends LucideProps {
+export type IconProps = LucideProps & {
     name?: keyof typeof icons;
 }
 
@@ -14,7 +12,7 @@ export const Icon = ({ name, ...props }: IconProps) => {
     if (!name) {
         return DefaultIcon;
     }
-    const LucideIcon = icons[name];
+    const LucideIcon = (icons as any)[name];
 
     return <LucideIcon {...props} />;
 };

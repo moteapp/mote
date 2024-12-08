@@ -5,9 +5,9 @@ import { Disposable } from 'mote/base/common/lifecycle';
 import { generateUuid } from 'mote/base/common/uuid';
 import { InstantiationType, registerSingleton } from 'mote/platform/instantiation/common/extensions';
 import { IRecordService } from 'mote/platform/record/common/record';
-import { ITransactionService, Transaction } from '../common/transaction';
 import { ApplyTransationsRequest, TransactionData } from 'mote/platform/request/common/request';
 import { requestService } from 'mote/platform/request/common/requestService';
+import { ITransactionService, Transaction } from '../common/transaction';
 
 export class TransactionService extends Disposable implements ITransactionService {
     readonly _serviceBrand: undefined;

@@ -1,10 +1,10 @@
 import { generateUuid } from "mote/base/common/uuid";
 import { IRecordService } from "mote/platform/record/common/record";
+import { IOperation, OperationType } from "mote/platform/request/common/request";
 import { BlockMap, BlockRole, BlockType, IBlock, IBlockAndRole, IBlockProvider, IBlockStore, ILayoutBlock, IPageBlock, ITextBlock, LayoutStyle, newTextBlock, TextStyle } from "../common/blockCommon";
 import { BlockModel } from "../common/model/blockModel";
 import { RecordModel } from "../common/model/recordModel";
 import { EditorCommand } from "./editorExtensions";
-import { IOperation, OperationType } from "mote/platform/request/common/request";
 
 export type NewPageOptions = {
     spaceId: string;

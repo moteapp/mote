@@ -3,9 +3,8 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 import { prisma } from 'mote/base/parts/storage/common/prisma';
-import { verifyJWT } from 'mote/server/common/jwt';
 import { collectionLister } from 'mote/server/commands/collectionCommands';
-import { Prisma } from '@prisma/client';
+import { verifyJWT } from 'mote/server/common/jwt';
 
 // This is a Data Access Layer (DAL).
 // It used to centralize your data requests and authorization logic.

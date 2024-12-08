@@ -1,9 +1,9 @@
+import { OperationType } from "mote/platform/request/common/request";
+import { ISegment } from "../blockCommon";
 import { ITextSelection } from "../core/selection";
+import { TextUtils } from "../core/text";
 import { ICommand, ICursorStateComputerData, IEditOperationBuilder } from "../editorCommon";
 import { RecordModel } from "../model/recordModel";
-import { ISegment } from "../blockCommon";
-import { TextUtils } from "../core/text";
-import { OperationType } from "mote/platform/request/common/request";
 
 export class ReplaceCommand implements ICommand {
     constructor(

@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDownIcon, PlusIcon } from "@radix-ui/react-icons"
 import * as React from "react"
 import {
   DropdownMenu,
@@ -15,8 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "mote/app/components/ui/sidebar"
-import { ChevronDownIcon, PlusIcon } from "@radix-ui/react-icons"
-import { Icon, IconName } from "./icon";
+import { Icon, IconName } from "./icons";
 
 // <activeTeam.logo className="size-3" />
 

@@ -1,7 +1,7 @@
+import { useModelChanges } from "mote/app/hooks/use-model";
 import { BlockModel } from "mote/editor/common/model/blockModel";
 import { BlockContainer } from "mote/editor/contrib/block/blockContainer";
 import { IBlockComponentProps } from "../blockComponent";
-import { useModelChanges } from "mote/app/hooks/use-model";
 
 export type PageHeaderProps = IBlockComponentProps &{
     onKeyDown?: any;

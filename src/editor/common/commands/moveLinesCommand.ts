@@ -1,9 +1,9 @@
+import { ListOperationPayload } from "mote/platform/record/common/operationExecutor";
+import { OperationType } from "mote/platform/request/common/request";
+import { ISegment } from "../blockCommon";
 import { ITextSelection } from "../core/selection";
 import { ICommand, ICursorStateComputerData, IEditOperationBuilder } from "../editorCommon";
 import { RecordModel } from "../model/recordModel";
-import { ISegment } from "../blockCommon";
-import { ListOperationPayload } from "mote/platform/record/common/operationExecutor";
-import { OperationType } from "mote/platform/request/common/request";
 
 export class MoveLinesCommand implements ICommand {
     constructor(

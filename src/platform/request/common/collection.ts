@@ -1,6 +1,6 @@
 import isUndefined from "lodash/isUndefined";
-import { CollectionPermission } from "mote/base/parts/storage/common/schema";
 import { z } from "zod";
+import { CollectionPermission } from "mote/base/parts/storage/common/schema";
 
 export const CollectionSchema = z.object({
     name: z.string().min(2).max(50),

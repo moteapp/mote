@@ -5,8 +5,8 @@
 
 import { autorun, autorunOpts, autorunWithStoreHandleChanges } from './autorun';
 import { BaseObservable, ConvenientObservable, IObservable, IObserver, IReader, ITransaction, _setKeepObserved, _setRecomputeInitiallyAndOnChange, observableValue, subtransaction, transaction } from './base';
-import { DebugNameData, DebugOwner, IDebugNameData, getDebugName, } from './debugName';
 import { BugIndicatingError, DisposableStore, EqualityComparer, Event, IDisposable, IValueWithChangeEvent, strictEquals, toDisposable } from './commonFacade/deps';
+import { DebugNameData, DebugOwner, IDebugNameData, getDebugName, } from './debugName';
 import { derived, derivedOpts } from './derived';
 import { getLogger } from './logging';
 

@@ -3,12 +3,12 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { IReader, IObservable } from './base';
-import { DebugOwner, DebugNameData } from './debugName';
-import { CancellationError, CancellationToken, CancellationTokenSource } from './commonFacade/cancellation';
-import { Derived } from './derived';
-import { strictEquals } from './commonFacade/deps';
 import { autorun } from './autorun';
+import { IReader, IObservable } from './base';
+import { CancellationError, CancellationToken, CancellationTokenSource } from './commonFacade/cancellation';
+import { strictEquals } from './commonFacade/deps';
+import { DebugOwner, DebugNameData } from './debugName';
+import { Derived } from './derived';
 
 /**
  * Resolves the promise when the observables state matches the predicate.

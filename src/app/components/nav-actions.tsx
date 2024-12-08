@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { CopyIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
 import {
   ArrowDown,
   ArrowUp,
@@ -17,6 +17,7 @@ import {
   Trash,
   Trash2,
 } from "lucide-react"
+import * as React from "react"
 
 import { Button } from "mote/app/components/ui/button"
 import {
@@ -33,7 +34,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "mote/app/components/ui/sidebar"
-import { CopyIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
 
 const data = [
   [

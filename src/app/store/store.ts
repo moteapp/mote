@@ -10,12 +10,12 @@ import {
     PURGE,
     REGISTER,
   } from 'redux-persist';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import { authSlice } from './features/auth/authSlice';
 import { blockSlice } from './features/block/blockSlice';
 import { layoutSlice } from './features/layout/layoutSlice';
 // eslint-disable-next-line no-duplicate-imports
 import type { Action, ThunkAction } from '@reduxjs/toolkit';
-import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.

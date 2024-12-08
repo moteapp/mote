@@ -1,6 +1,6 @@
+import { darken, lighten } from 'polished';
 import { createStyledBreakpointsTheme } from 'styled-breakpoints';
 import { Colors, defaultColors } from './colors';
-import { darken, lighten } from 'polished';
 
 const buildBaseTheme = (input: Partial<Colors>) => {
     const colors = {

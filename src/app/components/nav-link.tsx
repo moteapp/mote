@@ -1,7 +1,7 @@
 'use client';
+import { UrlObject } from "url";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UrlObject } from "url";
 
 type Url = string | UrlObject;
 

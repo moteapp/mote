@@ -1,5 +1,5 @@
-import { hash } from 'mote/base/common/hash';
 import { darken } from 'polished';
+import { hash } from 'mote/base/common/hash';
 
 export interface Colors {
     transparent: string;

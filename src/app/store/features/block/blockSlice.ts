@@ -1,8 +1,6 @@
-import { createSelector } from "@reduxjs/toolkit";
-import { EditorCommands } from "mote/editor/browser/coreCommands";
-import { BlockMap, BlockRole, BlockType, IBlockAndRole, IBlockProvider, LayoutStyle, Pointer } from "mote/editor/common/blockCommon";
+import { createSelector, type PayloadAction } from "@reduxjs/toolkit";
+import { BlockMap, IBlockProvider } from "mote/editor/common/blockCommon";
 import { createAppSlice } from "../../createAppSlice";
-import type { PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: BlockMap = {};
 

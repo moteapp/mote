@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { ISettableObservable, ObservableValue } from './base';
-import { DebugNameData, IDebugNameData } from './debugName';
 import { EqualityComparer, strictEquals } from './commonFacade/deps';
+import { DebugNameData, IDebugNameData } from './debugName';
 import { LazyObservableValue } from './lazyObservableValue';
 
 export function observableValueOpts<T, TChange = void>(

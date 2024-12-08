@@ -1,4 +1,4 @@
-import { OperationType } from "mote/platform/record/common/record";
+import { OperationType } from "mote/platform/request/common/request";
 import { ITextSelection } from "./core/selection";
 import { RecordModel } from "./model/recordModel";
 

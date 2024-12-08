@@ -1,8 +1,7 @@
 import filter from 'lodash/filter';
 import get from 'lodash/get';
-import { CommandType, IOperation } from "mote/platform/editor/common/editor";
+import { IOperation, OperationType } from 'mote/platform/request/common/request';
 import { BlockRole, IBlock, IBlockAndRole, IBlockProvider, IBlockStore } from '../blockCommon';
-import { BlockModel } from '../model/blockModel';
 import { RecordModel } from '../model/recordModel';
 
 export function calcVersion(operation: IOperation) {
@@ -113,7 +112,7 @@ export function newUpdateOperation(
         id: block.id,
         table: 'block',
         path: [],
-        type: CommandType.Update,
+        type: OperationType.Update,
         args: data,
     });
 }
@@ -127,7 +126,7 @@ export function newSetOperation<T>(
         id,
         table,
         path,
-        type: CommandType.Set,
+        type: OperationType.Set,
         args: data,
     });
 }
@@ -141,7 +140,7 @@ export function newListAfterOperation<T>(
         id,
         table,
         path,
-        type: CommandType.ListAfter,
+        type: OperationType.ListAfter,
         args: data,
     });
 }

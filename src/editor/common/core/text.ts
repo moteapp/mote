@@ -13,8 +13,8 @@ export class TextUtils {
             const txt = segment[0];
             const annotations = segment[1];
 
-            let currentOffset = offset;
-            let end = offset + txt.length;
+            const currentOffset = offset;
+            const end = offset + txt.length;
             // [start, txtBefore, segments, txtAfter, end]
             if (start >= currentOffset && start <= end && !merged) {
                 const index = start - currentOffset;

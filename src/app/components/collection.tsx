@@ -1,17 +1,17 @@
 'use client';
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { useForm } from "react-hook-form";
 import { CollectionSchema, ICollectionSchema } from "mote/platform/request/common/collection";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { useClientTranslation } from "../lib/i18nForClient";
-import { Switch } from "./ui/switch";
-import { useAppSelector } from "../store/hooks";
-import { selectSpace } from "../store/features/auth/authSlice";
 import { requestService } from "mote/platform/request/common/requestService";
 import { createCollectionAction } from "../actions/actions";
+import { useClientTranslation } from "../lib/i18nForClient";
+import { selectSpace } from "../store/features/auth/authSlice";
+import { useAppSelector } from "../store/hooks";
+import { Button } from "./ui/button";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Input } from "./ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Switch } from "./ui/switch";
 
 export type CollectionFormProps = {
     submitButton?: React.ReactNode;

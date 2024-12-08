@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from "react";
+import { IRecordService } from "mote/platform/record/common/record";
+import { instantiationService } from "mote/workbench/workbench.client.main";
 import { BlockModel } from "../common/model/blockModel";
 import { ViewController } from "./view/viewController";
 import { Document } from "./viewParts/document";
 import { PageHeader } from "./viewParts/pageHeader";
-import { instantiationService } from "mote/workbench/workbench.client.main";
-import { IRecordService } from "mote/platform/record/common/record";
 
 export type EditorViewProps = {
     rootId: string;

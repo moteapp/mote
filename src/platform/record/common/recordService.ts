@@ -25,12 +25,20 @@ export class RecordService extends Disposable implements IRecordService {
         if (!provider) {
             throw new Error(`No provider for ${pointer.table}`);
         }
-        return provider.get(pointer);
+        const record = provider.get(pointer);
+        if (!record) {
+            throw new Error(`No record found for ${pointer}`);
+        }
+        return record as T;
     }
     
     public async retriveRecordAsync<T extends IRecord>(pointer: Pointer): Promise<T> {
         const provider = await this.withReadProvider(pointer);
-        return provider.getAsync(pointer);
+        const record = await provider.getAsync(pointer);
+        if (!record) {
+            throw new Error(`No record found for ${pointer}`);
+        }
+        return record as T;
     }
 
     public async updateRecord<T extends IRecord>(pointer: Pointer, record: T): Promise<void> {

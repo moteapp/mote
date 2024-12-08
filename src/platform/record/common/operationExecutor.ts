@@ -1,7 +1,7 @@
 import filter from 'lodash/filter';
 import get from 'lodash/get';
-import { IRecordService } from "./record";
 import { IOperation, OperationType } from 'mote/platform/request/common/request';
+import { IRecordService } from "./record";
 
 export function calcVersion(operation: IOperation) {
     return operation.size ?? 1;

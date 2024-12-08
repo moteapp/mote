@@ -2,14 +2,14 @@
 
 import { type LucideIcon } from "lucide-react"
 
+import Link from "next/link"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "mote/app/components/ui/sidebar"
-import { useClientTranslation } from "../lib/i18nForClient"
-import Link from "next/link"
 import { useI18n } from "mote/platform/i18n/common/i18n";
+import { useClientTranslation } from "../lib/i18nForClient"
 
 export async function NavMain({
   items,

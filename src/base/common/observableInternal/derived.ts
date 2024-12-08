@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import { BaseObservable, IChangeContext, IObservable, IObserver, IReader, ISettableObservable, ITransaction, _setDerivedOpts, } from './base';
-import { DebugNameData, DebugOwner, IDebugNameData } from './debugName';
 import { DisposableStore, EqualityComparer, IDisposable, assertFn, onBugIndicatingError, strictEquals } from './commonFacade/deps';
+import { DebugNameData, DebugOwner, IDebugNameData } from './debugName';
 import { getLogger } from './logging';
 
 /**
@@ -230,6 +230,7 @@ export class Derived<T, TChangeSummary = any> extends BaseObservable<T, void> im
 		if (this.observers.size === 0) {
 			// Without observers, we don't know when to clean up stuff.
 			// Thus, we don't cache anything to prevent memory leaks.
+			// eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
 			const result = this._computeFn(this, this.createChangeSummary?.()!);
 			// Clear new dependencies
 			this.onLastObserverRemoved();

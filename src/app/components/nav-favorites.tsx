@@ -1,5 +1,6 @@
 "use client"
 
+import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import {
   ArrowUpRight,
   Link,
@@ -23,7 +24,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "mote/app/components/ui/sidebar"
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 
 export function NavFavorites({
   favorites,

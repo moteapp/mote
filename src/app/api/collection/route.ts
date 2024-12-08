@@ -1,8 +1,8 @@
+import { NextResponse } from "next/server";
 import { verifyToken } from "mote/app/lib/dal";
 import { prisma } from "mote/base/parts/storage/common/prisma";
 import { CollectionCreateSchema, ICollectionCreateRequest } from "mote/platform/request/common/collection";
 import { collectionCreator } from "mote/server/commands/collectionCommands";
-import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     const body = await request.json();
