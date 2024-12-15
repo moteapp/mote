@@ -5,13 +5,13 @@ import { BlockType, generateTextFromSegements, ISegment, isTextBlock, newBlock, 
 import { MoveLinesCommand } from '../commands/moveLinesCommand';
 import { NewLineCommand } from '../commands/newLineCommand';
 import { ReplaceCommand } from '../commands/replaceCommand';
+import { UpdateMetadataCommand } from '../commands/updateMetadataCommand';
 import { ITextSelection } from "../core/selection";
 import { TextUtils } from "../core/text";
 import { EditOperationResult } from '../cursorCommon';
 import { ICommand } from '../editorCommon';
 import { BlockModel } from "../model/blockModel";
 import { RecordModel } from '../model/recordModel';
-import { UpdateMetadataCommand } from '../commands/updateMetadataCommand';
 
 export class EnterOperation {
 

@@ -2,10 +2,9 @@
 import { Event, Emitter } from "mote/base/common/event";
 import { Disposable } from "mote/base/common/lifecycle";
 import { ApplyTransationsRequest } from "mote/platform/request/common/request";
+import { requestService } from "mote/platform/request/common/requestService";
 import { IDatabaseProvider, IRecord, Pointer, RecordChangeEvent } from "../common/record";
 import { ITransactionService } from "../common/transaction";
-import { requestService } from "mote/platform/request/common/requestService";
-
 
 export class LocalStorageDatabaseProvider extends Disposable implements IDatabaseProvider {
     private _onDidChange = new Emitter<RecordChangeEvent>();

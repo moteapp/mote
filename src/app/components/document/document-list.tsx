@@ -1,14 +1,14 @@
 'use server';
-import Link from "next/link";
-import { IBaseBlock, ICollection } from "mote/base/parts/storage/common/schema";
-import { SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
-import { NavDocumentActions } from "./document-actions";
-import { Trans } from "react-i18next/TransWithoutContext";
-import { NewDoc } from "../button/new-doc-button";
-import { I18N } from "mote/platform/i18n/common/i18n";
 import { format, formatDistanceToNow } from "date-fns";
 import { zhCN } from "date-fns/locale";
+import Link from "next/link";
+import { Trans } from "react-i18next/TransWithoutContext";
+import { IBaseBlock, ICollection } from "mote/base/parts/storage/common/schema";
 import { IPageBlock } from "mote/editor/common/blockCommon";
+import { I18N } from "mote/platform/i18n/common/i18n";
+import { NewDoc } from "../button/new-doc-button";
+import { SidebarMenu, SidebarMenuAction, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
+import { NavDocumentActions } from "./document-actions";
 
 const dateLocales = {
     "zh-CN": zhCN,

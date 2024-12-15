@@ -1,11 +1,11 @@
+import { IDocumentMetadata } from "mote/platform/request/common/document";
 import { OperationType } from "mote/platform/request/common/request";
 import { ISegment } from "../blockCommon";
 import { ITextSelection } from "../core/selection";
 import { TextUtils } from "../core/text";
 import { ICommand, ICursorStateComputerData, IEditOperationBuilder } from "../editorCommon";
-import { RecordModel } from "../model/recordModel";
 import { BlockModel } from "../model/blockModel";
-import { IDocumentMetadata } from "mote/platform/request/common/document";
+import { RecordModel } from "../model/recordModel";
 
 export class UpdateMetadataCommand implements ICommand {
     constructor(

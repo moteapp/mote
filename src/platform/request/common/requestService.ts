@@ -1,8 +1,8 @@
 import { ICollection } from "mote/base/parts/storage/common/schema";
-import { ICollectionCreateRequest } from "./collection";
-import { ApplyTransationsRequest, AuthConfig, LoginWithOneTimePasswordResponse } from "./request";
 import { IBlockAndRole } from "mote/editor/common/blockCommon";
 import { Pointer } from "mote/platform/record/common/record";
+import { ICollectionCreateRequest } from "./collection";
+import { ApplyTransationsRequest, AuthConfig, LoginWithOneTimePasswordResponse } from "./request";
 
 class RequestService {
     public async get<T>(url: string): Promise<T> {

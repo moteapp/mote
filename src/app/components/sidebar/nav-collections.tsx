@@ -21,9 +21,9 @@ import {
   SidebarMenuSubItem,
 } from "mote/app/components/ui/sidebar"
 import { getCollections, getDocuments } from "mote/app/lib/dal";
+import { ICollection } from "mote/base/parts/storage/common/schema";
 import { useI18n } from "mote/platform/i18n/common/i18n";
 import { NavCollectionAction } from "./nav-sidebar-actions";
-import { ICollection } from "mote/base/parts/storage/common/schema";
 
 export async function NavCollectionsSkeleton() {
     const { t } = await useI18n();
