@@ -1,9 +1,8 @@
-'use client';
 import get from 'lodash/get';
 import { Event, Emitter } from "mote/base/common/event";
 import { Disposable } from "mote/base/common/lifecycle";
 import { IRecordService, Pointer } from 'mote/platform/record/common/record';
-import { BlockRole, IBlock } from "../blockCommon";
+import { BlockRole } from "../blockCommon";
 import { IModel } from "../model";
 
 interface IInstanceState<T> {
@@ -66,8 +65,8 @@ export class RecordModel<T = any>
         this.handleBlockChange();
     }
 
-    private handleBlockChange() {
-        const block = this.recordService.retriveRecord(this.pointer);
+    private async handleBlockChange() {
+        const block = await this.recordService.retriveRecordAsync(this.pointer);
         let value: T;
         if (this.path && this.path.length) {
             value = get(block, this.path);
@@ -91,7 +90,7 @@ export class RecordModel<T = any>
     }
 
     get value() {
-        return this.state.value;
+        return this.state.value || {} as T;
     }
 
     public async load() {

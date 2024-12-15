@@ -6,6 +6,8 @@ import { prisma } from 'mote/base/parts/storage/common/prisma';
 import { collectionLister } from 'mote/server/commands/collectionCommands';
 import { documentLister, DocumentOrderBy } from 'mote/server/commands/documentCommands';
 import { verifyJWT } from 'mote/server/common/jwt';
+import { BlockRole, IBlock, IBlockAndRole, IPageBlock } from 'mote/editor/common/blockCommon';
+import { Pointer } from 'mote/platform/record/common/record';
 
 // This is a Data Access Layer (DAL).
 // It used to centralize your data requests and authorization logic.
@@ -114,4 +116,30 @@ export const getDocuments = cache(async (
     const documents = await documentLister({ collectionId, orderBySorter: orderBy });
     console.log('[DAL] documents', documents);
     return documents;
+});
+
+export const getDocument = cache(async (documentId: string) => {
+    console.log('[DAL] Fetching document from database');
+    const document = await prisma.block.findUnique({
+        where: { id: documentId },
+    }) as IPageBlock;
+    return document;
+});
+
+
+export const syncRecord = cache(async (pointer: Pointer): Promise<IBlockAndRole|null> => {
+    console.log('[DAL] Syncing record from database');
+    const { id, table } = pointer;
+    const { userId } = await verifyToken();
+    const record = await prisma.block.findUnique({
+        where: { id },
+    });
+    console.log('[DAL] record', record);
+    if (!record) {
+        return null;
+    }
+    return {
+        block: record as IBlock,
+        role: record.createdById === userId ? BlockRole.Editor : BlockRole.Reader,
+    };
 });

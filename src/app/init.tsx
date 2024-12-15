@@ -13,7 +13,7 @@ import { useAppSelector } from "./store/hooks";
  * @returns 
  */
 export default function Initializer() {
-    const userId = useAppSelector(selectUser)!.id;
+    const userId = useAppSelector(selectUser)?.id || '';
     useEffect(() => {
         instantiationService.invokeFunction((accessor) => {
             console.log('[Initializer] start up');

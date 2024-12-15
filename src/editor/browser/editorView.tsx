@@ -20,7 +20,7 @@ export function EditorView({rootId}: EditorViewProps) {
     const [blockModel, setBlockModel] = useState<BlockModel | null>(null);
 
     useEffect(() => {
-        instantiationService.invokeFunction((accessor) => {
+        instantiationService.invokeFunction(async (accessor) => {
             console.log('initialize editor view');
             const recordService = accessor.get(IRecordService);
             // Make sure block model is created on the client side since we need access the local storage
@@ -28,6 +28,7 @@ export function EditorView({rootId}: EditorViewProps) {
             const pointer = {id: rootId, table: 'block'};
             const blockModel = new BlockModel(pointer, recordService);
             blockModel.setRootModel(blockModel);
+            await blockModel.load();
             setBlockModel(blockModel);
         });
     }, []);

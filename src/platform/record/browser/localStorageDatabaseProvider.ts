@@ -4,6 +4,7 @@ import { Disposable } from "mote/base/common/lifecycle";
 import { ApplyTransationsRequest } from "mote/platform/request/common/request";
 import { IDatabaseProvider, IRecord, Pointer, RecordChangeEvent } from "../common/record";
 import { ITransactionService } from "../common/transaction";
+import { requestService } from "mote/platform/request/common/requestService";
 
 
 export class LocalStorageDatabaseProvider extends Disposable implements IDatabaseProvider {
@@ -49,7 +50,17 @@ export class LocalStorageDatabaseProvider extends Disposable implements IDatabas
     }
 
     public async getAsync<T extends IRecord>(pointer: Pointer): Promise<T|null> {
-        return Promise.resolve(this.get(pointer));
+        const record = this.get(pointer);
+        if (record) {
+            return Promise.resolve(this.get(pointer));
+        }
+        const recordAndRole = await requestService.syncRecord(pointer);
+        console.log('syncRecord', pointer, recordAndRole);
+        if (!recordAndRole || !recordAndRole.block) {
+            return null;
+        }
+        this.set(pointer, recordAndRole.block);
+        return recordAndRole.block as unknown as T;
     }
 
     public async set<T extends IRecord>(pointer: Pointer, value: T): Promise<void> {

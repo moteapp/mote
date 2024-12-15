@@ -1,6 +1,8 @@
 import { ICollection } from "mote/base/parts/storage/common/schema";
 import { ICollectionCreateRequest } from "./collection";
 import { ApplyTransationsRequest, AuthConfig, LoginWithOneTimePasswordResponse } from "./request";
+import { IBlockAndRole } from "mote/editor/common/blockCommon";
+import { Pointer } from "mote/platform/record/common/record";
 
 class RequestService {
     public async get<T>(url: string): Promise<T> {
@@ -17,7 +19,8 @@ class RequestService {
             },
             body: JSON.stringify(data),
         });
-        return response.ok && response.json();
+        const result = await response.json();
+        return result.data;
     }
 
     public async put<T>(url: string, data: any): Promise<T> {
@@ -65,6 +68,10 @@ class RequestService {
 
     public async createCollection(request: ICollectionCreateRequest): Promise<ICollection> {
         return this.post<ICollection>('/api/collection', request);
+    }
+
+    public async syncRecord(pointer: Pointer): Promise<IBlockAndRole> {
+        return this.post<IBlockAndRole>('/api/syncRecords', pointer);
     }
 }
 

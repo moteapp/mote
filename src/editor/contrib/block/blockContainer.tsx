@@ -36,8 +36,7 @@ export function BlockContainer({rootId, blockModel, ...restProps}: BlockContaine
     .when(isLayoutBlock, (block) => {
         canSelect = false;
         renderChildren = true;
-    })
-    .run();
+    });
 
     if (canDrop) {
         object = (

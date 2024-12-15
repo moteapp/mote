@@ -1,7 +1,7 @@
 import filter from 'lodash/filter';
 import get from 'lodash/get';
 import { IOperation, OperationType } from 'mote/platform/request/common/request';
-import { IRecordService } from "./record";
+import { IRecord, IRecordService } from "./record";
 
 export function calcVersion(operation: IOperation) {
     return operation.size ?? 1;
@@ -102,7 +102,7 @@ export class OperationExecutor {
 
 	public static async runOperation(operation: IOperation, recordService: IRecordService) {
 		const pointer = { id: operation.id, table: operation.table };
-		let record = await recordService.retriveRecordAsync(pointer) || (pointer as any);
+		let record = await recordService.retriveRecordAsync(pointer) || (pointer as unknown as IRecord);
 
         let value = operation.path.length > 0 ? get(record, operation.path): record;
         const prevVersion = record.version ?? 0;

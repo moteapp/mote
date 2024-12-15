@@ -11,6 +11,7 @@ import { EditOperationResult } from '../cursorCommon';
 import { ICommand } from '../editorCommon';
 import { BlockModel } from "../model/blockModel";
 import { RecordModel } from '../model/recordModel';
+import { UpdateMetadataCommand } from '../commands/updateMetadataCommand';
 
 export class EnterOperation {
 
@@ -64,8 +65,11 @@ export class EnterOperation {
         const blockValue = newTextBlock({
             id: pointer.id,
             rootId: block.rootId,
-            userId
+            userId,
         });
+        blockValue.spaceId = block.spaceId;
+        blockValue.collectionId = block.collectionId;
+        blockValue.parentId = rootModel.getChildrenModel().id;
 
         // create new line
         commands.push(new NewLineCommand(blockValue, model, selection));
@@ -146,6 +150,13 @@ export class TypeInterceptorsOperation {
                     start += value.length;
                     break;
             }
+        }
+
+        const parent = block.parent as BlockModel;
+
+        console.log('parent', parent);
+        if (parent.isTextTitle() && parent.getRootModel()) {
+            commands.push(new UpdateMetadataCommand({ title: text }, parent.getRootModel()!.getContentModel()));
         }
 
         return new EditOperationResult(commands, {

@@ -1,4 +1,3 @@
-'use client';
 import { match } from "ts-pattern";
 import { IBaseBlock } from "mote/base/parts/storage/common/schema";
 import { IRecordService, Pointer } from "mote/platform/record/common/record";
@@ -68,7 +67,7 @@ export class BlockModel extends RecordModel<IBlock> {
         .when(isLayoutBlock, (block) => {
             classNames.push(`layout${LayoutStyle[block.content.style]}`)
         })
-        .run();
+        .otherwise(() => {});
 
         classNames.push(defaultClass);
         return classNames.join(' ');
@@ -232,6 +231,14 @@ export class BlockModel extends RecordModel<IBlock> {
             );
         }
         throw new Error('Block is not a text block');
+    }
+
+    getContentModel() {
+        return RecordModel.createChildModel<any>(
+            this,
+            this.pointer,
+            ['content'],
+        );
     }
     
     getLayoutHeaderModel() {

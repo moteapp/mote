@@ -13,10 +13,10 @@ export async function POST(request: Request) {
    
     for (const transaction of payload.transactions) {
         for (const operation of transaction.operations) {
-            const record = await OperationExecutor.runOperation(operation, recordService) as any;
+            const record = await OperationExecutor.runOperation(operation, recordService);
             await prisma.block.upsert({
                 where: { id: operation.id },
-                create: record,
+                create: record as any,
                 update: record,
             });
         }

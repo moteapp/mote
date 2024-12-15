@@ -20,9 +20,10 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "mote/app/components/ui/sidebar"
-import { getCollections } from "mote/app/lib/dal";
+import { getCollections, getDocuments } from "mote/app/lib/dal";
 import { useI18n } from "mote/platform/i18n/common/i18n";
 import { NavCollectionAction } from "./nav-sidebar-actions";
+import { ICollection } from "mote/base/parts/storage/common/schema";
 
 export async function NavCollectionsSkeleton() {
     const { t } = await useI18n();
@@ -50,6 +51,58 @@ export async function NavCollectionsSkeleton() {
     )
 }
 
+
+
+async function NavDocument() {
+    
+}
+
+type NavCollectionProps = {
+    collection: ICollection;
+};
+
+async function NavCollection({ collection } : NavCollectionProps ) {
+    const { t } = await useI18n();
+    const documents = await getDocuments(collection.id);
+    return (
+        <Collapsible>
+            <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                    <Link href={`/collection/${collection.id}`}>
+                        <span>{collection.icon || "📔"}</span>
+                        <span>{collection.name}</span>
+                    </Link>
+                </SidebarMenuButton>
+                <CollapsibleTrigger asChild>
+                    <SidebarMenuAction
+                        className="left-2 bg-sidebar-accent text-sidebar-accent-foreground data-[state=open]:rotate-90"
+                        showOnHover
+                    >
+                        <ChevronRightIcon />
+                    </SidebarMenuAction>
+                </CollapsibleTrigger>
+                <SidebarMenuAction showOnHover>
+                    <PlusIcon />
+                </SidebarMenuAction>
+                <CollapsibleContent>
+                    <SidebarMenuSub>
+                    {documents.map((document) => (
+                        <SidebarMenuSubItem key={document.id}>
+                        <SidebarMenuSubButton asChild>
+                            <Link href={`/doc/${document.id}`} >
+                                <span>🔧</span>
+                                <span>{document.content?.title || t("Untitled")}</span>
+                            </Link>
+                        </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                    ))}
+                    </SidebarMenuSub>
+                </CollapsibleContent>
+            </SidebarMenuItem>
+        </Collapsible>
+    )
+}
+
 export async function NavCollections() {
     const { t } = await useI18n();
     const collections = await getCollections() || [];
@@ -66,41 +119,7 @@ export async function NavCollections() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {collections.map((collection) => (
-                            <Collapsible key={collection.id}>
-                                <SidebarMenuItem>
-                                <SidebarMenuButton asChild>
-                                    <Link href={`/collection/${collection.id}`}>
-                                        <span>{collection.icon || "📔"}</span>
-                                        <span>{collection.name}</span>
-                                    </Link>
-                                </SidebarMenuButton>
-                                <CollapsibleTrigger asChild>
-                                    <SidebarMenuAction
-                                    className="left-2 bg-sidebar-accent text-sidebar-accent-foreground data-[state=open]:rotate-90"
-                                    showOnHover
-                                    >
-                                    <ChevronRightIcon />
-                                    </SidebarMenuAction>
-                                </CollapsibleTrigger>
-                                <SidebarMenuAction showOnHover>
-                                    <PlusIcon />
-                                </SidebarMenuAction>
-                                <CollapsibleContent>
-                                    <SidebarMenuSub>
-                                    {/*collection.pages.map((page) => (
-                                        <SidebarMenuSubItem key={page.name}>
-                                        <SidebarMenuSubButton asChild>
-                                            <a href="#">
-                                            <span>{page.emoji}</span>
-                                            <span>{page.name}</span>
-                                            </a>
-                                        </SidebarMenuSubButton>
-                                        </SidebarMenuSubItem>
-                                    ))*/}
-                                    </SidebarMenuSub>
-                                </CollapsibleContent>
-                                </SidebarMenuItem>
-                            </Collapsible>
+                                <NavCollection key={collection.id} collection={collection} />
                             ))}
                             <SidebarMenuItem>
                                 <SidebarMenuButton className="text-sidebar-foreground/70">

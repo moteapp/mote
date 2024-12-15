@@ -30,5 +30,8 @@
     "Documents": "文档",
     "<em>{{ collectionName }}</em> doesn’t contain any documents yet.": "<em>{{ collectionName }}</em> 尚未包含任何文档",
     "Get started by creating a new one!": "从创建一个新文档集开始！",
-    "Create a document": "创建文档"
+    "Create a document": "创建文档",
+    "Created at <time dateTime={{ dateTime }}>{{ content }}</time>": "创建于<time dateTime={{ dateTime }}>{{ content }}</time>",
+    "Updated at <time dateTime={{ dateTime }}>{{ content }}</time>": "更新于<time dateTime={{ dateTime }}>{{ content }}</time>",
+    "Untitled": "未命名"
 }

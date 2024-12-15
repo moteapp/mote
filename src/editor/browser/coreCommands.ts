@@ -38,7 +38,7 @@ export function newPage(options: NewPageOptions) {
         parentId: null,
         children: [],
         collectionId: collectionId,
-        content: null,
+        content: { title: ''},
         type: BlockType.Page,
         createdAt: new Date(),
         updatedAt: new Date(),

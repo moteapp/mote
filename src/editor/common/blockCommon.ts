@@ -78,8 +78,13 @@ export interface ITextBlock extends IBaseBlock {
 
 //#endregion
 
+export type IPageContent = {
+    title: string;
+}
+
 export interface IPageBlock extends IBaseBlock {
     type: BlockType.Page;
+    content: IPageContent;
 }
 
 //#region Layout Block
